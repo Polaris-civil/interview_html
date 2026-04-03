@@ -1,5 +1,64 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q060",
+    updatedAt: "2026-04-03",
+    category: "激活函数",
+    tags: ["Softmax", "多分类", "Sigmoid"],
+    question: "Softmax 作为多分类器的作用是什么？和二分类相比有什么特点？",
+    answer: [
+      "Softmax 用来把多个类别的打分转成概率分布，所有类别概率之和为 1，常用于单标签多分类。",
+      "二分类常用 sigmoid，只关心一个类别的概率；Softmax 会同时考虑所有类别之间的竞争关系。",
+      "所以 Softmax 更适合互斥类别的多分类任务。"
+    ]
+  },
+  {
+    id: "Q061",
+    updatedAt: "2026-04-03",
+    category: "激活函数",
+    tags: ["Softmax", "公式", "概率分布"],
+    question: "Softmax 的计算公式怎么写？",
+    answer: [
+      "对第 i 类，Softmax 公式是 softmax(z_i) = exp(z_i) / Σ_j exp(z_j)。",
+      "它的含义是先把 logit 通过指数变成正数，再归一化成概率分布。",
+      "最终所有类别概率之和等于 1。"
+    ]
+  },
+  {
+    id: "Q062",
+    updatedAt: "2026-04-03",
+    category: "激活函数",
+    tags: ["Softmax", "Cross Entropy", "Loss"],
+    question: "Softmax 的 loss function 是什么？",
+    answer: [
+      "通常配合交叉熵损失。",
+      "若真实标签是 y，预测概率是 p，则损失写成 L = -Σ_i y_i log(p_i)。",
+      "如果 y 是 one-hot，实际就是正确类别概率的负对数。"
+    ]
+  },
+  {
+    id: "Q063",
+    updatedAt: "2026-04-03",
+    category: "手写代码",
+    tags: ["Softmax", "Numpy", "数值稳定"],
+    question: "怎么写一个 Softmax 实现，并注意上下溢问题？",
+    answer: [
+      "核心是先减去最大值再取指数，这样更稳定。",
+      "这是因为 exp 对大数很敏感，直接算容易上溢。",
+      { type: "code", language: "python", code: "import numpy as np\n\ndef softmax(x):\n    x = x - np.max(x, axis=-1, keepdims=True)\n    exp_x = np.exp(x)\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)" }
+    ]
+  },
+  {
+    id: "Q064",
+    updatedAt: "2026-04-03",
+    category: "激活函数",
+    tags: ["Softmax", "上溢", "下溢"],
+    question: "Softmax 在数值计算上为什么会出现上溢和下溢？怎么处理？",
+    answer: [
+      "因为 exp() 对大正数会非常大，可能上溢；对很小的负数会接近 0，可能下溢。",
+      "最常见处理方式就是先减去输入里的最大值，也就是做数值稳定化。",
+      "在算交叉熵时，也常直接使用 log-softmax 或框架自带的稳定实现。"
+    ]
+  },  {
     id: "Q055",
     updatedAt: "2026-04-03",
     category: "手写代码",
@@ -712,6 +771,7 @@
     ]
   }
 ];
+
 
 
 
