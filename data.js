@@ -1,5 +1,40 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q017",
+    updatedAt: "2026-04-13",
+    category: "深度学习",
+    tags: ["Pooling", "MaxPooling", "反向传播"],
+    question: "maxPooling 怎么传递导数？",
+    answer: [
+      "maxPooling 在前向时会记录每个池化窗口里最大值的位置。",
+      "反向传播时，梯度只传给这个最大值对应的位置，窗口里其他位置梯度为 0。",
+      "所以它本质上是把梯度路由回前向时被选中的那个元素。"
+    ]
+  },
+  {
+    id: "Q018",
+    updatedAt: "2026-04-13",
+    category: "深度学习",
+    tags: ["CNN", "Pooling", "下采样"],
+    question: "CNN 里面池化的作用是什么？",
+    answer: [
+      "池化首先是做下采样，减少特征图尺寸和后续计算量。",
+      "它还能扩大感受野，并提升一定的平移不变性，让模型对局部位置变化更鲁棒。",
+      "但池化也会带来信息损失，所以现在很多网络会用步长卷积替代一部分池化。"
+    ]
+  },
+  {
+    id: "Q019",
+    updatedAt: "2026-04-13",
+    category: "深度学习",
+    tags: ["Pooling", "反向传播", "AveragePooling"],
+    question: "反向传播的时候怎么传递 pooling 的导数？",
+    answer: [
+      "如果是 max pooling，梯度只回传到前向时取到最大值的那个元素。",
+      "如果是 average pooling，梯度会平均分配到池化窗口内的所有元素。",
+      "所以不同 pooling 的反向传播差别，核心就在于梯度分配方式不同。"
+    ]
+  },  {
     id: "Q007",
     updatedAt: "2026-04-12",
     category: "计算机视觉",
@@ -199,3 +234,4 @@
     ]
   }
 ];
+
