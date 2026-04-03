@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大厂面试题速查卡</title>
+  <meta name="description" content="一个适合放在 GitHub Pages 上的面试问答卡片页，支持搜索、标签筛选与翻转查看答案。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Interview Flashcards</p>
+        <h1>大厂面试题速查卡</h1>
+        <p class="hero-text">
+          把你平时问我的问题和答案，沉淀成一个能搜索、能翻卡、能放到 GitHub Pages 上随时查看的静态网页。
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-label">总题数</span>
+          <strong id="question-count">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">当前筛选</span>
+          <strong id="result-count">0</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="toolbar">
+      <label class="search-box" for="search-input">
+        <span class="search-label">搜索问题 / 关键词 / 标签</span>
+        <input id="search-input" type="search" placeholder="例如：闭包、TCP、索引、线程..." autocomplete="off">
+      </label>
+
+      <div class="tag-panel">
+        <span class="tag-title">标签筛选</span>
+        <div id="tag-list" class="tag-list"></div>
+      </div>
+    </section>
+
+    <section class="tips">
+      <p>使用方式：点卡片翻到答案，顶部搜索快速定位，标签可以缩小范围。后续你只要继续问我，我就能把新的问答追加进去。</p>
+    </section>
+
+    <main>
+      <section id="empty-state" class="empty-state hidden">
+        <h2>没有匹配结果</h2>
+        <p>换个关键词，或者取消标签筛选试试。</p>
+      </section>
+
+      <section id="card-grid" class="card-grid" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <template id="card-template">
+    <article class="qa-card" tabindex="0">
+      <div class="qa-card-inner">
+        <div class="qa-card-face qa-card-front">
+          <div class="card-meta">
+            <span class="card-id"></span>
+            <span class="card-category"></span>
+          </div>
+          <h2 class="card-question"></h2>
+          <div class="card-tags"></div>
+          <p class="card-hint">点击查看答案</p>
+        </div>
+        <div class="qa-card-face qa-card-back">
+          <div class="card-meta">
+            <span class="card-id"></span>
+            <span class="card-category"></span>
+          </div>
+          <div class="card-answer"></div>
+          <p class="card-hint">再次点击返回问题</p>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
