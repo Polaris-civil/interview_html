@@ -1,7 +1,7 @@
 ﻿window.INTERVIEW_QA = [
   {
     id: "Q017",
-    updatedAt: "2026-04-13",
+    updatedAt: "2026-04-03",
     category: "深度学习",
     tags: ["Pooling", "MaxPooling", "反向传播"],
     question: "maxPooling 怎么传递导数？",
@@ -13,7 +13,7 @@
   },
   {
     id: "Q018",
-    updatedAt: "2026-04-13",
+    updatedAt: "2026-04-03",
     category: "深度学习",
     tags: ["CNN", "Pooling", "下采样"],
     question: "CNN 里面池化的作用是什么？",
@@ -25,7 +25,7 @@
   },
   {
     id: "Q019",
-    updatedAt: "2026-04-13",
+    updatedAt: "2026-04-03",
     category: "深度学习",
     tags: ["Pooling", "反向传播", "AveragePooling"],
     question: "反向传播的时候怎么传递 pooling 的导数？",
@@ -36,7 +36,7 @@
     ]
   },  {
     id: "Q007",
-    updatedAt: "2026-04-12",
+    updatedAt: "2026-04-03",
     category: "计算机视觉",
     tags: ["卷积", "Depthwise", "轻量化"],
     question: "Depthwise 卷积是什么？它的优缺点是什么？",
@@ -48,7 +48,7 @@
   },
   {
     id: "Q008",
-    updatedAt: "2026-04-11",
+    updatedAt: "2026-04-03",
     category: "计算机视觉",
     tags: ["卷积", "1x1卷积", "网络设计"],
     question: "1×1 的卷积核有什么用？",
@@ -60,7 +60,7 @@
   },
   {
     id: "Q009",
-    updatedAt: "2026-04-10",
+    updatedAt: "2026-04-03",
     category: "计算机视觉",
     tags: ["上采样", "PixelShuffle", "棋盘格"],
     question: "反卷积相比 PixelShuffle 有什么缺点？棋盘格现象怎么产生的？",
@@ -72,7 +72,7 @@
   },
   {
     id: "Q010",
-    updatedAt: "2026-04-09",
+    updatedAt: "2026-04-03",
     category: "视频理解",
     tags: ["3D卷积", "2D卷积", "视频"],
     question: "3D 卷积和 2D 卷积的区别、主要问题、如何加速，以及视频理解还有哪些改进方向？",
@@ -85,7 +85,7 @@
   },
   {
     id: "Q011",
-    updatedAt: "2026-04-08",
+    updatedAt: "2026-04-03",
     category: "计算机视觉",
     tags: ["卷积", "感受野", "网络设计"],
     question: "卷积核大小如何选取？",
@@ -97,7 +97,7 @@
   },
   {
     id: "Q012",
-    updatedAt: "2026-04-07",
+    updatedAt: "2026-04-03",
     category: "计算机视觉",
     tags: ["卷积", "参数量", "3x3"],
     question: "卷积层减少参数的常见方法有哪些？用 1×3 和 3×1 代替 3×3 的原理是什么？",
@@ -109,7 +109,7 @@
   },
   {
     id: "Q013",
-    updatedAt: "2026-04-06",
+    updatedAt: "2026-04-03",
     category: "深度学习",
     tags: ["CNN", "Dropout", "正则化"],
     question: "如果在 CNN 的卷积块里设计 Dropout，一般怎么做？",
@@ -121,7 +121,7 @@
   },
   {
     id: "Q014",
-    updatedAt: "2026-04-05",
+    updatedAt: "2026-04-03",
     category: "深度学习",
     tags: ["反卷积", "转置卷积", "上采样"],
     question: "反卷积，也就是转置卷积，它的实现原理是什么？",
@@ -133,7 +133,7 @@
   },
   {
     id: "Q015",
-    updatedAt: "2026-04-04",
+    updatedAt: "2026-04-03",
     category: "深度学习",
     tags: ["Dropout", "正则化", "泛化"],
     question: "Dropout 的原理是什么？",
@@ -234,4 +234,5 @@
     ]
   }
 ];
+
 
