@@ -1,5 +1,219 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q034",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["反卷积", "转置卷积", "上采样"],
+    question: "什么是反卷积？",
+    answer: [
+      "反卷积通常指转置卷积，本质上不是严格意义上的逆卷积，而是普通卷积在线性形式下的转置操作。",
+      "它常用于上采样，比如生成、分割和检测中的解码阶段。",
+      "工程上也常拿它和插值上采样加卷积做对比。"
+    ]
+  },
+  {
+    id: "Q035",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["Inception", "GoogLeNet", "多分支"],
+    question: "什么是 Inception 模块？",
+    answer: [
+      "Inception 模块是一种多分支结构，会并行使用不同大小的卷积核和池化分支，再把结果拼接起来。",
+      "它的核心思想是同时提取多尺度特征，并提高计算利用率。",
+      "这是 GoogLeNet 的代表性设计。"
+    ]
+  },
+  {
+    id: "Q036",
+    updatedAt: "2026-04-03",
+    category: "轻量化网络",
+    tags: ["深度可分离卷积", "Depthwise", "MobileNet"],
+    question: "什么是深度可分离卷积？",
+    answer: [
+      "深度可分离卷积把标准卷积分成两步：先做 depthwise convolution，再做 pointwise 1×1 convolution。",
+      "这样能显著减少参数量和计算量。",
+      "它是 MobileNet 这类轻量化网络的核心操作。"
+    ]
+  },
+  {
+    id: "Q037",
+    updatedAt: "2026-04-03",
+    category: "轻量化网络",
+    tags: ["分组卷积", "Group Convolution", "ShuffleNet"],
+    question: "什么是分组卷积？",
+    answer: [
+      "分组卷积是把输入通道分成若干组，每组分别做卷积，然后把结果拼接起来。",
+      "这样可以减少计算量和参数量。",
+      "但组与组之间的信息交互会变弱，所以常配合 channel shuffle 或 1×1 卷积使用。"
+    ]
+  },  {
+    id: "Q020",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["MaxPooling", "反向传播", "CNN"],
+    question: "卷积神经网络在 maxpooling 处怎么反向传播误差？",
+    answer: [
+      "前向传播时先记录每个池化窗口最大值的位置。",
+      "反向传播时，误差只传回这个最大值所在位置，其他位置梯度为 0。",
+      "所以 max pooling 的梯度传递本质上是按 argmax 位置路由。"
+    ]
+  },
+  {
+    id: "Q021",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["ShuffleNet", "轻量化", "CNN"],
+    question: "ShuffleNet 的结构是什么？",
+    answer: [
+      "ShuffleNet 的核心是 pointwise group convolution、channel shuffle 和 depthwise convolution。",
+      "它先用分组 1×1 卷积降低计算量，再用 channel shuffle 促进不同组之间的信息交换。",
+      "这是一个典型的轻量化 CNN 设计。"
+    ]
+  },
+  {
+    id: "Q022",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["Attention", "SE", "CBAM"],
+    question: "深度网络里 Attention 一般怎么加？",
+    answer: [
+      "常见做法是把 attention 模块加在卷积块后、残差块里，或者特征融合阶段。",
+      "可以做通道注意力、空间注意力，或者二者结合。",
+      "典型模块有 SE、CBAM、Non-local 和 Transformer attention。"
+    ]
+  },
+  {
+    id: "Q023",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["ResNet", "残差连接", "退化问题"],
+    question: "ResNet 的结构特点以及解决的问题是什么？",
+    answer: [
+      "ResNet 的核心特点是残差连接，也就是 shortcut。",
+      "它主要解决深层网络训练困难和退化问题，让更深的网络也能稳定优化。",
+      "本质上是让网络学习残差映射而不是直接学习完整映射。"
+    ]
+  },
+  {
+    id: "Q024",
+    updatedAt: "2026-04-03",
+    category: "图神经网络",
+    tags: ["GNN", "谱域", "空间域"],
+    question: "图神经网络怎么理解？发展史怎么讲？",
+    answer: [
+      "图神经网络是处理图结构数据的模型，核心是节点聚合邻居信息来更新自己的表示。",
+      "发展上可以大致分为谱域方法和空间域方法。",
+      "后来空间域方法更常用，因为形式更直观，也更容易扩展到大图和实际任务。"
+    ]
+  },
+  {
+    id: "Q025",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["UNet", "编码器解码器", "分割"],
+    question: "UNet 的结构是什么，为什么要下采样和上采样？",
+    answer: [
+      "UNet 是编码器-解码器结构，并带有跳跃连接。",
+      "下采样用来提取更强语义并扩大感受野，上采样用来恢复空间分辨率。",
+      "跳跃连接负责把浅层细节补回去，所以它很适合分割这类需要精细定位的任务。"
+    ]
+  },
+  {
+    id: "Q026",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["ResNet", "V1", "V2"],
+    question: "ResNet V1 和 V2 的改进是什么？",
+    answer: [
+      "V1 里一般是卷积后接 BN 和 ReLU，再做残差相加。",
+      "V2 改成 pre-activation，把 BN 和 ReLU 放到卷积前面。",
+      "这样梯度传播更顺畅，深层网络通常更稳定。"
+    ]
+  },
+  {
+    id: "Q027",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["ResNet", "下采样", "残差块"],
+    question: "ResNet 的下采样过程是怎样的？",
+    answer: [
+      "通常在某个 stage 的第一个残差块里用 stride=2 的卷积做下采样。",
+      "同时 shortcut 分支也要做匹配，常见是 1×1 卷积加 stride。",
+      "这样能在减小特征图尺寸的同时增加通道数。"
+    ]
+  },
+  {
+    id: "Q028",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["ResBlock", "Shortcut", "Padding"],
+    question: "res-block 的跳跃连接以及 shape 怎么保持？",
+    answer: [
+      "如果输入输出 shape 一样，shortcut 可以直接相加。",
+      "如果空间尺寸或通道数不同，就在 shortcut 分支上用 1×1 卷积做匹配，必要时配合 stride。",
+      "主分支里则常通过 padding 保持卷积前后空间尺寸不变。"
+    ]
+  },
+  {
+    id: "Q029",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["FPN", "多尺度", "检测"],
+    question: "FPN 的结构是什么？",
+    answer: [
+      "FPN 是自顶向下路径加横向连接的多尺度特征融合结构。",
+      "它把高层强语义和低层高分辨率特征结合起来。",
+      "所以它特别适合目标检测这类需要多尺度表示的任务。"
+    ]
+  },
+  {
+    id: "Q030",
+    updatedAt: "2026-04-03",
+    category: "目标检测",
+    tags: ["RoI Pooling", "RoI Align", "Mask R-CNN"],
+    question: "RoI Pooling 和 RoI Align 的区别是什么？",
+    answer: [
+      "RoI Pooling 会对坐标做量化，所以容易产生对齐误差。",
+      "RoI Align 不做量化，而是用双线性插值取值，因此定位更精确。",
+      "这也是 Mask R-CNN 采用 RoI Align 的重要原因。"
+    ]
+  },
+  {
+    id: "Q031",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["ResNet", "全连接", "卷积网络"],
+    question: "ResNet 和全连接相比有什么区别？",
+    answer: [
+      "ResNet 是带卷积和残差连接的深层网络，适合处理有空间结构的图像。",
+      "全连接层会直接打平输入，参数量大，也不擅长利用局部空间结构。",
+      "所以视觉任务里通常是卷积网络作为主干，全连接只放在后端分类头里。"
+    ]
+  },
+  {
+    id: "Q032",
+    updatedAt: "2026-04-03",
+    category: "网络结构",
+    tags: ["AlexNet", "VGG", "ResNet"],
+    question: "AlexNet、VGG、ResNet、DenseNet、GoogLeNet 的特点是什么？",
+    answer: [
+      "AlexNet 让深度 CNN 真正大规模进入视觉任务；VGG 结构规整，主打堆叠小卷积。",
+      "GoogLeNet 用 Inception 做多分支特征提取；ResNet 用残差连接解决深层训练问题。",
+      "DenseNet 用密集连接强化特征复用和梯度传播。"
+    ]
+  },
+  {
+    id: "Q033",
+    updatedAt: "2026-04-03",
+    category: "轻量化网络",
+    tags: ["MobileNet", "ShuffleNet", "Xception"],
+    question: "MobileNet v1/v2、ShuffleNet v2、Xception、DenseNet 这些网络怎么概括？",
+    answer: [
+      "MobileNet v1 主打 depthwise separable convolution，v2 加了 inverted residual 和 linear bottleneck。",
+      "ShuffleNet v2 更强调真实推理效率和 channel split/shuffle，Xception 可以看成更极致的 depthwise separable convolution。",
+      "DenseNet 不一定最轻，但特征复用强、参数利用率高。"
+    ]
+  },  {
     id: "Q017",
     updatedAt: "2026-04-03",
     category: "深度学习",
@@ -234,5 +448,7 @@
     ]
   }
 ];
+
+
 
 
