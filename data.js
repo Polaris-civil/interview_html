@@ -1,5 +1,257 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q055",
+    updatedAt: "2026-04-03",
+    category: "手写代码",
+    tags: ["卷积", "手写实现", "多通道"],
+    question: "说一些卷积，用代码实现卷积，并再改成有通道的三维卷积，核心怎么理解？",
+    answer: [
+      "核心考点是是否理解卷积本质是滑窗加权求和。",
+      "单通道卷积是在二维输入上滑动卷积核；扩展到多通道时，就是对每个通道分别卷积后再求和。",
+      "多个卷积核则对应多个输出通道。",
+      { type: "code", language: "python", code: "import numpy as np\n\ndef conv2d_multi_channel(x, w):\n    # x: [Cin, H, W], w: [Cout, Cin, K, K]\n    cin, h, w_in = x.shape\n    cout, _, k, _ = w.shape\n    out_h = h - k + 1\n    out_w = w_in - k + 1\n    out = np.zeros((cout, out_h, out_w))\n\n    for co in range(cout):\n        for i in range(out_h):\n            for j in range(out_w):\n                region = x[:, i:i+k, j:j+k]\n                out[co, i, j] = np.sum(region * w[co])\n    return out" }
+    ]
+  },
+  {
+    id: "Q056",
+    updatedAt: "2026-04-03",
+    category: "手写代码",
+    tags: ["卷积", "Padding", "手写实现"],
+    question: "写一个单通道的图像卷积，带 padding，核心要点是什么？",
+    answer: [
+      "先对输入做 padding，再按窗口滑动。",
+      "每个位置取局部区域和卷积核逐元素相乘后求和，得到输出像素。",
+      "面试里通常更看重你逻辑是否清楚，而不是代码是否特别工程化。",
+      { type: "code", language: "python", code: "import numpy as np\n\ndef conv2d_single_channel(x, kernel, padding=1):\n    k = kernel.shape[0]\n    x_pad = np.pad(x, ((padding, padding), (padding, padding)), mode='constant')\n    out_h = x.shape[0] + 2 * padding - k + 1\n    out_w = x.shape[1] + 2 * padding - k + 1\n    out = np.zeros((out_h, out_w))\n\n    for i in range(out_h):\n        for j in range(out_w):\n            region = x_pad[i:i+k, j:j+k]\n            out[i, j] = np.sum(region * kernel)\n    return out" }
+    ]
+  },
+  {
+    id: "Q057",
+    updatedAt: "2026-04-03",
+    category: "手写代码",
+    tags: ["前向传播", "反向传播", "BP"],
+    question: "手写前向传播、反向传播代码，核心思路是什么？",
+    answer: [
+      "核心是按计算图把每一步拆开。",
+      "前向传播是逐层算输出，反向传播是从损失往回按链式法则求每层梯度。",
+      "最终得到参数梯度和输入梯度。",
+      { type: "code", language: "python", code: "import numpy as np\n\ndef sigmoid(x):\n    return 1 / (1 + np.exp(-x))\n\ndef forward(x, w, b):\n    z = x @ w + b\n    y = sigmoid(z)\n    return z, y\n\ndef backward(x, y, target, w):\n    dy = y - target\n    dz = dy * y * (1 - y)\n    dw = x.T @ dz\n    db = dz.sum(axis=0)\n    dx = dz @ w.T\n    return dx, dw, db" }
+    ]
+  },
+  {
+    id: "Q058",
+    updatedAt: "2026-04-03",
+    category: "手写代码",
+    tags: ["BP", "Numpy", "反向传播"],
+    question: "如果面试官让你写 BP，正向传播、反向传播都推一个遍，重点是什么？",
+    answer: [
+      "重点不是死背所有公式，而是能说明前向得到输出、损失对输出求导、再一层层传回去更新参数的逻辑。",
+      "如果能用 numpy 手写一个单层或两层网络的前反向传播，通常已经能证明你理解了 BP。",
+      "面试官很多时候更看重你思路是否闭环。",
+      { type: "code", language: "python", code: "# 两层 MLP 反向传播示意\na1 = x @ w1 + b1\nh1 = np.maximum(a1, 0)\na2 = h1 @ w2 + b2\nloss = ((a2 - y) ** 2).mean()\n\n# backward\nda2 = 2 * (a2 - y) / y.shape[0]\ndw2 = h1.T @ da2\ndh1 = da2 @ w2.T\nda1 = dh1 * (a1 > 0)\ndw1 = x.T @ da1" }
+    ]
+  },
+  {
+    id: "Q059",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["BN", "GN", "LN"],
+    question: "怎么用代码或数学公式展示 BN 的内部实现？为什么要用 GN？GN、BN、LN、IN 的区别是什么？",
+    answer: [
+      "BN 是按 batch 维度统计均值方差，LN 按单样本所有通道统计，IN 按单样本单通道统计，GN 是把通道分组后在组内统计。",
+      "为什么用 GN，主要是因为小 batch 或检测分割任务里 BN 统计不稳定，而 GN 不依赖 batch size。",
+      "所以它们的核心区别在于统计均值和方差的维度不同。",
+      { type: "code", language: "python", code: "def batch_norm(x, gamma, beta, eps=1e-5):\n    mean = x.mean(axis=0, keepdims=True)\n    var = x.var(axis=0, keepdims=True)\n    x_hat = (x - mean) / np.sqrt(var + eps)\n    y = gamma * x_hat + beta\n    return y" }
+    ]
+  },  {
+    id: "Q053",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["BP", "反向传播", "链式法则"],
+    question: "BP 神经网络反向传播怎么推导？",
+    answer: [
+      "核心就是链式法则。",
+      "先从损失函数对输出层求导，再一层层往前传，把当前层的梯度拆成上游梯度乘本层局部导数。",
+      "最后就能得到每层参数和输入的梯度。"
+    ]
+  },
+  {
+    id: "Q054",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["MaxPooling", "梯度", "反向传播"],
+    question: "max pooling 的梯度怎么求？",
+    answer: [
+      "max pooling 前向时先找到池化窗口里的最大值位置。",
+      "反向传播时，梯度只传给这个最大值所在位置。",
+      "其他位置梯度为 0。"
+    ]
+  },  {
+    id: "Q048",
+    updatedAt: "2026-04-03",
+    category: "计算机视觉",
+    tags: ["卷积", "参数量", "FLOPs"],
+    question: "如何计算卷积的复杂度、卷积层的参数量？",
+    answer: [
+      "卷积层参数量一般是 k×k×Cin×Cout，如果有偏置再加 Cout。",
+      "计算复杂度通常看 FLOPs，近似为 Hout×Wout×k×k×Cin×Cout。",
+      "如果把乘法和加法都单独计数，有些资料会再乘 2。"
+    ]
+  },
+  {
+    id: "Q049",
+    updatedAt: "2026-04-03",
+    category: "计算机视觉",
+    tags: ["Feature Map", "输出尺寸", "卷积"],
+    question: "怎么计算 Feature Map 的 size？",
+    answer: [
+      "二维卷积输出尺寸公式是 Hout = floor((Hin + 2p - k)/s) + 1，Wout = floor((Win + 2p - k)/s) + 1。",
+      "其中 k 是卷积核大小，p 是 padding，s 是 stride。",
+      "池化层也是同样的空间尺寸计算逻辑。"
+    ]
+  },
+  {
+    id: "Q050",
+    updatedAt: "2026-04-03",
+    category: "计算机视觉",
+    tags: ["FLOPs", "输出尺寸", "卷积"],
+    question: "输入为 L×L，卷积核为 k×k，步长 s，padding p，怎么求输出尺寸和 FLOPs？",
+    answer: [
+      "输出尺寸是 L1 = floor((L - k + 2p)/s) + 1。",
+      "如果输入通道数是 C1，输出通道数是 C2，则卷积 FLOPs 近似是 L1×L1×k×k×C1×C2。",
+      "如果严格把乘法和加法都分开计，一些资料会写成约 2×L1×L1×k×k×C1×C2。"
+    ]
+  },
+  {
+    id: "Q051",
+    updatedAt: "2026-04-03",
+    category: "轻量化网络",
+    tags: ["Depthwise", "Pointwise", "Feature Map"],
+    question: "同时考虑 pooling、stride、padding 时，怎么计算 depthwise conv 和 pointwise conv 每一步的计算量和 feature map 尺寸？",
+    answer: [
+      "先按普通卷积公式逐层计算输出尺寸。",
+      "depthwise conv 参数量是 k×k×Cin，FLOPs 是 Hout×Wout×k×k×Cin。",
+      "pointwise conv 参数量是 Cin×Cout，FLOPs 是 Hout×Wout×Cin×Cout；如果中间有 pooling，就继续按 pooling 输出尺寸往后推。"
+    ]
+  },
+  {
+    id: "Q052",
+    updatedAt: "2026-04-03",
+    category: "计算机视觉",
+    tags: ["输出维度", "Padding", "CNN"],
+    question: "CNN 中给定输入维度 [c, w, h]、卷积核 [k, k]，若 padding=p，输出维度怎么求？",
+    answer: [
+      "如果输出通道数是 Cout，步长是 s，那么输出维度是 [Cout, floor((w + 2p - k)/s) + 1, floor((h + 2p - k)/s) + 1]。",
+      "输出通道数由卷积核个数决定，空间尺寸由卷积公式决定。",
+      "如果是 same padding 且 s=1，空间尺寸通常保持不变。"
+    ]
+  },  {
+    id: "Q045",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["BatchNorm", "BN", "训练"],
+    question: "BN 的机制是什么，BN 怎么训练？",
+    answer: [
+      "BN 的核心是在每个 mini-batch 上对特征做标准化，再引入可学习的缩放参数和偏移参数。",
+      "训练时用当前 batch 的均值和方差归一化，同时更新全局滑动均值和方差。",
+      "推理时则使用这些滑动统计量。"
+    ]
+  },
+  {
+    id: "Q046",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["梯度消失", "梯度爆炸", "训练稳定性"],
+    question: "梯度消失和梯度爆炸的原因是什么？怎么解决？",
+    answer: [
+      "本质上是反向传播时梯度连乘，若导数长期小于 1 就容易消失，长期大于 1 就容易爆炸。",
+      "常见原因包括网络太深、初始化不合理、激活函数饱和、学习率过大。",
+      "解决方法包括合理初始化、残差连接、BN、使用 ReLU 类激活、梯度裁剪和调整学习率。"
+    ]
+  },
+  {
+    id: "Q047",
+    updatedAt: "2026-04-03",
+    category: "模型压缩",
+    tags: ["模型压缩", "移动端", "部署"],
+    question: "如果 CNN 网络很大，在手机上运行效率不高，有哪些模型压缩方法？",
+    answer: [
+      "常见方法有剪枝、量化、知识蒸馏、低秩分解、结构轻量化设计和算子融合。",
+      "实际部署中通常会组合使用，比如先换成 MobileNet 这类轻量骨干，再做量化和蒸馏。",
+      "目标是在精度和速度之间做平衡。"
+    ]
+  },  {
+    id: "Q039",
+    updatedAt: "2026-04-03",
+    category: "计算机视觉",
+    tags: ["CNN", "图像", "视频"],
+    question: "为什么卷积神经网络适用于图像和视频，还能用于其他领域吗？",
+    answer: [
+      "因为 CNN 擅长处理有局部相关性和空间结构的数据。",
+      "图像和视频天然满足这个特点，所以卷积能高效提取局部模式。",
+      "除了视觉，CNN 也能用于语音、文本、时间序列和医学信号等任务，只要数据中存在局部模式和可平移结构。"
+    ]
+  },
+  {
+    id: "Q040",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["反向传播", "全连接", "卷积层"],
+    question: "CNN 反向传播细节，怎么过全连接层、池化层、卷积层？",
+    answer: [
+      "全连接层和普通神经网络一样按链式法则传梯度。",
+      "池化层里，max pooling 把梯度传给最大值位置，average pooling 把梯度平均分配。",
+      "卷积层反向传播时要分别求输入梯度、卷积核梯度和偏置梯度，本质上还是链式法则。"
+    ]
+  },
+  {
+    id: "Q041",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["过拟合", "正则化", "CNN"],
+    question: "CNN 里面能自然起到防止过拟合的办法有哪些？",
+    answer: [
+      "卷积的局部连接和权值共享本身就在减少参数量，这是 CNN 天然比全连接更不容易过拟合的原因之一。",
+      "另外常见办法还有数据增强、Dropout、正则化、BN、早停和使用预训练模型。",
+      "本质上都是在减少模型对训练集噪声的过度记忆。"
+    ]
+  },
+  {
+    id: "Q042",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["感受野", "权值共享", "CNN"],
+    question: "CNN 中感受野和权值共享是什么意思？",
+    answer: [
+      "感受野是某一层神经元在原图上能够看到的区域大小。",
+      "权值共享是指同一个卷积核在不同空间位置重复使用同一组参数。",
+      "这样既减少参数量，也让模型对平移变化更有泛化能力。"
+    ]
+  },
+  {
+    id: "Q043",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["BatchNorm", "BN", "训练推理"],
+    question: "BN 层的作用是什么，训练和测试时有什么不同？",
+    answer: [
+      "BN 主要作用是稳定特征分布、加快收敛，并让训练更稳定。",
+      "训练时用当前 mini-batch 的均值和方差做归一化，同时更新滑动统计量。",
+      "测试时不用当前 batch，而是使用训练阶段累计得到的全局均值和方差。"
+    ]
+  },
+  {
+    id: "Q044",
+    updatedAt: "2026-04-03",
+    category: "深度学习",
+    tags: ["BatchNorm", "online learning", "小batch"],
+    question: "BN 层做预测时，方差均值怎么算？online learning 时又怎么算？",
+    answer: [
+      "预测时直接使用训练时保存下来的滑动均值和滑动方差。",
+      "online learning 或继续训练时，如果还是训练模式，就继续用当前 batch 统计量并更新滑动均值方差。",
+      "如果 batch 太小，BN 可能不稳定，这时常考虑 GroupNorm 或 LayerNorm。"
+    ]
+  },  {
     id: "Q038",
     updatedAt: "2026-04-03",
     category: "轻量化网络",
@@ -460,6 +712,12 @@
     ]
   }
 ];
+
+
+
+
+
+
 
 
 
