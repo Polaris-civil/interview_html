@@ -1,15 +1,14 @@
-﻿const questionCountEl = document.querySelector("#question-count");
-const resultCountEl = document.querySelector("#result-count");
+﻿const searchToggleEl = document.querySelector("#search-toggle");
+const searchPanelEl = document.querySelector("#search-panel");
 const searchInputEl = document.querySelector("#search-input");
-const tagListEl = document.querySelector("#tag-list");
 const cardGridEl = document.querySelector("#card-grid");
 const emptyStateEl = document.querySelector("#empty-state");
 const cardTemplate = document.querySelector("#card-template");
 
-const allQuestions = Array.isArray(window.INTERVIEW_QA) ? window.INTERVIEW_QA : [];
-const allTags = [...new Set(allQuestions.flatMap((item) => [item.category, ...item.tags]))].sort((a, b) => a.localeCompare(b, "zh-CN"));
+const allQuestions = Array.isArray(window.INTERVIEW_QA)
+  ? [...window.INTERVIEW_QA].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+  : [];
 
-let activeTag = "全部";
 let searchKeyword = "";
 
 function normalizeText(value) {
@@ -31,40 +30,21 @@ function formatAnswerParagraphs(answerList) {
 
 function matchesQuestion(item) {
   const keyword = normalizeText(searchKeyword);
-  const inTag = activeTag === "全部" || item.tags.includes(activeTag) || item.category === activeTag;
 
   if (!keyword) {
-    return inTag;
+    return true;
   }
 
   const haystack = normalizeText([
     item.id,
+    item.updatedAt,
     item.category,
     item.question,
     item.tags.join(" "),
     item.answer.join(" ")
   ].join(" "));
 
-  return inTag && haystack.includes(keyword);
-}
-
-function buildTagChip(label) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = `tag-chip${label === activeTag ? " active" : ""}`;
-  button.textContent = label;
-  button.addEventListener("click", () => {
-    activeTag = label;
-    render();
-  });
-  return button;
-}
-
-function renderTags() {
-  tagListEl.innerHTML = "";
-  ["全部", ...allTags].forEach((tag) => {
-    tagListEl.appendChild(buildTagChip(tag));
-  });
+  return haystack.includes(keyword);
 }
 
 function createMiniTag(text) {
@@ -81,14 +61,14 @@ function toggleCard(cardEl) {
 function buildCard(item) {
   const fragment = cardTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".qa-card");
-  const ids = fragment.querySelectorAll(".card-id");
+  const dates = fragment.querySelectorAll(".card-date");
   const categories = fragment.querySelectorAll(".card-category");
   const question = fragment.querySelector(".card-question");
   const answer = fragment.querySelector(".card-answer");
   const tagContainer = fragment.querySelector(".card-tags");
 
-  ids.forEach((node) => {
-    node.textContent = item.id;
+  dates.forEach((node) => {
+    node.textContent = item.updatedAt;
   });
   categories.forEach((node) => {
     node.textContent = item.category;
@@ -120,19 +100,23 @@ function renderCards() {
     cardGridEl.appendChild(buildCard(item));
   });
 
-  questionCountEl.textContent = String(allQuestions.length);
-  resultCountEl.textContent = String(filtered.length);
   emptyStateEl.classList.toggle("hidden", filtered.length > 0);
 }
 
-function render() {
-  renderTags();
-  renderCards();
+function toggleSearch() {
+  const willOpen = searchPanelEl.classList.contains("hidden");
+  searchPanelEl.classList.toggle("hidden", !willOpen);
+  searchToggleEl.setAttribute("aria-expanded", String(willOpen));
+
+  if (willOpen) {
+    searchInputEl.focus();
+  }
 }
 
+searchToggleEl.addEventListener("click", toggleSearch);
 searchInputEl.addEventListener("input", (event) => {
   searchKeyword = event.target.value;
   renderCards();
 });
 
-render();
+renderCards();
