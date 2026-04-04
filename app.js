@@ -6,6 +6,13 @@ const clearFilterEl = document.querySelector("#clear-filter");
 const cardGridEl = document.querySelector("#card-grid");
 const emptyStateEl = document.querySelector("#empty-state");
 const cardTemplate = document.querySelector("#card-template");
+const detailModalEl = document.querySelector("#detail-modal");
+const detailCloseEl = document.querySelector("#detail-close");
+const detailDateEl = document.querySelector("#detail-date");
+const detailCategoryEl = document.querySelector("#detail-category");
+const detailTitleEl = document.querySelector("#detail-title");
+const detailTagsEl = document.querySelector("#detail-tags");
+const detailAnswerEl = document.querySelector("#detail-answer");
 
 const allQuestions = Array.isArray(window.INTERVIEW_QA)
   ? [...window.INTERVIEW_QA].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
@@ -14,6 +21,7 @@ const categories = ["全部", ...new Set(allQuestions.map((item) => item.categor
 
 let searchKeyword = "";
 let activeCategory = "全部";
+let lastFocusedCard = null;
 
 function normalizeText(value) {
   return String(value || "").trim().toLowerCase();
@@ -34,15 +42,26 @@ function answerItemToText(item) {
   }
 
   if (item && typeof item === "object") {
-    return [item.text, item.code, item.language].filter(Boolean).join(" ");
+    return [item.text, item.code, item.language, item.latex].filter(Boolean).join(" ");
   }
 
   return "";
 }
 
+function looksLikeFormula(text) {
+  return /[=Σ∑π√∞×÷^_]|softmax|log|exp|floor|argmax|L1|FLOPs|Cin|Cout|Hout|Wout/i.test(text);
+}
+
+function renderFormulaBlock(text) {
+  return `<div class="answer-formula"><code>${escapeHtml(text)}</code></div>`;
+}
+
 function formatAnswerParagraphs(answerList) {
   return answerList.map((item) => {
     if (typeof item === "string") {
+      if (looksLikeFormula(item) && item.length <= 140) {
+        return renderFormulaBlock(item);
+      }
       return `<p>${escapeHtml(item)}</p>`;
     }
 
@@ -52,12 +71,24 @@ function formatAnswerParagraphs(answerList) {
       return `<pre class="answer-code"><code class="language-${language}">${code}</code></pre>`;
     }
 
+    if (item && typeof item === "object" && item.type === "formula") {
+      return renderFormulaBlock(item.latex || item.text || "");
+    }
+
     if (item && typeof item === "object" && item.type === "text") {
       return `<p>${escapeHtml(item.text || "")}</p>`;
     }
 
     return "";
   }).join("");
+}
+
+function buildPreview(answerList) {
+  const text = answerList.map(answerItemToText).join(" ").replace(/\s+/g, " ").trim();
+  if (!text) {
+    return "这道题包含完整答案，点开后查看详情。";
+  }
+  return text.length > 92 ? `${text.slice(0, 92)}...` : text;
 }
 
 function formatDisplayDate(dateString) {
@@ -133,8 +164,33 @@ function renderFilters() {
   clearFilterEl.classList.toggle("hidden", activeCategory === "全部");
 }
 
-function toggleCard(cardEl) {
-  cardEl.classList.toggle("is-flipped");
+function openDetail(item, cardEl) {
+  lastFocusedCard = cardEl || null;
+  detailDateEl.textContent = formatDisplayDate(item.updatedAt);
+  detailDateEl.title = item.updatedAt;
+  detailCategoryEl.textContent = item.category;
+  detailTitleEl.textContent = item.question;
+  detailAnswerEl.innerHTML = formatAnswerParagraphs(item.answer);
+  detailTagsEl.innerHTML = "";
+  item.tags.forEach((tag) => detailTagsEl.appendChild(createMiniTag(tag)));
+
+  detailCategoryEl.onclick = () => {
+    setActiveCategory(item.category);
+    closeDetail();
+  };
+
+  detailModalEl.classList.remove("hidden");
+  detailModalEl.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeDetail() {
+  detailModalEl.classList.add("hidden");
+  detailModalEl.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  if (lastFocusedCard) {
+    lastFocusedCard.focus();
+  }
 }
 
 function buildCategoryButton(buttonEl, category) {
@@ -148,31 +204,27 @@ function buildCategoryButton(buttonEl, category) {
 function buildCard(item) {
   const fragment = cardTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".qa-card");
-  const dates = fragment.querySelectorAll(".card-date");
-  const categoriesEls = fragment.querySelectorAll(".card-category");
+  const date = fragment.querySelector(".card-date");
+  const categoryEl = fragment.querySelector(".card-category");
   const question = fragment.querySelector(".card-question");
-  const answer = fragment.querySelector(".card-answer");
+  const preview = fragment.querySelector(".card-preview");
   const tagContainer = fragment.querySelector(".card-tags");
-  const displayDate = formatDisplayDate(item.updatedAt);
 
-  dates.forEach((node) => {
-    node.textContent = displayDate;
-    node.title = item.updatedAt;
-  });
-  categoriesEls.forEach((node) => buildCategoryButton(node, item.category));
-
+  date.textContent = formatDisplayDate(item.updatedAt);
+  date.title = item.updatedAt;
+  buildCategoryButton(categoryEl, item.category);
   question.textContent = item.question;
-  answer.innerHTML = formatAnswerParagraphs(item.answer);
+  preview.textContent = buildPreview(item.answer);
 
-  item.tags.forEach((tag) => {
+  item.tags.slice(0, 4).forEach((tag) => {
     tagContainer.appendChild(createMiniTag(tag));
   });
 
-  card.addEventListener("click", () => toggleCard(card));
+  card.addEventListener("click", () => openDetail(item, card));
   card.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      toggleCard(card);
+      openDetail(item, card);
     }
   });
 
@@ -206,6 +258,17 @@ searchInputEl.addEventListener("input", (event) => {
   renderCards();
 });
 clearFilterEl.addEventListener("click", () => setActiveCategory("全部"));
+detailCloseEl.addEventListener("click", closeDetail);
+detailModalEl.addEventListener("click", (event) => {
+  if (event.target instanceof HTMLElement && event.target.dataset.close === "true") {
+    closeDetail();
+  }
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !detailModalEl.classList.contains("hidden")) {
+    closeDetail();
+  }
+});
 
 renderFilters();
 renderCards();

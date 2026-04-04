@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>视觉 AI 面试题卡</title>
-  <meta name="description" content="面向视觉 AI 算法工程师的面试问答卡片页，支持翻转查看答案与快速搜索。">
+  <meta name="description" content="面向视觉 AI 算法工程师的面试问答卡片页，支持搜索、分类筛选与弹窗查看完整答案。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
       <div class="hero-copy">
         <p class="eyebrow">Visual AI Interview Deck</p>
         <h1>视觉 AI 面试题卡</h1>
-        <p class="hero-text">围绕 Python、深度学习、计算机视觉和 AIGC 的高频问题整理。首页默认按最近更新时间展示，点击卡片翻到答案。</p>
+        <p class="hero-text">首页只看问题摘要，点击卡片弹出完整答案。长代码、长公式和长解释都放到详情层里看，PC 和手机都会舒服很多。</p>
       </div>
       <div class="hero-actions">
         <button id="search-toggle" class="search-toggle" type="button" aria-expanded="false" aria-controls="search-panel">搜索</button>
@@ -26,7 +26,7 @@
     <section id="search-panel" class="search-panel hidden">
       <label class="search-box" for="search-input">
         <span class="search-label">搜索问题 / 关键词 / 标签</span>
-        <input id="search-input" type="search" placeholder="例如：PyTorch、BatchNorm、扩散模型..." autocomplete="off">
+        <input id="search-input" type="search" placeholder="例如：PyTorch、BatchNorm、Softmax..." autocomplete="off">
       </label>
     </section>
 
@@ -50,27 +50,34 @@
 
   <template id="card-template">
     <article class="qa-card" tabindex="0">
-      <div class="qa-card-inner">
-        <div class="qa-card-face qa-card-front">
-          <div class="card-meta">
-            <span class="card-date"></span>
-            <button class="card-category" type="button"></button>
-          </div>
-          <h2 class="card-question"></h2>
-          <div class="card-tags"></div>
-          <p class="card-hint">点击查看答案</p>
+      <div class="card-shell">
+        <div class="card-meta">
+          <span class="card-date"></span>
+          <button class="card-category" type="button"></button>
         </div>
-        <div class="qa-card-face qa-card-back">
-          <div class="card-meta">
-            <span class="card-date"></span>
-            <button class="card-category" type="button"></button>
-          </div>
-          <div class="card-answer"></div>
-          <p class="card-hint">再次点击返回问题</p>
-        </div>
+        <h2 class="card-question"></h2>
+        <p class="card-preview"></p>
+        <div class="card-tags"></div>
+        <p class="card-hint">点击查看完整答案</p>
       </div>
     </article>
   </template>
+
+  <div id="detail-modal" class="detail-modal hidden" aria-hidden="true">
+    <div class="detail-backdrop" data-close="true"></div>
+    <section class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <div class="detail-header">
+        <div class="detail-meta">
+          <span id="detail-date" class="detail-date"></span>
+          <button id="detail-category" class="detail-category" type="button"></button>
+        </div>
+        <button id="detail-close" class="detail-close" type="button" aria-label="关闭">关闭</button>
+      </div>
+      <h2 id="detail-title" class="detail-title"></h2>
+      <div id="detail-tags" class="detail-tags"></div>
+      <div id="detail-answer" class="detail-answer"></div>
+    </section>
+  </div>
 
   <script src="./data.js"></script>
   <script src="./app.js"></script>
