@@ -1,5 +1,269 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q086",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "损失函数",
+    tags: ["交叉熵", "相对熵", "KL散度"],
+    question: "交叉熵、相对熵怎么理解？它们之间是什么关系？",
+    answer: [
+      "交叉熵和相对熵本质上都在衡量两个分布差多远。",
+      "相对熵也叫 KL 散度，英文全称是 Kullback-Leibler Divergence，中文一般叫 KL 散度或相对熵。它表示用预测分布 Q 去逼近真实分布 P 时损失了多少信息。",
+      { type: "formula", latex: "D_{KL}(P\\|Q)=\\sum_x P(x)\\log\\frac{P(x)}{Q(x)}" },
+      "交叉熵的英文全称是 Cross Entropy，中文叫交叉熵。它表示真实分布是 P，但你按 Q 来编码时平均需要多少信息量。",
+      { type: "formula", latex: "H(P,Q)=-\\sum_x P(x)\\log Q(x)" },
+      "两者关系是：交叉熵 = 真实熵 + KL 散度。训练时真实分布固定，所以最小化交叉熵，本质上就等价于最小化 KL 散度。",
+      { type: "formula", latex: "H(P,Q)=H(P)+D_{KL}(P\\|Q)" }
+    ]
+  },
+  {
+    id: "Q087",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "损失函数",
+    tags: ["分类", "回归", "常见损失"],
+    question: "回归和分类的常用损失函数有哪些？",
+    answer: [
+      "分类里最常见的是交叉熵，因为分类任务本质上是在学类别概率分布。",
+      "二分类常用 BCE，英文全称是 Binary Cross Entropy，中文叫二元交叉熵；多分类常用 Cross Entropy Loss。",
+      "回归里最常见的是 MSE、MAE 和 Smooth L1。",
+      "MSE 的英文全称是 Mean Squared Error，中文叫均方误差，对大误差惩罚更重。",
+      "MAE 的英文全称是 Mean Absolute Error，中文叫平均绝对误差，更抗异常值。",
+      "Smooth L1 Loss 也叫 Huber Loss，是 MSE 和 MAE 的折中。"
+    ]
+  },
+  {
+    id: "Q088",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "损失函数",
+    tags: ["Logistic Regression", "最大似然", "BCE"],
+    question: "Logistic Regression 损失函数怎么来的？",
+    answer: [
+      "Logistic Regression 的英文全称是逻辑回归，虽然名字里有回归，但它做的是分类。",
+      "它先用线性部分算一个分数，再通过 Sigmoid 映射成 0 到 1 的概率。",
+      { type: "formula", latex: "z=w^Tx+b,\\quad p=\\frac{1}{1+e^{-z}}" },
+      "这里 Sigmoid 中文一般叫 S 形激活函数。接着我们假设标签服从伯努利分布，也就是结果只有 0 和 1 两种。",
+      "伯努利分布的英文全称是 Bernoulli Distribution，中文叫伯努利分布。",
+      { type: "formula", latex: "P(y\\mid x)=p^y(1-p)^{1-y}" },
+      "训练时做极大似然估计，也就是让真实标签出现的概率最大。为了更好优化，通常取负对数，就得到损失函数。",
+      { type: "formula", latex: "L=-\\left[y\\log p+(1-y)\\log(1-p)\\right]" },
+      "这就是逻辑回归常见的对数损失，本质上就是二元交叉熵。"
+    ]
+  },
+  {
+    id: "Q089",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "损失函数",
+    tags: ["Focal Loss", "IoU", "Dice"],
+    question: "常见损失函数有哪些？",
+    answer: [
+      "可以按任务来记：分类常用交叉熵和 Focal Loss，回归常用 MSE、MAE、Smooth L1。",
+      "Focal Loss 中文一般叫焦点损失，它会降低容易样本的权重，更关注难样本和类别不平衡场景。",
+      "检测任务里，分类部分常用交叉熵或 Focal Loss，框回归部分常用 Smooth L1 或 IoU Loss。",
+      "IoU 的英文全称是 Intersection over Union，中文叫交并比，表示预测框和真实框的重叠程度。",
+      "分割任务里常见交叉熵、Dice Loss、Focal Loss。",
+      "Dice 一般指 Dice Coefficient，中文叫 Dice 系数，用来衡量两个区域的重合程度。"
+    ]
+  },
+  {
+    id: "Q090",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "损失函数",
+    tags: ["逻辑回归", "概率解释", "交叉熵"],
+    question: "逻辑回归中损失函数的实际意义是什么？",
+    answer: [
+      "逻辑回归里的损失函数，本质上是在惩罚你给真实标签的概率太低。",
+      "如果真实标签是 1，你预测的概率 p 越接近 1，损失越小；如果你很自信地预测错了，比如真实是 1 但给了很小的概率，那损失会非常大。",
+      { type: "formula", latex: "L=-\\left[y\\log p+(1-y)\\log(1-p)\\right]" },
+      "所以它的实际意义有两个：一是从概率角度，它对应最大似然估计；二是从训练角度，它会强烈惩罚高置信度错误。",
+      "这比简单算分类对错更合理，因为它把预测概率也纳入了优化目标。"
+    ]
+  },
+  {
+    id: "Q091",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "损失函数",
+    tags: ["Smooth L1", "Huber Loss", "回归"],
+    question: "Smooth L1 loss 公式以及为什么这么设计？",
+    answer: [
+      "Smooth L1 Loss 可以理解成小误差时像 L2，大误差时像 L1。",
+      "L1 全称是 L1 Loss，中文叫绝对值损失；L2 常指平方损失，这里对应均方误差。",
+      "设误差是 x = y_hat - y，常见写法如下。",
+      { type: "formula", latex: "SmoothL1(x)=\\begin{cases}0.5x^2,& |x|<1\\\\ |x|-0.5,& |x|\\ge 1\\end{cases}" },
+      "这么设计的原因是：小误差区间用平方项，函数更平滑、梯度更稳定，利于收敛；大误差区间改成线性增长，避免像 MSE 那样被异常值主导。",
+      "所以它兼顾了 MSE 的平滑性和 MAE 的鲁棒性，在目标检测框回归里特别常见。"
+    ]
+  },
+  {
+    id: "Q092",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "损失函数",
+    tags: ["交叉熵", "分类", "最大似然"],
+    question: "为什么分类问题常用交叉熵？它是怎么来的？",
+    answer: [
+      "因为分类问题通常希望模型输出的是每个类别的概率，而交叉熵刚好就是衡量预测概率分布和真实分布差多少的损失。",
+      "如果真实标签是 one-hot，那么多分类交叉熵可以写成下面这个形式。",
+      { type: "formula", latex: "L=-\\sum_i y_i\\log p_i" },
+      "因为只有真实类别那一项不为 0，所以它本质上就是：正确类别概率越大，损失越小；正确类别概率越小，损失越大。",
+      "它怎么来的，本质也是最大似然估计。你假设样本标签服从某个离散分布，想让真实标签出现的概率最大；对似然取负对数以后，就得到交叉熵损失。",
+      "一句话面试版总结：分类问题用交叉熵，是因为它和概率建模天然一致，而且能直接惩罚模型对真实类别给出的低概率预测。"
+    ]
+  },
+  {
+    id: "Q076",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "评估指标",
+    tags: ["ROC", "AUC", "F1"],
+    question: "有哪些评价指标，比如 ROC、AUC、F1-Score？",
+    answer: [
+      "常见分类指标有准确率、精确率、召回率、F1、ROC、AUC、PR 曲线。",
+      "准确率适合类别均衡，精确率和召回率适合更关注误报或漏报的场景。",
+      "F1 用来平衡精确率和召回率，ROC/AUC 更关注排序能力和整体区分能力。"
+    ]
+  },
+  {
+    id: "Q077",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "评估指标",
+    tags: ["mAP", "PR曲线", "Recall"],
+    question: "解释下深度学习中的评价指标：mAP、PR 曲线、AUC、Recall？",
+    answer: [
+      "Recall 是召回率，表示正样本里有多少被找出来；PR 曲线展示不同阈值下 precision 和 recall 的关系。",
+      "AUC 是 ROC 曲线下面积，反映模型整体区分正负样本的能力。",
+      "mAP 常用于检测任务，是多个类别 AP 的平均值。"
+    ]
+  },
+  {
+    id: "Q078",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "评估指标",
+    tags: ["AUC", "ROC", "实现"],
+    question: "AUC 怎么计算？它画的是什么？实现 AUC 的过程是什么？",
+    answer: [
+      "AUC 对应的是 ROC 曲线下面积。ROC 曲线横轴是 FPR，纵轴是 TPR。",
+      "TPR 是真正率，也叫召回率，表示真实正样本里有多少被预测成正，公式是 TP / (TP + FN)。",
+      "FPR 是假正率，表示真实负样本里有多少被误判成正，公式是 FP / (FP + TN)。",
+      "实现时通常先收集每个样本的预测分数和真实标签，再按分数从高到低排序，依次改变阈值，计算每个阈值下的 TPR 和 FPR。",
+      "把这些点画出来连成线，就是 ROC 曲线；最后通常用梯形法求曲线下面积，得到 AUC。",
+      "也可以从排序角度理解：AUC 等于随机取一个正样本，它得分高于随机取一个负样本的概率。"
+    ]
+  },
+  {
+    id: "Q079",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "评估指标",
+    tags: ["AUC", "秩和", "公式"],
+    question: "给你 M 个正样本、N 个负样本以及预测值 P，怎么求 AUC？",
+    answer: [
+      "一种常见做法是按预测分数排序，统计正样本排名和，再用秩和公式计算。",
+      { type: "formula", latex: "AUC=\\frac{\\sum rank_{pos}-\\frac{M(M+1)}{2}}{MN}" },
+      "本质上还是在看正样本得分超过负样本的比例。"
+    ]
+  },
+  {
+    id: "Q080",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "评估指标",
+    tags: ["AUC", "排序", "单调变换"],
+    question: "如果所有预测值都乘 1.2，AUC 会变吗？",
+    answer: [
+      "如果只是统一乘一个正常数，AUC 不会变。",
+      "因为 AUC 只和样本之间的相对排序有关，不依赖分数的绝对大小。",
+      "只要排序不变，AUC 就不变。"
+    ]
+  },
+  {
+    id: "Q081",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "评估指标",
+    tags: ["ROC曲线", "AUC", "分类指标"],
+    question: "ROC 曲线的含义和其他评价指标的区别是什么？",
+    answer: [
+      "ROC 曲线描述的是不同阈值下 TPR 和 FPR 的变化，强调模型整体排序能力。",
+      "和准确率、精确率、召回率不同，它不是单点指标，而是一整条曲线。",
+      "AUC 则是对这条曲线的整体概括。"
+    ]
+  },
+  {
+    id: "Q082",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "评估指标",
+    tags: ["准确率", "召回率", "PR曲线"],
+    question: "分类问题的指标是什么？准确率、召回率、PR 曲线怎么理解？",
+    answer: [
+      "准确率是预测正确的比例；召回率是正样本中被找回来的比例。",
+      "PR 曲线是 precision 和 recall 在不同阈值下的关系。",
+      "类别不平衡时，PR 曲线通常比准确率更有参考价值。"
+    ]
+  },
+  {
+    id: "Q083",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "数学基础",
+    tags: ["相关系数", "协方差", "统计"],
+    question: "相关系数是怎么计算的？讲一下协方差和它的意义？",
+    answer: [
+      "协方差衡量两个变量是否同向变化，正协方差表示同增同减，负协方差表示一个增一个减。",
+      "相关系数是在协方差基础上做标准化，范围在 [-1, 1]。",
+      "它更方便比较不同变量之间的线性相关程度。"
+    ]
+  },
+  {
+    id: "Q084",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "评估指标",
+    tags: ["视频", "mAP", "mIoU"],
+    question: "做视频用的是什么评价指标？",
+    answer: [
+      "要看任务。分类任务常用准确率、Top-k accuracy；检测任务常用 mAP；分割任务常用 mIoU、Dice。",
+      "跟踪任务常用 MOTA、IDF1、HOTA。",
+      "视频理解里还常看 clip-level 和 video-level 的精度。"
+    ]
+  },
+  {
+    id: "Q085",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "业务指标",
+    tags: ["CPM", "CPC", "ROI"],
+    question: "计算广告中 CPM、CPC、ROI 的含义和计算方式是什么？",
+    answer: [
+      "CPM 的全称是 Cost Per Mille，中文一般说千次曝光成本，公式是 花费 / 曝光量 × 1000。",
+      "CPC 的全称是 Cost Per Click，中文是单次点击成本，公式是 花费 / 点击量。",
+      "ROI 的全称是 Return On Investment，中文是投资回报率，通常写成 收益 / 花费，用来衡量投放回报。"
+    ]
+  },  {
     id: "Q065",
     updatedAt: "2026-04-04",
     company: "字节跳动",
@@ -1053,6 +1317,9 @@
     ]
   }
 ];
+
+
+
 
 
 

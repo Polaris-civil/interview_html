@@ -3,6 +3,7 @@ const searchPanelEl = document.querySelector("#search-panel");
 const searchInputEl = document.querySelector("#search-input");
 const companyFilterListEl = document.querySelector("#company-filter-list");
 const topicFilterListEl = document.querySelector("#topic-filter-list");
+const dateFilterListEl = document.querySelector("#date-filter-list");
 const clearFilterEl = document.querySelector("#clear-filter");
 const cardGridEl = document.querySelector("#card-grid");
 const emptyStateEl = document.querySelector("#empty-state");
@@ -24,6 +25,7 @@ const companies = ["全部", ...new Set(allQuestions.map((item) => item.company 
 let searchKeyword = "";
 let activeCompany = "全部";
 let activeTopic = "全部";
+let activeDate = "全部";
 let lastFocusedCard = null;
 
 function normalizeText(value) {
@@ -56,6 +58,14 @@ function looksLikeFormula(text) {
 }
 
 function renderFormulaBlock(text) {
+  if (window.katex) {
+    try {
+      return `<div class="answer-formula">${window.katex.renderToString(text, { throwOnError: false, displayMode: true })}</div>`;
+    } catch (error) {
+      return `<div class="answer-formula"><code>${escapeHtml(text)}</code></div>`;
+    }
+  }
+
   return `<div class="answer-formula"><code>${escapeHtml(text)}</code></div>`;
 }
 
@@ -94,28 +104,42 @@ function buildPreview(answerList) {
   return text.length > 92 ? `${text.slice(0, 92)}...` : text;
 }
 
-function formatDisplayDate(dateString) {
+function getTodayString() {
   const today = new Date();
-  const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const target = new Date(`${dateString}T00:00:00`);
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 
+function getYesterdayString() {
+  const today = new Date();
+  today.setDate(today.getDate() - 1);
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatDisplayDate(dateString) {
+  const todayString = getTodayString();
+  const yesterdayString = getYesterdayString();
+
+  if (dateString === todayString) {
+    return "今天";
+  }
+
+  if (dateString === yesterdayString) {
+    return "昨天";
+  }
+
+  const target = new Date(`${dateString}T00:00:00`);
   if (Number.isNaN(target.getTime())) {
     return dateString;
   }
 
-  const targetDate = new Date(target.getFullYear(), target.getMonth(), target.getDate());
-  const diffDays = Math.round((currentDate - targetDate) / 86400000);
-
-  if (diffDays === 0) {
-    return "今天";
-  }
-
-  if (diffDays === 1) {
-    return "昨天";
-  }
-
-  const month = String(targetDate.getMonth() + 1).padStart(2, "0");
-  const day = String(targetDate.getDate()).padStart(2, "0");
+  const month = String(target.getMonth() + 1).padStart(2, "0");
+  const day = String(target.getDate()).padStart(2, "0");
   return `${month}-${day}`;
 }
 
@@ -135,13 +159,24 @@ function getVisibleTopics() {
   return ["全部", ...new Set(pool.map((item) => getTopicGroup(item)))];
 }
 
+function getVisibleDates() {
+  const pool = allQuestions.filter((item) => {
+    const companyMatched = activeCompany === "全部" || getCompany(item) === activeCompany;
+    const topicMatched = activeTopic === "全部" || getTopicGroup(item) === activeTopic;
+    return companyMatched && topicMatched;
+  });
+
+  return ["全部", ...new Set(pool.map((item) => item.updatedAt))];
+}
+
 function matchesQuestion(item) {
   const keyword = normalizeText(searchKeyword);
   const companyMatched = activeCompany === "全部" || getCompany(item) === activeCompany;
   const topicMatched = activeTopic === "全部" || getTopicGroup(item) === activeTopic;
+  const dateMatched = activeDate === "全部" || item.updatedAt === activeDate;
 
   if (!keyword) {
-    return companyMatched && topicMatched;
+    return companyMatched && topicMatched && dateMatched;
   }
 
   const haystack = normalizeText([
@@ -155,7 +190,7 @@ function matchesQuestion(item) {
     item.answer.map(answerItemToText).join(" ")
   ].join(" "));
 
-  return companyMatched && topicMatched && haystack.includes(keyword);
+  return companyMatched && topicMatched && dateMatched && haystack.includes(keyword);
 }
 
 function createMiniTag(text) {
@@ -168,14 +203,24 @@ function createMiniTag(text) {
 function setActiveCompany(company) {
   activeCompany = company;
   activeTopic = "全部";
+  activeDate = "全部";
   renderCompanyFilters();
   renderTopicFilters();
+  renderDateFilters();
   renderCards();
 }
 
 function setActiveTopic(topic) {
   activeTopic = topic;
+  activeDate = "全部";
   renderTopicFilters();
+  renderDateFilters();
+  renderCards();
+}
+
+function setActiveDate(dateValue) {
+  activeDate = dateValue;
+  renderDateFilters();
   renderCards();
 }
 
@@ -201,8 +246,21 @@ function renderTopicFilters() {
     button.addEventListener("click", () => setActiveTopic(topic));
     topicFilterListEl.appendChild(button);
   });
+}
 
-  clearFilterEl.classList.toggle("hidden", activeCompany === "全部" && activeTopic === "全部");
+function renderDateFilters() {
+  dateFilterListEl.innerHTML = "";
+  getVisibleDates().forEach((dateValue) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `filter-chip${dateValue === activeDate ? " is-active" : ""}`;
+    button.textContent = dateValue === "全部" ? "全部" : formatDisplayDate(dateValue);
+    button.title = dateValue === "全部" ? "全部" : dateValue;
+    button.addEventListener("click", () => setActiveDate(dateValue));
+    dateFilterListEl.appendChild(button);
+  });
+
+  clearFilterEl.classList.toggle("hidden", activeCompany === "全部" && activeTopic === "全部" && activeDate === "全部");
 }
 
 function openDetail(item, cardEl) {
@@ -216,6 +274,10 @@ function openDetail(item, cardEl) {
   detailTagsEl.innerHTML = "";
   item.tags.forEach((tag) => detailTagsEl.appendChild(createMiniTag(tag)));
 
+  detailDateEl.onclick = () => {
+    setActiveDate(item.updatedAt);
+    closeDetail();
+  };
   detailCompanyEl.onclick = () => {
     setActiveCompany(getCompany(item));
     closeDetail();
@@ -240,8 +302,8 @@ function closeDetail() {
   }
 }
 
-function buildFilterButton(buttonEl, value, setter) {
-  buttonEl.textContent = value;
+function buildFilterButton(buttonEl, value, setter, label) {
+  buttonEl.textContent = label || value;
   buttonEl.addEventListener("click", (event) => {
     event.stopPropagation();
     setter(value);
@@ -251,15 +313,15 @@ function buildFilterButton(buttonEl, value, setter) {
 function buildCard(item) {
   const fragment = cardTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".qa-card");
-  const date = fragment.querySelector(".card-date");
+  const dateEl = fragment.querySelector(".card-date");
   const companyEl = fragment.querySelector(".card-company");
   const topicEl = fragment.querySelector(".card-topic");
   const question = fragment.querySelector(".card-question");
   const preview = fragment.querySelector(".card-preview");
   const tagContainer = fragment.querySelector(".card-tags");
 
-  date.textContent = formatDisplayDate(item.updatedAt);
-  date.title = item.updatedAt;
+  buildFilterButton(dateEl, item.updatedAt, setActiveDate, formatDisplayDate(item.updatedAt));
+  dateEl.title = item.updatedAt;
   buildFilterButton(companyEl, getCompany(item), setActiveCompany);
   buildFilterButton(topicEl, getTopicGroup(item), setActiveTopic);
   question.textContent = item.question;
@@ -309,8 +371,10 @@ searchInputEl.addEventListener("input", (event) => {
 clearFilterEl.addEventListener("click", () => {
   activeCompany = "全部";
   activeTopic = "全部";
+  activeDate = "全部";
   renderCompanyFilters();
   renderTopicFilters();
+  renderDateFilters();
   renderCards();
 });
 detailCloseEl.addEventListener("click", closeDetail);
@@ -327,4 +391,5 @@ document.addEventListener("keydown", (event) => {
 
 renderCompanyFilters();
 renderTopicFilters();
+renderDateFilters();
 renderCards();

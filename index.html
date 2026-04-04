@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>视觉 AI 面试题卡</title>
-  <meta name="description" content="面向视觉 AI 算法工程师的面试问答卡片页，支持公司筛选、专题分栏、搜索与详情弹窗。">
+  <meta name="description" content="面向视觉 AI 算法工程师的面试问答卡片页，支持公司筛选、专题分栏、日期筛选、搜索与详情弹窗。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -16,7 +17,7 @@
       <div class="hero-copy">
         <p class="eyebrow">Visual AI Interview Deck</p>
         <h1>视觉 AI 面试题卡</h1>
-        <p class="hero-text">现在可以先按公司，再按专题查看。现有题目默认归在字节跳动的基础知识点里，后面你继续补题时可以逐步扩展到项目题和 Python 编程题。</p>
+        <p class="hero-text">现在可以按公司、专题和日期一起查看。现有题目默认归在字节跳动的基础知识点里，后面你继续补题时可以逐步扩展到项目题和 Python 编程题。</p>
       </div>
       <div class="hero-actions">
         <button id="search-toggle" class="search-toggle" type="button" aria-expanded="false" aria-controls="search-panel">搜索</button>
@@ -40,15 +41,22 @@
     <section class="filter-panel">
       <div class="filter-header">
         <span class="search-label">专题分栏</span>
-        <button id="clear-filter" class="clear-filter hidden" type="button">清除筛选</button>
       </div>
       <div id="topic-filter-list" class="filter-list"></div>
+    </section>
+
+    <section class="filter-panel">
+      <div class="filter-header">
+        <span class="search-label">日期筛选</span>
+        <button id="clear-filter" class="clear-filter hidden" type="button">清除筛选</button>
+      </div>
+      <div id="date-filter-list" class="filter-list"></div>
     </section>
 
     <main>
       <section id="empty-state" class="empty-state hidden">
         <h2>没有匹配结果</h2>
-        <p>换个关键词、公司或专题试试。</p>
+        <p>换个关键词、公司、专题或日期试试。</p>
       </section>
 
       <section id="card-grid" class="card-grid" aria-live="polite"></section>
@@ -59,7 +67,7 @@
     <article class="qa-card" tabindex="0">
       <div class="card-shell">
         <div class="card-meta">
-          <span class="card-date"></span>
+          <button class="card-date" type="button"></button>
           <div class="card-meta-actions">
             <button class="card-company" type="button"></button>
             <button class="card-topic" type="button"></button>
@@ -78,7 +86,7 @@
     <section class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
       <div class="detail-header">
         <div class="detail-meta">
-          <span id="detail-date" class="detail-date"></span>
+          <button id="detail-date" class="detail-date" type="button"></button>
           <div class="detail-meta-actions">
             <button id="detail-company" class="detail-company" type="button"></button>
             <button id="detail-topic" class="detail-topic" type="button"></button>
@@ -92,6 +100,7 @@
     </section>
   </div>
 
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="./data.js"></script>
   <script src="./app.js"></script>
 </body>
