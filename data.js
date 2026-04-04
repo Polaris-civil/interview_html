@@ -1,5 +1,185 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q098",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["SGD", "Online Learning", "梯度下降"],
+    question: "SGD 每步做什么，为什么能做 online learning？",
+    answer: [
+      "SGD 的英文全称是 Stochastic Gradient Descent，中文叫随机梯度下降。",
+      "它每一步先拿一个样本或者一个 mini-batch 算当前梯度，再按梯度反方向更新参数。",
+      { type: "formula", latex: "w\\leftarrow w-\\eta\\nabla L(w)" },
+      "这里 eta 是学习率，英文叫 Learning Rate，决定每次走多大。",
+      "它能做 Online Learning，也就是在线学习，原因是它不需要等全量数据都准备好，只要来了一个新样本，就可以立刻算梯度、立刻更新参数。"
+    ]
+  },
+  {
+    id: "Q099",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["L1 Loss", "SGD", "次梯度"],
+    question: "L1 是损失函数，有哪些优化方法，能用 SGD 吗？为什么？",
+    answer: [
+      "L1 Loss 中文叫绝对值损失，形式是预测误差的绝对值。",
+      { type: "formula", latex: "L=|y-\\hat y|" },
+      "它可以用 SGD，但要注意 L1 在 0 点不可导，通常用 subgradient，也就是次梯度来做。",
+      "Subgradient 的中文叫次梯度，就是不可导点时用一个可接受的替代梯度。误差大于 0 时梯度是 1，小于 0 时是负 1，等于 0 时工程里常直接取 0。",
+      "能用 SGD 的原因是，优化器不要求函数处处严格可导，只要大部分地方能算梯度或次梯度，就能迭代更新。",
+      "但 L1 的梯度不随误差连续变小，所以收敛时震荡通常会比 L2 更明显。"
+    ]
+  },
+  {
+    id: "Q100",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["Adam", "迭代公式", "自适应学习率"],
+    question: "Adam 优化器的迭代公式是什么？",
+    answer: [
+      "Adam 的英文全称是 Adaptive Moment Estimation，中文一般叫自适应矩估计。",
+      "它结合了动量和自适应学习率两部分。",
+      { type: "formula", latex: "m_t=\\beta_1 m_{t-1}+(1-\\beta_1)g_t" },
+      { type: "formula", latex: "v_t=\\beta_2 v_{t-1}+(1-\\beta_2)g_t^2" },
+      { type: "formula", latex: "\\hat m_t=\\frac{m_t}{1-\\beta_1^t},\\quad \\hat v_t=\\frac{v_t}{1-\\beta_2^t}" },
+      { type: "formula", latex: "\\theta_t=\\theta_{t-1}-\\eta\\frac{\\hat m_t}{\\sqrt{\\hat v_t}+\\epsilon}" },
+      "其中 beta1 控制一阶动量，beta2 控制二阶动量，epsilon 是防止分母为 0 的小常数。"
+    ]
+  },
+  {
+    id: "Q101",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["Adam", "二阶矩", "原理"],
+    question: "Adam 用到二阶矩的原理是什么？",
+    answer: [
+      "这里的二阶矩不是在算真正的 Hessian，也不是牛顿法那种二阶导。",
+      "它用的是梯度平方的指数滑动平均，也就是最近一段时间每个维度梯度波动有多大。",
+      { type: "formula", latex: "v_t=\\beta_2 v_{t-1}+(1-\\beta_2)g_t^2" },
+      "如果某一维梯度一直很大，说明这维更新容易太猛，就把步长缩小；如果某一维梯度比较小，就允许更大一点的更新。",
+      "所以 Adam 的核心思想是：一阶矩负责提供稳定方向，二阶矩负责做每个维度的自适应缩放。"
+    ]
+  },
+  {
+    id: "Q102",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["Batch GD", "SGD", "Mini-batch"],
+    question: "几种梯度下降的方法和优缺点是什么？",
+    answer: [
+      "最常见三种是 Batch Gradient Descent、SGD 和 Mini-batch Gradient Descent。",
+      "Batch Gradient Descent 中文叫批量梯度下降，每次用全量数据算梯度。优点是方向稳定，缺点是一次更新太慢，数据大时成本高。",
+      "SGD 每次只用一个样本更新。优点是更新快，能在线学习，也更容易跳出一些局部不良点；缺点是噪声大，收敛路径抖动明显。",
+      "Mini-batch Gradient Descent 中文叫小批量梯度下降，是现在最常用的折中方案。它兼顾并行效率和梯度稳定性，但 batch 太小会抖，batch 太大又会变慢。"
+    ]
+  },
+  {
+    id: "Q103",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["Momentum", "Adam", "RMSProp"],
+    question: "梯度下降系列算法有哪些？Momentum、Adam 这类算不算？",
+    answer: [
+      "算，当然算。广义上的梯度下降系列，不只是最原始的 GD、SGD，还包括各种基于梯度更新规则改造出来的优化器。",
+      "基础类有 GD、SGD、Mini-batch SGD。",
+      "加速类有 Momentum、Nesterov。Momentum 中文叫动量法，核心是给历史梯度一个惯性。",
+      "自适应学习率类有 Adagrad、RMSProp、Adadelta。",
+      "综合类有 Adam、AdamW、Nadam。",
+      "所以面试里如果问梯度下降算法有哪些，最好把 momentum、RMSProp、Adam 这些一起说出来。"
+    ]
+  },
+  {
+    id: "Q104",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["SGD", "Adam", "发展史"],
+    question: "讲一下你熟悉的优化器，说一下区别或发展史。",
+    answer: [
+      "可以按发展脉络讲：最早是 SGD，简单直接，但震荡大、对学习率敏感。",
+      "然后是 Momentum，加入历史方向，减小来回摆动，加快沿主方向前进。",
+      "再后来有 Adagrad，给不同参数维度自适应学习率，但它会让学习率越来越小。",
+      "然后是 RMSProp，用指数滑动平均解决 Adagrad 学习率衰减过快的问题。",
+      "最后是 Adam，把 Momentum 和 RMSProp 结合起来，所以一开始收敛通常很快。",
+      "工程上常见经验是：Adam 前期收敛快，SGD 后期泛化有时更好；大规模训练里也常见 AdamW。"
+    ]
+  },
+  {
+    id: "Q105",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["Adam", "默认参数", "优化器"],
+    question: "有哪些优化算法？Adam 的默认参数有哪些？",
+    answer: [
+      "常见优化算法有 SGD、Momentum、Nesterov、Adagrad、RMSProp、Adam、AdamW。",
+      "Adam 常见默认参数是学习率 lr 等于 0.001，beta1 等于 0.9，beta2 等于 0.999，epsilon 等于 1e-8。",
+      { type: "formula", latex: "lr=10^{-3},\\quad \\beta_1=0.9,\\quad \\beta_2=0.999,\\quad \\epsilon=10^{-8}" },
+      "这组默认值之所以常用，是因为大多数任务上比较稳，尤其是前期训练不太容易炸。"
+    ]
+  },
+  {
+    id: "Q106",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "数学基础",
+    tags: ["方向导数", "梯度", "优化"],
+    question: "方向导数和梯度是什么？它们的关系是什么？为什么梯度法有效？",
+    answer: [
+      "方向导数表示函数在某个方向上的变化率，梯度是把各个方向上的偏导数组合成的向量。",
+      { type: "formula", latex: "\\nabla f(x)=\\left(\\frac{\\partial f}{\\partial x_1},\\dots,\\frac{\\partial f}{\\partial x_n}\\right)" },
+      "沿单位方向向量 u 的方向导数等于梯度和这个方向的内积。",
+      { type: "formula", latex: "D_u f(x)=\\nabla f(x)^T u" },
+      "这说明梯度方向是函数上升最快方向，负梯度方向就是下降最快方向。",
+      "所以梯度法有效，是因为在当前位置做局部一阶近似时，沿负梯度走，能最快降低目标函数。"
+    ]
+  },
+  {
+    id: "Q107",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["初始化", "Xavier", "He"],
+    question: "神经网络权重初始化方法和优化方法有哪些？",
+    answer: [
+      "权重初始化常见有随机小值初始化、Xavier 初始化、He 初始化。",
+      "Xavier Initialization 更适合 tanh、sigmoid 这类激活；He Initialization 更适合 ReLU 系列。",
+      "优化方法常见有 SGD、Momentum、RMSProp、Adam、AdamW。",
+      "面试里可以把两者连起来说：初始化决定一开始梯度稳不稳，优化器决定后面参数怎么走。如果初始化不好，再好的优化器也会很难训。"
+    ]
+  },
+  {
+    id: "Q108",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "优化算法",
+    tags: ["Adam", "Adagrad", "优缺点"],
+    question: "介绍一下你了解的优化器和各自优缺点？Adam 和 Adagrad 的区别是什么？",
+    answer: [
+      "SGD 的优点是简单、内存开销小、后期泛化常不错；缺点是收敛慢，对学习率敏感。",
+      "Momentum 的优点是能加速、减小震荡；缺点是还得调动量参数。",
+      "Adagrad 的优点是对稀疏特征友好，不同维度有自适应学习率；缺点是学习率会不断累积衰减，后期可能几乎不动。",
+      "RMSProp 缓解了 Adagrad 学习率衰减过快的问题。",
+      "Adam 的优点是收敛快、对超参相对不那么敏感；缺点是有时最终泛化不如 SGD。",
+      "Adam 和 Adagrad 的核心区别是：Adagrad 会把历史平方梯度一直累加，所以学习率单调变小；Adam 用指数滑动平均记录一阶和二阶矩，不会无限累加，所以更适合长时间训练，也更稳定。"
+    ]
+  },
+  {
     id: "Q093",
     updatedAt: "2026-04-04",
     company: "字节跳动",
