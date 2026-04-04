@@ -1,8 +1,164 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q065",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
+    tags: ["梯度消失", "梯度爆炸", "训练稳定性"],
+    question: "详细解释梯度消失、梯度爆炸的原因及其解决方法。",
+    answer: [
+      "梯度消失和爆炸本质上都来自反向传播中的链式连乘。导数长期小于 1 会让梯度越传越小，长期大于 1 会让梯度越传越大。",
+      "常见诱因包括网络过深、初始化不合理、激活函数饱和、学习率过大。",
+      "解决方法有合理初始化、残差连接、BatchNorm、使用 ReLU 类激活、梯度裁剪和调整学习率。"
+    ]
+  },
+  {
+    id: "Q066",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
+    tags: ["Dropout", "正则化", "过拟合"],
+    question: "你用过 Dropout 吗？介绍一下，Dropout 的作用是什么？",
+    answer: [
+      "Dropout 是训练时随机丢弃一部分神经元的正则化方法。",
+      "它能减少神经元之间的共适应，让模型不要过度依赖某些局部特征，从而降低过拟合。",
+      "推理时不再随机丢弃，而是使用完整网络，并通过缩放保持期望一致。"
+    ]
+  },
+  {
+    id: "Q067",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
+    tags: ["梯度消失", "训练稳定性", "表现"],
+    question: "梯度消失的表现是什么，该怎么处理？",
+    answer: [
+      "常见表现是前面层的参数几乎不更新，训练很慢，loss 长时间降不下去。",
+      "深层网络里越靠前的层梯度越接近 0，模型容易学不到有效特征。",
+      "常见处理方法有换 ReLU 类激活、用残差连接、BN、合理初始化和减小网络深度。"
+    ]
+  },
+  {
+    id: "Q068",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
+    tags: ["初始化", "权重初始化", "训练稳定性"],
+    question: "神经网络权重怎么初始化，说一下自己知道的方法。",
+    answer: [
+      "常见方法有随机小值初始化、Xavier 初始化、He 初始化。",
+      "Xavier 更适合 tanh/sigmoid 这类激活，He 初始化更适合 ReLU 系列。",
+      "初始化目标是让前向和反向传播的方差都尽量稳定，避免梯度消失或爆炸。"
+    ]
+  },
+  {
+    id: "Q069",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
+    tags: ["Dropout", "过拟合", "机制"],
+    question: "Dropout 的机制是什么？为什么它能够抑制过拟合？",
+    answer: [
+      "训练时随机屏蔽一部分神经元，相当于每次训练一个不同的子网络。",
+      "这样模型不能依赖固定路径记忆训练集噪声，会被迫学习更鲁棒的表示。",
+      "因此它能减少共适应现象，提高泛化能力。"
+    ]
+  },
+  {
+    id: "Q070",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
+    tags: ["初始化", "权重为0", "对称性"],
+    question: "神经网络中把权重 W 初始化为 0 有什么问题？为什么不能初始化权重为 0？",
+    answer: [
+      "如果所有权重都初始化为 0，同一层神经元的输出和梯度会完全一样。",
+      "这样参数更新后仍然保持一致，网络无法学出不同特征。",
+      "本质上这是对称性没有被打破，所以通常需要随机初始化。"
+    ]
+  },
+  {
+    id: "Q071",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
+    tags: ["不收敛", "训练速度", "优化"],
+    question: "如何解决模型不收敛问题，以及如何加快模型的训练速度？",
+    answer: [
+      "先排查数据、标签、学习率、初始化、损失函数和梯度是否正常。模型不收敛很多时候不是结构问题，而是训练配置问题。",
+      "常见改进包括调学习率和优化器、加 BN、做残差连接、检查数据归一化、换更合适的损失函数。",
+      "想加快训练可用 mixed precision、更大 batch、预训练模型、数据加载优化和更轻量的骨干网络。"
+    ]
+  },
+  {
+    id: "Q072",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
+    tags: ["BatchNorm", "normalize", "收敛"],
+    question: "你知道哪几种 normalize 的方法？请着重介绍一种（BatchNormalization）。这个方法在深度学习网络中有什么用？为什么可以加速模型收敛？",
+    answer: [
+      "常见有 BN、LN、IN、GN。BN 是按 mini-batch 统计均值和方差后做归一化，再用可学习参数恢复表示能力。",
+      "BN 的作用是稳定特征分布，让每层输入不要变化太剧烈，从而训练更稳定。",
+      "它能加速收敛，主要是因为优化更平滑、允许使用更大学习率，并且对初始化没那么敏感。"
+    ]
+  },
+  {
+    id: "Q073",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "注意力机制",
+    tags: ["Attention", "Self-Attention", "公式"],
+    question: "Attention 怎么做，Self-Attention 怎么做？Self-Attention 原理公式是什么，为什么有效？",
+    answer: [
+      "Attention 的核心是给不同输入位置分配不同权重，再做加权求和。",
+      "Self-Attention 里，Q、K、V 都来自同一输入，先算相似度，再经过 Softmax 得到权重，最后对 V 加权求和。",
+      { type: "formula", latex: "Attention(Q,K,V)=Softmax(\frac{QK^T}{\sqrt{d_k}})V" },
+      "它有效是因为能直接建模长距离依赖，而且不同位置之间的交互是动态的。"
+    ]
+  },
+  {
+    id: "Q074",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "注意力机制",
+    tags: ["Encoder-Decoder", "Attention", "Seq2Seq"],
+    question: "Encoder-Decoder 模型里，如果 Decoder 是基于 Attention 做的，该怎么做，是一个什么结构？",
+    answer: [
+      "这是典型的带 Attention 的 Seq2Seq 结构。Encoder 先把输入编码成一组隐藏状态，Decoder 在每一步解码时都对这些隐藏状态做 Attention。",
+      "也就是说 Decoder 不只依赖上一步状态，还会动态选择当前最相关的 Encoder 信息。",
+      "这样比只用一个固定上下文向量更强，尤其适合长序列任务。"
+    ]
+  },
+  {
+    id: "Q075",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "注意力机制",
+    tags: ["Attention", "Soft Attention", "Hard Attention"],
+    question: "Attention 机制是什么？什么是 Soft Attention 和 Hard Attention？",
+    answer: [
+      "Attention 就是根据相关性给不同输入分配不同权重，再聚合信息。",
+      "Soft Attention 是对所有位置分配连续权重，可微、可直接反向传播，所以最常用。",
+      "Hard Attention 更像是离散选择少数位置，通常不可微，训练更难，常需要强化学习或近似方法。"
+    ]
+  },  {
     id: "Q060",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "激活函数",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "激活函数",
     tags: ["Softmax", "多分类", "Sigmoid"],
     question: "Softmax 作为多分类器的作用是什么？和二分类相比有什么特点？",
     answer: [
@@ -14,7 +170,9 @@
   {
     id: "Q061",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "激活函数",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "激活函数",
     tags: ["Softmax", "公式", "概率分布"],
     question: "Softmax 的计算公式怎么写？",
     answer: [
@@ -26,7 +184,9 @@
   {
     id: "Q062",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "激活函数",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "激活函数",
     tags: ["Softmax", "Cross Entropy", "Loss"],
     question: "Softmax 的 loss function 是什么？",
     answer: [
@@ -38,7 +198,9 @@
   {
     id: "Q063",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "手写代码",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "手写代码",
     tags: ["Softmax", "Numpy", "数值稳定"],
     question: "怎么写一个 Softmax 实现，并注意上下溢问题？",
     answer: [
@@ -50,7 +212,9 @@
   {
     id: "Q064",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "激活函数",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "激活函数",
     tags: ["Softmax", "上溢", "下溢"],
     question: "Softmax 在数值计算上为什么会出现上溢和下溢？怎么处理？",
     answer: [
@@ -61,7 +225,9 @@
   },  {
     id: "Q055",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "手写代码",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "手写代码",
     tags: ["卷积", "手写实现", "多通道"],
     question: "说一些卷积，用代码实现卷积，并再改成有通道的三维卷积，核心怎么理解？",
     answer: [
@@ -74,7 +240,9 @@
   {
     id: "Q056",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "手写代码",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "手写代码",
     tags: ["卷积", "Padding", "手写实现"],
     question: "写一个单通道的图像卷积，带 padding，核心要点是什么？",
     answer: [
@@ -87,7 +255,9 @@
   {
     id: "Q057",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "手写代码",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "手写代码",
     tags: ["前向传播", "反向传播", "BP"],
     question: "手写前向传播、反向传播代码，核心思路是什么？",
     answer: [
@@ -100,7 +270,9 @@
   {
     id: "Q058",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "手写代码",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "手写代码",
     tags: ["BP", "Numpy", "反向传播"],
     question: "如果面试官让你写 BP，正向传播、反向传播都推一个遍，重点是什么？",
     answer: [
@@ -113,7 +285,9 @@
   {
     id: "Q059",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["BN", "GN", "LN"],
     question: "怎么用代码或数学公式展示 BN 的内部实现？为什么要用 GN？GN、BN、LN、IN 的区别是什么？",
     answer: [
@@ -125,7 +299,9 @@
   },  {
     id: "Q053",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["BP", "反向传播", "链式法则"],
     question: "BP 神经网络反向传播怎么推导？",
     answer: [
@@ -137,7 +313,9 @@
   {
     id: "Q054",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["MaxPooling", "梯度", "反向传播"],
     question: "max pooling 的梯度怎么求？",
     answer: [
@@ -148,7 +326,9 @@
   },  {
     id: "Q048",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["卷积", "参数量", "FLOPs"],
     question: "如何计算卷积的复杂度、卷积层的参数量？",
     answer: [
@@ -160,7 +340,9 @@
   {
     id: "Q049",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["Feature Map", "输出尺寸", "卷积"],
     question: "怎么计算 Feature Map 的 size？",
     answer: [
@@ -172,7 +354,9 @@
   {
     id: "Q050",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["FLOPs", "输出尺寸", "卷积"],
     question: "输入为 L×L，卷积核为 k×k，步长 s，padding p，怎么求输出尺寸和 FLOPs？",
     answer: [
@@ -184,7 +368,9 @@
   {
     id: "Q051",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "轻量化网络",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "轻量化网络",
     tags: ["Depthwise", "Pointwise", "Feature Map"],
     question: "同时考虑 pooling、stride、padding 时，怎么计算 depthwise conv 和 pointwise conv 每一步的计算量和 feature map 尺寸？",
     answer: [
@@ -196,7 +382,9 @@
   {
     id: "Q052",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["输出维度", "Padding", "CNN"],
     question: "CNN 中给定输入维度 [c, w, h]、卷积核 [k, k]，若 padding=p，输出维度怎么求？",
     answer: [
@@ -207,7 +395,9 @@
   },  {
     id: "Q045",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["BatchNorm", "BN", "训练"],
     question: "BN 的机制是什么，BN 怎么训练？",
     answer: [
@@ -219,7 +409,9 @@
   {
     id: "Q046",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["梯度消失", "梯度爆炸", "训练稳定性"],
     question: "梯度消失和梯度爆炸的原因是什么？怎么解决？",
     answer: [
@@ -231,7 +423,9 @@
   {
     id: "Q047",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "模型压缩",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "模型压缩",
     tags: ["模型压缩", "移动端", "部署"],
     question: "如果 CNN 网络很大，在手机上运行效率不高，有哪些模型压缩方法？",
     answer: [
@@ -242,7 +436,9 @@
   },  {
     id: "Q039",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["CNN", "图像", "视频"],
     question: "为什么卷积神经网络适用于图像和视频，还能用于其他领域吗？",
     answer: [
@@ -254,7 +450,9 @@
   {
     id: "Q040",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["反向传播", "全连接", "卷积层"],
     question: "CNN 反向传播细节，怎么过全连接层、池化层、卷积层？",
     answer: [
@@ -266,7 +464,9 @@
   {
     id: "Q041",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["过拟合", "正则化", "CNN"],
     question: "CNN 里面能自然起到防止过拟合的办法有哪些？",
     answer: [
@@ -278,7 +478,9 @@
   {
     id: "Q042",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["感受野", "权值共享", "CNN"],
     question: "CNN 中感受野和权值共享是什么意思？",
     answer: [
@@ -290,7 +492,9 @@
   {
     id: "Q043",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["BatchNorm", "BN", "训练推理"],
     question: "BN 层的作用是什么，训练和测试时有什么不同？",
     answer: [
@@ -302,7 +506,9 @@
   {
     id: "Q044",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["BatchNorm", "online learning", "小batch"],
     question: "BN 层做预测时，方差均值怎么算？online learning 时又怎么算？",
     answer: [
@@ -313,7 +519,9 @@
   },  {
     id: "Q038",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "轻量化网络",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "轻量化网络",
     tags: ["深度可分离卷积", "分组卷积", "参数量"],
     question: "为什么深度可分离卷积和分组卷积可以减少参数量，原理是什么？",
     answer: [
@@ -325,7 +533,9 @@
   },  {
     id: "Q034",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["反卷积", "转置卷积", "上采样"],
     question: "什么是反卷积？",
     answer: [
@@ -337,7 +547,9 @@
   {
     id: "Q035",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["Inception", "GoogLeNet", "多分支"],
     question: "什么是 Inception 模块？",
     answer: [
@@ -349,7 +561,9 @@
   {
     id: "Q036",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "轻量化网络",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "轻量化网络",
     tags: ["深度可分离卷积", "Depthwise", "MobileNet"],
     question: "什么是深度可分离卷积？",
     answer: [
@@ -361,7 +575,9 @@
   {
     id: "Q037",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "轻量化网络",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "轻量化网络",
     tags: ["分组卷积", "Group Convolution", "ShuffleNet"],
     question: "什么是分组卷积？",
     answer: [
@@ -372,7 +588,9 @@
   },  {
     id: "Q020",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["MaxPooling", "反向传播", "CNN"],
     question: "卷积神经网络在 maxpooling 处怎么反向传播误差？",
     answer: [
@@ -384,7 +602,9 @@
   {
     id: "Q021",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["ShuffleNet", "轻量化", "CNN"],
     question: "ShuffleNet 的结构是什么？",
     answer: [
@@ -396,7 +616,9 @@
   {
     id: "Q022",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["Attention", "SE", "CBAM"],
     question: "深度网络里 Attention 一般怎么加？",
     answer: [
@@ -408,7 +630,9 @@
   {
     id: "Q023",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["ResNet", "残差连接", "退化问题"],
     question: "ResNet 的结构特点以及解决的问题是什么？",
     answer: [
@@ -420,7 +644,9 @@
   {
     id: "Q024",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "图神经网络",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "图神经网络",
     tags: ["GNN", "谱域", "空间域"],
     question: "图神经网络怎么理解？发展史怎么讲？",
     answer: [
@@ -432,7 +658,9 @@
   {
     id: "Q025",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["UNet", "编码器解码器", "分割"],
     question: "UNet 的结构是什么，为什么要下采样和上采样？",
     answer: [
@@ -444,7 +672,9 @@
   {
     id: "Q026",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["ResNet", "V1", "V2"],
     question: "ResNet V1 和 V2 的改进是什么？",
     answer: [
@@ -456,7 +686,9 @@
   {
     id: "Q027",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["ResNet", "下采样", "残差块"],
     question: "ResNet 的下采样过程是怎样的？",
     answer: [
@@ -468,7 +700,9 @@
   {
     id: "Q028",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["ResBlock", "Shortcut", "Padding"],
     question: "res-block 的跳跃连接以及 shape 怎么保持？",
     answer: [
@@ -480,7 +714,9 @@
   {
     id: "Q029",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["FPN", "多尺度", "检测"],
     question: "FPN 的结构是什么？",
     answer: [
@@ -492,7 +728,9 @@
   {
     id: "Q030",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "目标检测",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "目标检测",
     tags: ["RoI Pooling", "RoI Align", "Mask R-CNN"],
     question: "RoI Pooling 和 RoI Align 的区别是什么？",
     answer: [
@@ -504,7 +742,9 @@
   {
     id: "Q031",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["ResNet", "全连接", "卷积网络"],
     question: "ResNet 和全连接相比有什么区别？",
     answer: [
@@ -516,7 +756,9 @@
   {
     id: "Q032",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "网络结构",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "网络结构",
     tags: ["AlexNet", "VGG", "ResNet"],
     question: "AlexNet、VGG、ResNet、DenseNet、GoogLeNet 的特点是什么？",
     answer: [
@@ -528,7 +770,9 @@
   {
     id: "Q033",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "轻量化网络",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "轻量化网络",
     tags: ["MobileNet", "ShuffleNet", "Xception"],
     question: "MobileNet v1/v2、ShuffleNet v2、Xception、DenseNet 这些网络怎么概括？",
     answer: [
@@ -539,7 +783,9 @@
   },  {
     id: "Q017",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["Pooling", "MaxPooling", "反向传播"],
     question: "maxPooling 怎么传递导数？",
     answer: [
@@ -551,7 +797,9 @@
   {
     id: "Q018",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["CNN", "Pooling", "下采样"],
     question: "CNN 里面池化的作用是什么？",
     answer: [
@@ -563,7 +811,9 @@
   {
     id: "Q019",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["Pooling", "反向传播", "AveragePooling"],
     question: "反向传播的时候怎么传递 pooling 的导数？",
     answer: [
@@ -574,7 +824,9 @@
   },  {
     id: "Q007",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["卷积", "Depthwise", "轻量化"],
     question: "Depthwise 卷积是什么？它的优缺点是什么？",
     answer: [
@@ -586,7 +838,9 @@
   {
     id: "Q008",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["卷积", "1x1卷积", "网络设计"],
     question: "1×1 的卷积核有什么用？",
     answer: [
@@ -598,7 +852,9 @@
   {
     id: "Q009",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["上采样", "PixelShuffle", "棋盘格"],
     question: "反卷积相比 PixelShuffle 有什么缺点？棋盘格现象怎么产生的？",
     answer: [
@@ -610,7 +866,9 @@
   {
     id: "Q010",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "视频理解",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "视频理解",
     tags: ["3D卷积", "2D卷积", "视频"],
     question: "3D 卷积和 2D 卷积的区别、主要问题、如何加速，以及视频理解还有哪些改进方向？",
     answer: [
@@ -623,7 +881,9 @@
   {
     id: "Q011",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["卷积", "感受野", "网络设计"],
     question: "卷积核大小如何选取？",
     answer: [
@@ -635,7 +895,9 @@
   {
     id: "Q012",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["卷积", "参数量", "3x3"],
     question: "卷积层减少参数的常见方法有哪些？用 1×3 和 3×1 代替 3×3 的原理是什么？",
     answer: [
@@ -647,7 +909,9 @@
   {
     id: "Q013",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["CNN", "Dropout", "正则化"],
     question: "如果在 CNN 的卷积块里设计 Dropout，一般怎么做？",
     answer: [
@@ -659,7 +923,9 @@
   {
     id: "Q014",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["反卷积", "转置卷积", "上采样"],
     question: "反卷积，也就是转置卷积，它的实现原理是什么？",
     answer: [
@@ -671,7 +937,9 @@
   {
     id: "Q015",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["Dropout", "正则化", "泛化"],
     question: "Dropout 的原理是什么？",
     answer: [
@@ -683,7 +951,9 @@
   {
     id: "Q016",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["转置卷积", "上采样", "解码器"],
     question: "直接用转置卷积，和先上采样再卷积，有什么区别？",
     answer: [
@@ -695,7 +965,9 @@
   {
     id: "Q001",
     updatedAt: "2026-04-03",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "Python",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "Python",
     tags: ["Python", "GIL", "多线程"],
     question: "Python 里的 GIL 是什么？它对多线程性能有什么影响？",
     answer: [
@@ -708,7 +980,9 @@
   {
     id: "Q002",
     updatedAt: "2026-04-02",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "深度学习",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "深度学习",
     tags: ["BatchNorm", "训练", "推理"],
     question: "BatchNorm 在训练和推理阶段有什么区别？为什么小 batch 下效果可能变差？",
     answer: [
@@ -721,7 +995,9 @@
   {
     id: "Q003",
     updatedAt: "2026-04-01",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["目标检测", "mAP", "评估"],
     question: "目标检测里的 mAP 是什么？面试里应该怎么解释？",
     answer: [
@@ -734,7 +1010,9 @@
   {
     id: "Q004",
     updatedAt: "2026-03-31",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "AIGC",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "AIGC",
     tags: ["Diffusion", "扩散模型", "生成式模型"],
     question: "扩散模型为什么能生成图像？它和 GAN 的核心差别是什么？",
     answer: [
@@ -747,7 +1025,9 @@
   {
     id: "Q005",
     updatedAt: "2026-03-30",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "PyTorch",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "PyTorch",
     tags: ["PyTorch", "反向传播", "autograd"],
     question: "PyTorch 的 autograd 是怎么工作的？什么时候要用 no_grad？",
     answer: [
@@ -760,7 +1040,9 @@
   {
     id: "Q006",
     updatedAt: "2026-03-29",
-        company: "字节跳动",`r`n    topicGroup: "基础知识点",`r`n    category: "计算机视觉",
+        company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "计算机视觉",
     tags: ["过拟合", "泛化", "训练技巧"],
     question: "深度学习训练中怎么判断过拟合？常见缓解方法有哪些？",
     answer: [
@@ -771,6 +1053,8 @@
     ]
   }
 ];
+
+
 
 
 
