@@ -1,5 +1,88 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q093",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "激活函数",
+    tags: ["Sigmoid", "Tanh", "ReLU"],
+    question: "各种常用激活函数对比下？比如 sigmoid、tanh、relu、lrelu。",
+    answer: [
+      "常见激活函数可以从输出范围、是否容易梯度消失、计算是否简单三个角度比较。",
+      "Sigmoid 的英文全称就是 Sigmoid Function，中文一般叫 S 形激活函数。输出范围是 0 到 1，适合表示概率，比如二分类输出层，但两端容易饱和，梯度很小，而且输出不是零中心。",
+      "Tanh 的英文全称是 Hyperbolic Tangent，中文叫双曲正切函数。输出范围是负 1 到 1，比 sigmoid 更零中心，所以优化通常更好一点，但同样会饱和，也会有梯度消失问题。",
+      "ReLU 的英文全称是 Rectified Linear Unit，中文叫修正线性单元。它的公式很简单。",
+      { type: "formula", latex: "f(x)=\\max(0,x)" },
+      "ReLU 的优点是计算快，正半轴梯度恒定，不容易像 sigmoid 和 tanh 那样大面积梯度消失，所以训练深网络更稳定。缺点是负半轴梯度为 0，可能出现神经元死亡。",
+      "Leaky ReLU 的英文全称是 Leaky Rectified Linear Unit，中文叫带泄漏的修正线性单元。它在负半轴保留一个很小斜率，比如 0.01x，这样能缓解 ReLU 的神经元死亡问题。",
+      "一句话总结：深度学习里隐藏层更常用 ReLU 或 Leaky ReLU，因为更容易训练。"
+    ]
+  },
+  {
+    id: "Q094",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "激活函数",
+    tags: ["Sigmoid", "优缺点", "梯度消失"],
+    question: "sigmoid 的优缺点是什么？",
+    answer: [
+      "Sigmoid 的优点是输出在 0 到 1 之间，很适合表示概率，所以常用于二分类输出层。",
+      "它是连续可导的，形式也比较直观。",
+      "缺点第一是输入很大或很小时会进入饱和区，梯度接近 0，容易梯度消失。",
+      "第二是输出不是零中心，参数更新时梯度方向不够均衡。",
+      "第三是 exp 计算相对比 ReLU 更慢一点。",
+      "所以 sigmoid 现在一般不太用在深层隐藏层，但在逻辑回归和二分类输出层仍然常见。"
+    ]
+  },
+  {
+    id: "Q095",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "激活函数",
+    tags: ["Sigmoid", "ReLU", "区别"],
+    question: "sigmoid 和 relu 的区别是什么？",
+    answer: [
+      "第一，输出范围不同。sigmoid 输出 0 到 1，ReLU 输出 0 到正无穷。",
+      "第二，梯度特性不同。sigmoid 在两端容易饱和，梯度会很小；ReLU 在正半轴梯度是 1，更利于深层训练。",
+      "第三，输出是否零中心不同。sigmoid 不是零中心；ReLU 也不完全零中心，但通常优化表现还是更好。",
+      "第四，适用位置不同。sigmoid 更常用于二分类输出层；ReLU 更常用于隐藏层，尤其是深层网络。"
+    ]
+  },
+  {
+    id: "Q096",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "激活函数",
+    tags: ["ReLU", "Leaky ReLU", "PReLU"],
+    question: "平时用什么激活函数更多？为什么 ReLU 用得多？",
+    answer: [
+      "平时隐藏层最常用的是 ReLU 或它的变体，比如 Leaky ReLU、PReLU。",
+      "PReLU 的英文全称是 Parametric Rectified Linear Unit，中文叫参数化修正线性单元，它和 Leaky ReLU 的区别是负半轴斜率可以学习。",
+      "为什么 ReLU 用得多，核心是三点：第一，公式简单，计算快；第二，正半轴不容易梯度消失，深层网络更容易训练；第三，很多经典网络实践已经验证它效果稳定。",
+      "所以现在面试里如果问隐藏层默认激活函数，优先答 ReLU，再补一句如果担心神经元死亡，可以用 Leaky ReLU 或 PReLU。"
+    ]
+  },
+  {
+    id: "Q097",
+    updatedAt: "2026-04-04",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "损失函数",
+    tags: ["Logloss", "逻辑回归", "BCE"],
+    question: "写逻辑回归的 logloss 损失函数。",
+    answer: [
+      "逻辑回归的 logloss 本质上就是二元交叉熵。",
+      "如果预测正类概率是 p，真实标签是 y，单样本损失写成下面这样。",
+      { type: "formula", latex: "L=-\\left[y\\log p+(1-y)\\log(1-p)\\right]" },
+      "如果是 N 个样本，平均损失可以写成下面这样。",
+      { type: "formula", latex: "L=-\\frac{1}{N}\\sum_{i=1}^{N}\\left[y_i\\log p_i+(1-y_i)\\log(1-p_i)\\right]" },
+      "它的直觉是：真实标签是 1，就希望 p 大；真实标签是 0，就希望 p 小。如果模型很自信但预测错了，损失会变得很大，所以它会强烈惩罚高置信度错误。"
+    ]
+  },
+  {
     id: "Q086",
     updatedAt: "2026-04-04",
     company: "字节跳动",
@@ -1243,7 +1326,7 @@
   },
   {
     id: "Q002",
-    updatedAt: "2026-04-02",
+    updatedAt: "2026-04-03",
         company: "字节跳动",
     topicGroup: "基础知识点",
     category: "深度学习",
@@ -1258,7 +1341,7 @@
   },
   {
     id: "Q003",
-    updatedAt: "2026-04-01",
+    updatedAt: "2026-04-03",
         company: "字节跳动",
     topicGroup: "基础知识点",
     category: "计算机视觉",
@@ -1273,7 +1356,7 @@
   },
   {
     id: "Q004",
-    updatedAt: "2026-03-31",
+    updatedAt: "2026-04-03",
         company: "字节跳动",
     topicGroup: "基础知识点",
     category: "AIGC",
@@ -1288,7 +1371,7 @@
   },
   {
     id: "Q005",
-    updatedAt: "2026-03-30",
+    updatedAt: "2026-04-03",
         company: "字节跳动",
     topicGroup: "基础知识点",
     category: "PyTorch",
@@ -1303,7 +1386,7 @@
   },
   {
     id: "Q006",
-    updatedAt: "2026-03-29",
+    updatedAt: "2026-04-03",
         company: "字节跳动",
     topicGroup: "基础知识点",
     category: "计算机视觉",
