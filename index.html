@@ -30,10 +30,18 @@
       </label>
     </section>
 
+    <section class="filter-panel">
+      <div class="filter-header">
+        <span class="search-label">分类筛选</span>
+        <button id="clear-filter" class="clear-filter hidden" type="button">清除筛选</button>
+      </div>
+      <div id="category-filter-list" class="filter-list"></div>
+    </section>
+
     <main>
       <section id="empty-state" class="empty-state hidden">
         <h2>没有匹配结果</h2>
-        <p>换个关键词试试。</p>
+        <p>换个关键词或分类试试。</p>
       </section>
 
       <section id="card-grid" class="card-grid" aria-live="polite"></section>
@@ -46,7 +54,7 @@
         <div class="qa-card-face qa-card-front">
           <div class="card-meta">
             <span class="card-date"></span>
-            <span class="card-category"></span>
+            <button class="card-category" type="button"></button>
           </div>
           <h2 class="card-question"></h2>
           <div class="card-tags"></div>
@@ -55,7 +63,7 @@
         <div class="qa-card-face qa-card-back">
           <div class="card-meta">
             <span class="card-date"></span>
-            <span class="card-category"></span>
+            <button class="card-category" type="button"></button>
           </div>
           <div class="card-answer"></div>
           <p class="card-hint">再次点击返回问题</p>
