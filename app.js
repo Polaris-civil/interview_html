@@ -1,7 +1,8 @@
 ﻿const searchToggleEl = document.querySelector("#search-toggle");
 const searchPanelEl = document.querySelector("#search-panel");
 const searchInputEl = document.querySelector("#search-input");
-const categoryFilterListEl = document.querySelector("#category-filter-list");
+const companyFilterListEl = document.querySelector("#company-filter-list");
+const topicFilterListEl = document.querySelector("#topic-filter-list");
 const clearFilterEl = document.querySelector("#clear-filter");
 const cardGridEl = document.querySelector("#card-grid");
 const emptyStateEl = document.querySelector("#empty-state");
@@ -9,7 +10,8 @@ const cardTemplate = document.querySelector("#card-template");
 const detailModalEl = document.querySelector("#detail-modal");
 const detailCloseEl = document.querySelector("#detail-close");
 const detailDateEl = document.querySelector("#detail-date");
-const detailCategoryEl = document.querySelector("#detail-category");
+const detailCompanyEl = document.querySelector("#detail-company");
+const detailTopicEl = document.querySelector("#detail-topic");
 const detailTitleEl = document.querySelector("#detail-title");
 const detailTagsEl = document.querySelector("#detail-tags");
 const detailAnswerEl = document.querySelector("#detail-answer");
@@ -17,10 +19,11 @@ const detailAnswerEl = document.querySelector("#detail-answer");
 const allQuestions = Array.isArray(window.INTERVIEW_QA)
   ? [...window.INTERVIEW_QA].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
   : [];
-const categories = ["全部", ...new Set(allQuestions.map((item) => item.category))];
+const companies = ["全部", ...new Set(allQuestions.map((item) => item.company || "字节跳动"))];
 
 let searchKeyword = "";
-let activeCategory = "全部";
+let activeCompany = "全部";
+let activeTopic = "全部";
 let lastFocusedCard = null;
 
 function normalizeText(value) {
@@ -116,24 +119,43 @@ function formatDisplayDate(dateString) {
   return `${month}-${day}`;
 }
 
+function getTopicGroup(item) {
+  return item.topicGroup || "基础知识点";
+}
+
+function getCompany(item) {
+  return item.company || "字节跳动";
+}
+
+function getVisibleTopics() {
+  const pool = activeCompany === "全部"
+    ? allQuestions
+    : allQuestions.filter((item) => getCompany(item) === activeCompany);
+
+  return ["全部", ...new Set(pool.map((item) => getTopicGroup(item)))];
+}
+
 function matchesQuestion(item) {
   const keyword = normalizeText(searchKeyword);
-  const categoryMatched = activeCategory === "全部" || item.category === activeCategory;
+  const companyMatched = activeCompany === "全部" || getCompany(item) === activeCompany;
+  const topicMatched = activeTopic === "全部" || getTopicGroup(item) === activeTopic;
 
   if (!keyword) {
-    return categoryMatched;
+    return companyMatched && topicMatched;
   }
 
   const haystack = normalizeText([
     item.id,
     item.updatedAt,
+    getCompany(item),
+    getTopicGroup(item),
     item.category,
     item.question,
     item.tags.join(" "),
     item.answer.map(answerItemToText).join(" ")
   ].join(" "));
 
-  return categoryMatched && haystack.includes(keyword);
+  return companyMatched && topicMatched && haystack.includes(keyword);
 }
 
 function createMiniTag(text) {
@@ -143,39 +165,64 @@ function createMiniTag(text) {
   return span;
 }
 
-function setActiveCategory(category) {
-  activeCategory = category;
-  renderFilters();
+function setActiveCompany(company) {
+  activeCompany = company;
+  activeTopic = "全部";
+  renderCompanyFilters();
+  renderTopicFilters();
   renderCards();
 }
 
-function renderFilters() {
-  categoryFilterListEl.innerHTML = "";
+function setActiveTopic(topic) {
+  activeTopic = topic;
+  renderTopicFilters();
+  renderCards();
+}
 
-  categories.forEach((category) => {
+function renderCompanyFilters() {
+  companyFilterListEl.innerHTML = "";
+  companies.forEach((company) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = `filter-chip${category === activeCategory ? " is-active" : ""}`;
-    button.textContent = category;
-    button.addEventListener("click", () => setActiveCategory(category));
-    categoryFilterListEl.appendChild(button);
+    button.className = `filter-chip${company === activeCompany ? " is-active" : ""}`;
+    button.textContent = company;
+    button.addEventListener("click", () => setActiveCompany(company));
+    companyFilterListEl.appendChild(button);
+  });
+}
+
+function renderTopicFilters() {
+  topicFilterListEl.innerHTML = "";
+  getVisibleTopics().forEach((topic) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `filter-chip${topic === activeTopic ? " is-active" : ""}`;
+    button.textContent = topic;
+    button.addEventListener("click", () => setActiveTopic(topic));
+    topicFilterListEl.appendChild(button);
   });
 
-  clearFilterEl.classList.toggle("hidden", activeCategory === "全部");
+  clearFilterEl.classList.toggle("hidden", activeCompany === "全部" && activeTopic === "全部");
 }
 
 function openDetail(item, cardEl) {
   lastFocusedCard = cardEl || null;
   detailDateEl.textContent = formatDisplayDate(item.updatedAt);
   detailDateEl.title = item.updatedAt;
-  detailCategoryEl.textContent = item.category;
+  detailCompanyEl.textContent = getCompany(item);
+  detailTopicEl.textContent = getTopicGroup(item);
   detailTitleEl.textContent = item.question;
   detailAnswerEl.innerHTML = formatAnswerParagraphs(item.answer);
   detailTagsEl.innerHTML = "";
   item.tags.forEach((tag) => detailTagsEl.appendChild(createMiniTag(tag)));
 
-  detailCategoryEl.onclick = () => {
-    setActiveCategory(item.category);
+  detailCompanyEl.onclick = () => {
+    setActiveCompany(getCompany(item));
+    closeDetail();
+  };
+  detailTopicEl.onclick = () => {
+    setActiveCompany(getCompany(item));
+    setActiveTopic(getTopicGroup(item));
     closeDetail();
   };
 
@@ -193,11 +240,11 @@ function closeDetail() {
   }
 }
 
-function buildCategoryButton(buttonEl, category) {
-  buttonEl.textContent = category;
+function buildFilterButton(buttonEl, value, setter) {
+  buttonEl.textContent = value;
   buttonEl.addEventListener("click", (event) => {
     event.stopPropagation();
-    setActiveCategory(category);
+    setter(value);
   });
 }
 
@@ -205,14 +252,16 @@ function buildCard(item) {
   const fragment = cardTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".qa-card");
   const date = fragment.querySelector(".card-date");
-  const categoryEl = fragment.querySelector(".card-category");
+  const companyEl = fragment.querySelector(".card-company");
+  const topicEl = fragment.querySelector(".card-topic");
   const question = fragment.querySelector(".card-question");
   const preview = fragment.querySelector(".card-preview");
   const tagContainer = fragment.querySelector(".card-tags");
 
   date.textContent = formatDisplayDate(item.updatedAt);
   date.title = item.updatedAt;
-  buildCategoryButton(categoryEl, item.category);
+  buildFilterButton(companyEl, getCompany(item), setActiveCompany);
+  buildFilterButton(topicEl, getTopicGroup(item), setActiveTopic);
   question.textContent = item.question;
   preview.textContent = buildPreview(item.answer);
 
@@ -257,7 +306,13 @@ searchInputEl.addEventListener("input", (event) => {
   searchKeyword = event.target.value;
   renderCards();
 });
-clearFilterEl.addEventListener("click", () => setActiveCategory("全部"));
+clearFilterEl.addEventListener("click", () => {
+  activeCompany = "全部";
+  activeTopic = "全部";
+  renderCompanyFilters();
+  renderTopicFilters();
+  renderCards();
+});
 detailCloseEl.addEventListener("click", closeDetail);
 detailModalEl.addEventListener("click", (event) => {
   if (event.target instanceof HTMLElement && event.target.dataset.close === "true") {
@@ -270,5 +325,6 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-renderFilters();
+renderCompanyFilters();
+renderTopicFilters();
 renderCards();

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>视觉 AI 面试题卡</title>
-  <meta name="description" content="面向视觉 AI 算法工程师的面试问答卡片页，支持搜索、分类筛选与弹窗查看完整答案。">
+  <meta name="description" content="面向视觉 AI 算法工程师的面试问答卡片页，支持公司筛选、专题分栏、搜索与详情弹窗。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
       <div class="hero-copy">
         <p class="eyebrow">Visual AI Interview Deck</p>
         <h1>视觉 AI 面试题卡</h1>
-        <p class="hero-text">首页只看问题摘要，点击卡片弹出完整答案。长代码、长公式和长解释都放到详情层里看，PC 和手机都会舒服很多。</p>
+        <p class="hero-text">现在可以先按公司，再按专题查看。现有题目默认归在字节跳动的基础知识点里，后面你继续补题时可以逐步扩展到项目题和 Python 编程题。</p>
       </div>
       <div class="hero-actions">
         <button id="search-toggle" class="search-toggle" type="button" aria-expanded="false" aria-controls="search-panel">搜索</button>
@@ -32,16 +32,23 @@
 
     <section class="filter-panel">
       <div class="filter-header">
-        <span class="search-label">分类筛选</span>
+        <span class="search-label">公司筛选</span>
+      </div>
+      <div id="company-filter-list" class="filter-list"></div>
+    </section>
+
+    <section class="filter-panel">
+      <div class="filter-header">
+        <span class="search-label">专题分栏</span>
         <button id="clear-filter" class="clear-filter hidden" type="button">清除筛选</button>
       </div>
-      <div id="category-filter-list" class="filter-list"></div>
+      <div id="topic-filter-list" class="filter-list"></div>
     </section>
 
     <main>
       <section id="empty-state" class="empty-state hidden">
         <h2>没有匹配结果</h2>
-        <p>换个关键词或分类试试。</p>
+        <p>换个关键词、公司或专题试试。</p>
       </section>
 
       <section id="card-grid" class="card-grid" aria-live="polite"></section>
@@ -53,7 +60,10 @@
       <div class="card-shell">
         <div class="card-meta">
           <span class="card-date"></span>
-          <button class="card-category" type="button"></button>
+          <div class="card-meta-actions">
+            <button class="card-company" type="button"></button>
+            <button class="card-topic" type="button"></button>
+          </div>
         </div>
         <h2 class="card-question"></h2>
         <p class="card-preview"></p>
@@ -69,7 +79,10 @@
       <div class="detail-header">
         <div class="detail-meta">
           <span id="detail-date" class="detail-date"></span>
-          <button id="detail-category" class="detail-category" type="button"></button>
+          <div class="detail-meta-actions">
+            <button id="detail-company" class="detail-company" type="button"></button>
+            <button id="detail-topic" class="detail-topic" type="button"></button>
+          </div>
         </div>
         <button id="detail-close" class="detail-close" type="button" aria-label="关闭">关闭</button>
       </div>
