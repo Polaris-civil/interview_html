@@ -1,5 +1,132 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q129",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["RoI Pooling", "RoI Align", "双线性插值"],
+    question: "RoI Pooling 和 RoI Align 怎么做？线性插值、双线性插值怎么理解？",
+    answer: [
+      "RoI Pooling 的英文全称是 Region of Interest Pooling，中文叫感兴趣区域池化。它先把候选框映射到特征图上，再把这个 RoI 划成固定个数的小格，比如 7×7，每个格子做 max pooling，最后得到固定大小输出。",
+      "它的问题是有两次量化：RoI 坐标映射到特征图时会量化，划分 bin 时边界也会量化，所以会带来位置对齐误差。",
+      "RoI Align 的英文全称是 Region of Interest Align，中文叫感兴趣区域对齐。它的核心改进就是不做量化，直接在浮点坐标上采样，再用双线性插值取值，所以定位更准。",
+      "Linear Interpolation 的中文叫线性插值，就是两点之间按比例加权。Bilinear Interpolation 的中文叫双线性插值，本质上是对采样点周围四个点按距离做加权平均，可以理解成先在 x 方向插值，再在 y 方向插值。",
+      "Spline Interpolation 的中文叫样条插值，它更平滑，但目标检测里最常用的还是双线性插值。"
+    ]
+  },
+  {
+    id: "Q130",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["RoI Align", "RoI Pooling", "改进"],
+    question: "RoI Align 相比于 RoI Pooling 有什么改进？",
+    answer: [
+      "核心改进就一句话：RoI Align 去掉了量化误差。",
+      "RoI Pooling 因为坐标和 bin 都要取整，所以会发生特征错位；RoI Align 保留浮点坐标，通过双线性插值采样，所以空间对齐更好。",
+      "这带来的直接收益是目标框回归更准、实例分割边界更准，小目标和精细定位任务效果更明显。",
+      "一句话面试版：RoI Align 的本质改进是更准确的空间对齐。"
+    ]
+  },
+  {
+    id: "Q131",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["R-CNN", "Faster R-CNN", "CenterNet"],
+    question: "目标检测的发展历程怎么讲？比如从 R-CNN 到 CenterNet。",
+    answer: [
+      "可以按 two-stage 和 one-stage 两条线讲。",
+      "最早是 R-CNN，也就是 Region-based Convolutional Neural Network。它先生成候选框，再逐个框跑 CNN，精度不错，但非常慢。",
+      "然后是 Fast R-CNN，把整张图只过一次 backbone，再在特征图上做 RoI Pooling，速度快很多。再到 Faster R-CNN，把 selective search 换成 RPN，也就是 Region Proposal Network，实现了真正端到端的 two-stage 检测。",
+      "之后 one-stage 路线起来了，比如 YOLO、SSD，速度更快。再后来 anchor-free 方法起来，比如 FCOS、CenterNet，不再强依赖 anchor 设计。",
+      "CenterNet 的核心思想是把目标看成中心点检测，再回归宽高和偏移。",
+      "一句话总结：检测的发展方向就是从慢而准的 proposal-based，逐步走向更快、更简洁、更端到端，最后很多方法开始弱化甚至去掉 anchor。"
+    ]
+  },
+  {
+    id: "Q132",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Faster R-CNN", "RPN", "Anchor"],
+    question: "着重讲一下 Faster R-CNN：RPN 原理、9 种 Anchor、正负样本、loss、tx ty tw th。",
+    answer: [
+      "Faster R-CNN 由 backbone、RPN、RoI 特征提取和分类回归头几部分组成。RPN 就是在特征图每个位置上放一组 anchor，然后同时预测这个 anchor 是前景还是背景，以及如果是前景，框该怎么回归。",
+      "为什么常说 9 个 anchor？因为通常是 3 个尺度乘 3 个长宽比，比如尺度 128、256、512，长宽比 1 比 1、1 比 2、2 比 1，这样设计是为了覆盖不同大小和形状的目标。",
+      "IoU 的英文全称是 Intersection over Union，中文叫交并比。RPN 里一般 IoU 大于等于 0.7 记正样本，小于等于 0.3 记负样本，中间区域忽略。",
+      "边框回归通常写成下面这组形式。",
+      { type: "formula", latex: "t_x=\\frac{x-x_a}{w_a},\\quad t_y=\\frac{y-y_a}{h_a},\\quad t_w=\\log\\frac{w}{w_a},\\quad t_h=\\log\\frac{h}{h_a}" },
+      "这里下标 a 表示 anchor。x、y 用平移相对量；w、h 用 log，是因为宽高更适合用相对缩放去建模。",
+      "Loss 一般是分类损失加回归损失，分类常用交叉熵，回归常用 Smooth L1 Loss。"
+    ]
+  },
+  {
+    id: "Q133",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["R-FCN", "Faster R-CNN", "PS RoI Pooling"],
+    question: "R-FCN 与 Faster R-CNN 的区别是什么？PS RoI Pooling 怎么理解？",
+    answer: [
+      "R-FCN 的英文全称是 Region-based Fully Convolutional Network，中文叫基于区域的全卷积网络。",
+      "它和 Faster R-CNN 最大区别是：Faster R-CNN 在 RoI 之后还会接一段 per-RoI 的 head，所以每个 RoI 计算更重；R-FCN 把更多计算前移到整图卷积阶段，让 RoI 后的计算更轻，所以更快。",
+      "PS RoI Pooling 的英文全称是 Position-Sensitive RoI Pooling，中文叫位置敏感 RoI 池化。它的核心思想是把不同空间位置对应到不同的 score map，而不是所有 RoI 共用同一组特征。",
+      "比如如果分成 k 乘 k 个位置，就对应 k 乘 k 个 position-sensitive map，这样既保持了全卷积结构，又保留了位置信息。"
+    ]
+  },
+  {
+    id: "Q134",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["RPN", "IoU", "NMS"],
+    question: "RPN 中正负样本阈值为什么设成 0.7 和 0.3？中间 0.3 到 0.7 不用会怎样？和 NMS 0.3 有关系吗？",
+    answer: [
+      "设成 0.7 和 0.3 的核心目的是把正样本和负样本尽量拉开，减少标签噪声。",
+      "如果阈值太近，很多模糊样本会被硬分成正负，训练容易不稳定。把 0.3 到 0.7 这段忽略，本质上是跳过不太确定的样本，让模型先学更干净的监督信号。",
+      "如果不用这段忽略区，直接全拿来训，通常会带来正负标签更混乱、分类边界更难学、训练更抖。",
+      "NMS 的英文全称是 Non-Maximum Suppression，中文叫非极大值抑制。RPN 的 0.7 和 0.3 是训练阶段分正负样本的阈值，NMS 的 0.3 是推理阶段去重的阈值，含义不同，没有直接关系。"
+    ]
+  },
+  {
+    id: "Q135",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Anchor", "Smooth L1", "边框回归"],
+    question: "Anchor 选太大或太小有什么影响？Smooth L1 为什么不用 L1 或 L2？w、h 为什么取 log，x、y 为什么用除法？",
+    answer: [
+      "anchor 太大或太小，都会让它和真实框匹配得不好。如果 anchor 跟真实目标尺度差太远，IoU 就低，正样本会少，回归难度也会变大。",
+      "Smooth L1 Loss 常用的原因是：比 L2 对异常大误差更稳，不容易被离群值主导；比 L1 更平滑，优化更稳定。",
+      "w、h 为什么取 log？因为宽高变化更像比例缩放，不是简单加减。取 log 后，乘法关系变成加法关系，更适合回归，也更稳定。",
+      "x、y 为什么做归一化除法？因为中心点偏移更适合表示成相对 anchor 尺度的平移量，这样不同尺度 anchor 的回归目标分布更一致。"
+    ]
+  },
+  {
+    id: "Q136",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["SSD", "YOLO", "Faster R-CNN"],
+    question: "讲一下 SSD 流程；Faster R-CNN、YOLO、SSD 的区别是什么？",
+    answer: [
+      "SSD 的英文全称是 Single Shot MultiBox Detector，中文叫单次多框检测器。它的流程是先用 backbone 提特征，再取多个不同尺度的特征层；每层上预设 default boxes，也就是默认框；对每个框同时预测类别和位置偏移；最后做 NMS 得到结果。",
+      "它的核心特点是多尺度预测，尤其比早期 YOLO 对中小目标更友好。",
+      "Faster R-CNN 是 two-stage，先 proposal 再分类回归，优点是通常精度高，缺点是速度相对慢。",
+      "YOLO 是 one-stage，直接把检测当回归问题做，优点是快、部署友好；SSD 也是 one-stage，但用多尺度特征图做预测，可以看成早期速度和精度比较平衡的一类方法。",
+      "一句话总结：Faster R-CNN 偏精度，YOLO 偏速度和工程落地，SSD 是早期 one-stage 多尺度检测代表。"
+    ]
+  },
+  {
     id: "Q124",
     updatedAt: "2026-04-06",
     company: "字节跳动",
