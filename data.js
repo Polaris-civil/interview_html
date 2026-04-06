@@ -1,5 +1,451 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q160",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标跟踪",
+    tags: ["匈牙利算法", "Kalman Filter", "匹配"],
+    question: "目标跟踪里匈牙利算法的流程是什么？",
+    answer: [
+      "Hungarian Algorithm 的中文叫匈牙利算法，本质上是解决二分图最优匹配问题的，在多目标跟踪里常用来做轨迹和检测框的匹配。",
+      "在目标跟踪里，流程通常是：先有上一帧的 tracks 和当前帧的 detections；再计算代价矩阵，比如 IoU 距离、中心点距离或者外观特征距离；把这个代价矩阵送进匈牙利算法；算出总代价最小的一一匹配关系。",
+      "匹配上的轨迹更新，没匹配上的检测框新建轨迹，没匹配上的旧轨迹做丢失或删除处理。",
+      "所以一句话理解：匈牙利算法负责最优配对，不负责预测运动本身。运动预测通常由 Kalman Filter，也就是卡尔曼滤波来做。"
+    ]
+  },
+  {
+    id: "Q161",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图像分割",
+    tags: ["UNet", "DeepLabv2", "DeepLabv3"],
+    question: "讲一下 UNet 和 DeepLabv2 的流程；DeepLabv3 了解吗？",
+    answer: [
+      "UNet 是典型编码器-解码器结构，并带跳跃连接。流程是输入图像后，编码器逐步下采样提语义，解码器逐步上采样恢复分辨率，再与对应浅层特征做 skip connection，最后输出分割图。",
+      "它的核心优势是高层语义和低层细节结合得很好，所以特别适合医学分割、小样本分割和边界要求高的任务。",
+      "DeepLabv2 的核心是空洞卷积加 ASPP。ASPP 的英文全称是 Atrous Spatial Pyramid Pooling，中文叫空洞空间金字塔池化。它会用多个不同膨胀率的空洞卷积并行提特征，从而扩大感受野、融合多尺度信息。",
+      "DeepLabv3 可以理解成在 v2 基础上进一步强化了 ASPP 和多尺度上下文建模，不再像早期那样那么依赖 CRF 后处理。"
+    ]
+  },
+  {
+    id: "Q162",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图像分割",
+    tags: ["UNet", "编码器解码器", "Skip Connection"],
+    question: "介绍一下 UNet？为什么要这么设计？好处是什么？",
+    answer: [
+      "UNet 的设计核心就是：下采样负责拿到更强语义，上采样负责恢复空间分辨率，跳跃连接负责把浅层细节补回来。",
+      "为什么这么设计？因为分割任务不是只要知道是什么，还要知道在哪、边界在哪。",
+      "如果只做编码，不做解码，空间细节会丢很多；如果只做解码没有 skip connection，恢复出来的边界往往会比较糊。",
+      "所以 UNet 的好处是定位细节更好、边界更清楚、对小样本任务更友好，而且结构直观，也容易改 backbone。"
+    ]
+  },
+  {
+    id: "Q163",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图像分割",
+    tags: ["FPN", "UNet", "concat"],
+    question: "FPN 和 UNet 的上采样里用了直接相加和 concat，有什么区别？从反向传播角度怎么说？",
+    answer: [
+      "concat 是把两个特征在通道维直接拼接，add 是逐元素相加。",
+      "UNet 里更常见 concat，因为它希望把浅层细节和深层语义都完整保留下来，后面再让卷积自己学习怎么融合。FPN 里更常见 add，因为它更强调轻量、统一通道和自顶向下的特征融合。",
+      "从反向传播角度看，concat 后每一路特征都有自己独立的通道表达，后续卷积可以分别利用这些信息，信息保留更充分，但计算量更大。",
+      "add 则是先混合后再传播，参数更省，但有时不同来源特征会互相干扰。",
+      "一句话总结：concat 更保信息，add 更省计算。"
+    ]
+  },
+  {
+    id: "Q164",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图像分割",
+    tags: ["FCN", "DeepLab", "BiSeNet"],
+    question: "分割的网络有哪些？这些网络一般怎么优化？",
+    answer: [
+      "常见分割网络可以按路线记：编码器-解码器类有 UNet、SegNet；空洞卷积和多尺度上下文类有 DeepLab 系列；实例分割类有 Mask R-CNN；实时分割类有 ENet、BiSeNet、Fast-SCNN。",
+      "优化方向常见有：更强的 backbone、多尺度特征融合、注意力机制、更好的损失函数，比如 Dice Loss、Focal Loss、Boundary Loss，以及推理侧的轻量化和蒸馏。",
+      "如果面试是项目导向，最好优先讲你真正做过的那几类网络和优化方式。"
+    ]
+  },
+  {
+    id: "Q165",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图像分割",
+    tags: ["mIoU", "IoU", "语义分割"],
+    question: "语义分割中 mIoU 的计算公式是什么？了解哪些语义分割算法？",
+    answer: [
+      "mIoU 的英文全称是 mean Intersection over Union，中文叫平均交并比。",
+      "单类别 IoU 的公式是下面这样。",
+      { type: "formula", latex: "IoU=\frac{TP}{TP+FP+FN}" },
+      "所有类别的 IoU 取平均，就是 mIoU。",
+      { type: "formula", latex: "mIoU=\frac{1}{C}\sum_{c=1}^{C} IoU_c" },
+      "这里 TP 的英文全称是 True Positive，中文叫真正例；FP 是 False Positive，中文叫假正例；FN 是 False Negative，中文叫假负例。",
+      "常见语义分割算法可以说 FCN、UNet、SegNet、PSPNet、DeepLabv1/v2/v3/v3+、BiSeNet、Mask2Former。如果面试是项目导向，就优先讲你真正做过的那几类。"
+    ]
+  },
+  {
+    id: "Q156",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "手写代码",
+    tags: ["NMS", "IoU", "目标检测"],
+    question: "手写 NMS。",
+    answer: [
+      "NMS 的英文全称是 Non-Maximum Suppression，中文叫非极大值抑制。它的核心流程是：先按 score 从高到低排序；取当前最高分框加入保留结果；计算它和剩余框的 IoU；把 IoU 大于阈值的框删掉；循环直到没有框。",
+      "面试里重点不是写得多工程化，而是逻辑清楚。",
+      { type: "code", language: "python", code: "import numpy as np\n\ndef iou(box, boxes):\n    x1 = np.maximum(box[0], boxes[:, 0])\n    y1 = np.maximum(box[1], boxes[:, 1])\n    x2 = np.minimum(box[2], boxes[:, 2])\n    y2 = np.minimum(box[3], boxes[:, 3])\n\n    inter_w = np.maximum(0.0, x2 - x1)\n    inter_h = np.maximum(0.0, y2 - y1)\n    inter = inter_w * inter_h\n\n    area_box = (box[2] - box[0]) * (box[3] - box[1])\n    area_boxes = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])\n    union = area_box + area_boxes - inter\n\n    return inter / np.maximum(union, 1e-12)\n\ndef nms(boxes, scores, iou_thresh=0.5):\n    order = scores.argsort()[::-1]\n    keep = []\n\n    while order.size > 0:\n        i = order[0]\n        keep.append(i)\n\n        if order.size == 1:\n            break\n\n        rest = order[1:]\n        ious = iou(boxes[i], boxes[rest])\n        order = rest[ious < iou_thresh]\n\n    return keep" }
+    ]
+  },
+  {
+    id: "Q157",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Faster R-CNN", "RPN", "流程"],
+    question: "画出 Faster R-CNN 流程以及 RPN 的具体过程。",
+    answer: [
+      "面试里这题通常不用真画图代码，更重要是你能口头顺着流程讲出来。",
+      "整条链路是：输入图像，先过 backbone 提特征；再由 RPN 在特征图上生成候选框；候选框映射到特征图后做 RoI Align 或 RoI Pooling；接着 head 做分类和框回归；最后后处理得到最终结果。",
+      "RPN 的具体过程是：在特征图每个位置放多个 anchor；对每个 anchor 预测前景背景分数；同时预测框偏移量；decode 成 proposal；经过 NMS 保留 top proposal；再送到第二阶段做更精细分类和回归。",
+      "一句话总结：RPN 本质上就是在特征图上滑窗地产生 proposal 的小检测器。"
+    ]
+  },
+  {
+    id: "Q158",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "手写代码",
+    tags: ["NMS", "score排序", "IoU"],
+    question: "实现 NMS 的全过程：包括 score 排序、IoU 计算、NMS 选出最后的框。",
+    answer: [
+      "这个和手写 NMS 本质一样，但面试里可以把全过程明确拆成三步：第一步按 score 从高到低排序；第二步计算 IoU；第三步每次保留当前最高分框，并删除与它重叠太大的框。",
+      "IoU 的英文全称是 Intersection over Union，中文叫交并比，表示两个框重叠程度。公式就是交集面积除以并集面积。",
+      { type: "formula", latex: "IoU=\frac{Area\ of\ Intersection}{Area\ of\ Union}" },
+      "代码和常规 NMS 一样，下面这版足够面试手写。",
+      { type: "code", language: "python", code: "import numpy as np\n\ndef calc_iou(box, boxes):\n    x1 = np.maximum(box[0], boxes[:, 0])\n    y1 = np.maximum(box[1], boxes[:, 1])\n    x2 = np.minimum(box[2], boxes[:, 2])\n    y2 = np.minimum(box[3], boxes[:, 3])\n\n    inter = np.maximum(0.0, x2 - x1) * np.maximum(0.0, y2 - y1)\n    area1 = (box[2] - box[0]) * (box[3] - box[1])\n    area2 = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])\n    union = area1 + area2 - inter\n    return inter / np.maximum(union, 1e-12)\n\ndef nms_full(boxes, scores, thresh=0.5):\n    order = scores.argsort()[::-1]\n    keep = []\n\n    while len(order) > 0:\n        idx = order[0]\n        keep.append(idx)\n        if len(order) == 1:\n            break\n\n        rest = order[1:]\n        ious = calc_iou(boxes[idx], boxes[rest])\n        order = rest[ious < thresh]\n\n    return keep" }
+    ]
+  },
+  {
+    id: "Q159",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "手写代码",
+    tags: ["IoU", "旋转框", "多边形"],
+    question: "实现计算 IoU 的函数；扩展：当 bounding box 与坐标轴不平行时怎么计算？说出思路。",
+    answer: [
+      "如果框和坐标轴平行，也就是常见水平框，IoU 很容易，直接用交集矩形面积和并集面积算。",
+      { type: "code", language: "python", code: "def calc_iou(box1, box2):\n    x1 = max(box1[0], box2[0])\n    y1 = max(box1[1], box2[1])\n    x2 = min(box1[2], box2[2])\n    y2 = min(box1[3], box2[3])\n\n    inter_w = max(0.0, x2 - x1)\n    inter_h = max(0.0, y2 - y1)\n    inter = inter_w * inter_h\n\n    area1 = (box1[2] - box1[0]) * (box1[3] - box1[1])\n    area2 = (box2[2] - box2[0]) * (box2[3] - box2[1])\n    union = area1 + area2 - inter\n\n    return inter / max(union, 1e-12)" },
+      "如果是旋转框，也就是 bounding box 不和坐标轴平行，那就不能直接用左上右下算交集矩形了。",
+      "这时候思路一般是：先把框表示成四个顶点；求两个多边形的相交区域；算相交多边形面积；再用 IoU = 交集面积 / 并集面积。",
+      "也就是说，旋转框 IoU 本质上变成了多边形相交面积问题。面试里如果不要求你现场手写完整几何算法，讲清这个思路就够了。"
+    ]
+  },
+  {
+    id: "Q153",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Focal Loss", "OHEM", "难样本"],
+    question: "讲一下 Focal Loss，公式是什么？它解决了什么问题？和 OHEM 有什么区别？",
+    answer: [
+      "Focal Loss 主要是为了解决 one-stage 检测里正负样本极不平衡、而且大量容易负样本主导训练的问题。",
+      "它的核心形式是下面这个式子。",
+      { type: "formula", latex: "FL(p_t)=-\\alpha(1-p_t)^\\gamma\\log(p_t)" },
+      "这里 alpha 是类别平衡项，gamma 是聚焦参数。",
+      "如果一个样本很容易、模型已经很自信了，那 p_t 很大，(1-p_t)^gamma 就会很小，这个样本的损失就被压下去；如果一个样本很难，p_t 小，那它的损失权重就保留得更高。",
+      "它和 OHEM 的区别是：OHEM 的英文全称是 Online Hard Example Mining，中文叫在线困难样本挖掘。OHEM 是挑 hardest 的一部分样本参与训练，Focal Loss 则是不丢样本，而是通过连续加权压低 easy sample 的权重。",
+      "一句话区分：OHEM 是离散采样策略，Focal Loss 是连续加权策略。"
+    ]
+  },
+  {
+    id: "Q154",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Focal Loss", "OHEM", "正负样本不均衡"],
+    question: "Focal Loss 和 OHEM 的区别是什么？Focal Loss 解决了正负样本不均衡吗？",
+    answer: [
+      "可以说 Focal Loss 就是为缓解正负样本不均衡提出来的，但更准确地说，它主要解决的是大量容易负样本造成的训练失衡。",
+      "不是说它直接把样本数量变平衡了，而是它让负样本里那些特别容易的样本贡献更小，这样正样本和难样本不会被海量 easy negatives 淹没。",
+      "和 OHEM 的区别再压缩一下：OHEM 是先算损失，再选 hardest 样本训练；Focal Loss 是不丢样本，直接通过损失函数自动压低 easy sample 权重。",
+      "OHEM 更像显式挖困难样本，Focal Loss 更像隐式聚焦困难样本。工程上很多人更喜欢 Focal Loss，是因为它更端到端，训练流程更自然。"
+    ]
+  },
+  {
+    id: "Q155",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Faster R-CNN", "Loss", "RPN"],
+    question: "Faster R-CNN 损失函数的构成是什么？",
+    answer: [
+      "Faster R-CNN 的损失一般可以分成两部分，再细一点是四部分。",
+      "第一部分是 RPN loss，包括 RPN classification loss，也就是 anchor 的前景背景分类损失；以及 RPN regression loss，也就是 anchor 到真实框的回归损失。",
+      "第二部分是 RoI head loss，包括 RoI 的类别分类损失，以及 RoI 的边框回归损失。",
+      "整体上可以写成下面这个形式。",
+      { type: "formula", latex: "L=L_{rpn\_cls}+L_{rpn\_reg}+L_{roi\_cls}+L_{roi\_reg}" },
+      "分类部分通常用交叉熵，回归部分通常用 Smooth L1 Loss。",
+      "一句话理解：RPN 先学提候选框，RoI head 再学精修和分类，所以损失也是这两阶段各有一套分类和回归损失。"
+    ]
+  },
+  {
+    id: "Q146",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["加速", "TensorRT", "ONNX Runtime"],
+    question: "检测中能提升速度但尽量不损失性能的操作有哪些？",
+    answer: [
+      "这题不要答得太绝对，因为完全不损失性能很少。更稳妥的说法是：有些优化在很多场景下几乎不掉点，或者掉点很小，但速度收益明显。",
+      "常见可以讲：换更高效的 backbone、减少不必要的后处理开销、推理侧工程优化比如 TensorRT 和 ONNX Runtime、合理调整输入分辨率和 batch、以及结构级优化比如深度可分离卷积、通道裁剪、特征层裁剪。",
+      "如果面试官问你自己用过哪些，就优先答项目里真做过的，比如半精度、部署引擎优化、backbone 轻量化、输入尺寸优化、剪枝、量化。"
+    ]
+  },
+  {
+    id: "Q147",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["RetinaFace", "人脸检测", "关键点"],
+    question: "介绍一下 RetinaFace。",
+    answer: [
+      "RetinaFace 可以理解成一个高质量单阶段人脸检测框架。",
+      "它的核心特点不是只做人脸框检测，而是同时预测人脸框、人脸关键点，有时还会结合像素级辅助监督。",
+      "它通常基于 RetinaNet 风格的 dense prediction 框架，再针对人脸任务做多任务学习优化。",
+      "为什么它效果好？因为人脸检测很看重小目标、遮挡和关键点结构信息；RetinaFace 把检测和关键点学习结合起来，所以对姿态变化、遮挡和小脸更稳。"
+    ]
+  },
+  {
+    id: "Q148",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["CenterNet", "Anchor Free", "中心点检测"],
+    question: "介绍一下 CenterNet。",
+    answer: [
+      "CenterNet 是典型的 anchor-free 检测器。",
+      "它的核心思想是把每个目标看成一个中心点，先预测中心点热力图，再回归宽高和中心点偏移。",
+      "也就是说，它不需要提前设计 anchor，而是直接回答三个问题：哪里有目标中心、目标有多大、这个中心点在原图里应该精确落在哪。",
+      "它的优点是结构简单、anchor 超参少；缺点是中心点重叠、密集小目标场景下会更有挑战。"
+    ]
+  },
+  {
+    id: "Q149",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["One-Stage", "负样本", "Focal Loss"],
+    question: "单阶段检测方法如 YOLO 为什么对负样本需求更大？",
+    answer: [
+      "因为 one-stage 检测是在整张特征图上做 dense prediction，也就是要在大量位置、尺度、anchor 上同时判断这里是不是目标。",
+      "这样天然会产生海量负样本，因为真正有目标的位置只占很少一部分，所以 one-stage 方法更容易遇到正负样本极不平衡问题。",
+      "这也是为什么很多 one-stage 检测器会特别强调正负样本分配策略、hard negative mining，以及 Focal Loss。",
+      "Focal Loss 的作用就是降低大量容易负样本的权重，把训练重点放到难样本上。"
+    ]
+  },
+  {
+    id: "Q150",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["YOLOv3", "Anchor", "K-means"],
+    question: "YOLOv3 中 anchor 尺寸一般怎么设置？",
+    answer: [
+      "YOLOv3 的 anchor 尺寸通常不是手拍脑袋定的，而是先在训练集标注框上做聚类。",
+      "最常见是用 K-means，也就是 K 均值聚类，或者用基于 IoU 的聚类方式，得到一组更贴近数据集分布的框大小。",
+      "YOLOv3 通常会分成 3 个尺度预测，每个尺度分配 3 个 anchor，所以总共 9 个 anchor。",
+      "大 anchor 给低分辨率特征层，小 anchor 给高分辨率特征层，这样更符合大目标和小目标的检测需求。"
+    ]
+  },
+  {
+    id: "Q151",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["数据增强", "Mosaic", "Mixup"],
+    question: "数据增强的常用方法有哪些？项目里目标检测常用哪些数据增强？",
+    answer: [
+      "常见数据增强可以分两类。通用图像增强包括翻转、裁剪、缩放、颜色抖动、亮度对比度变化、模糊、加噪声。",
+      "目标检测常用增强包括随机裁剪、随机 resize、多尺度训练、Mosaic、Mixup、随机翻转、颜色扰动。",
+      "Mosaic 是把 4 张图拼到一起，能显著增加小目标和上下文多样性。",
+      "目标检测里要特别注意一点：增强不能只改图，还要同步改 bbox 坐标。",
+      "如果面试官问项目里用什么，就优先答你真用过的，比如多尺度训练、随机翻转、颜色扰动、Mosaic、Mixup。"
+    ]
+  },
+  {
+    id: "Q152",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Focal Loss", "Anchor Free", "Two-Stage"],
+    question: "两阶段方法与一阶段方法的对比及优缺点？Focal Loss 的表达式？Anchor Free 方法的优缺点？",
+    answer: [
+      "two-stage 通常精度更高，尤其复杂场景更稳；one-stage 更快，更适合实时和部署。",
+      "Focal Loss 的核心形式可以写成下面这个式子。",
+      { type: "formula", latex: "FL(p_t)=-\\alpha(1-p_t)^\\gamma\\log(p_t)" },
+      "这里 alpha 是类别平衡项，gamma 是聚焦参数。它的作用是降低容易样本的权重，把训练重点放到难样本上。",
+      "Anchor Free 的优点是超参更少，不需要精细设计 anchor，结构更简单，有时训练和迁移更方便。",
+      "缺点是正负样本定义、中心分配、密集目标处理需要特别设计，并不是所有任务都天然优于 anchor-based。"
+    ]
+  },
+  {
+    id: "Q137",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["SSD", "DSSD", "RefineDet"],
+    question: "SSD 有哪些常见变体？它们主要在改什么？",
+    answer: [
+      "原始 SSD 的英文全称是 Single Shot MultiBox Detector，中文叫单次多框检测器。它优点是快，但对小目标不够友好，浅层特征语义弱，不同层之间特征融合也不够强。",
+      "常见变体比如 DSSD、FSSD、RefineDet。DSSD 在 SSD 基础上加反卷积和更强特征融合，提升小目标检测；FSSD 更强调多层特征融合；RefineDet 则加入两步回归和更精细的 anchor refinement。",
+      "如果面试里不要求逐篇背论文，更稳妥的回答是：SSD 后续变体核心都在补三件事，小目标、特征融合、回归质量。"
+    ]
+  },
+  {
+    id: "Q138",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["YOLOv3", "FPN", "小目标"],
+    question: "YOLOv3 相比前代有哪些提升？尤其小物体检测为什么更好？",
+    answer: [
+      "YOLOv3 相比早期 YOLO，提升主要有三点。",
+      "第一，多尺度预测。它在 3 个尺度特征图上做检测，类似 FPN 思路。FPN 的英文全称是 Feature Pyramid Network，中文叫特征金字塔网络。这对小目标帮助最大，因为高分辨率特征层会保留更多细节。",
+      "第二，backbone 变强了，它用 Darknet-53，比早期 backbone 表达能力更强。",
+      "第三，分类方式更灵活，从早期更偏 softmax 的方式变成独立 logistic 分类，更适合多标签场景。",
+      "一句话总结：YOLOv3 对小目标提升最关键的是多尺度预测。"
+    ]
+  },
+  {
+    id: "Q139",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Anchor Free", "CenterNet", "FCOS"],
+    question: "Anchor free 检测算法了解吗？它的基本思路是什么？",
+    answer: [
+      "Anchor Free 就是不再预先设计一堆 anchor 框，而是直接从点、中心、角点或者像素位置出发预测目标。",
+      "传统 anchor-based 方法，比如 Faster R-CNN、SSD、早期 YOLO，要先设定很多不同尺度和长宽比的锚框；Anchor Free 则直接预测哪个位置是目标、目标中心在哪、宽高是多少，或者四条边距离是多少。",
+      "比如 CenterNet 把检测看成中心点检测，FCOS 让每个点直接回归到目标框四条边的距离。",
+      "它的优点是超参更少、设计更简单；缺点是正负样本定义和训练策略要重新设计。"
+    ]
+  },
+  {
+    id: "Q140",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["YOLO", "SSD", "Faster R-CNN"],
+    question: "目标检测前世今生怎么讲？YOLO、SSD、Faster R-CNN 细节和工程问题怎么展开？",
+    answer: [
+      "这题面比较大，面试里不要散讲，建议按三层说。",
+      "第一层讲算法路线：two-stage 代表 Faster R-CNN，one-stage 代表 YOLO 和 SSD。第二层讲核心差别：Faster R-CNN 先 proposal 再分类回归，精度通常高；YOLO 直接 dense prediction，速度快；SSD 是早期速度和精度比较平衡的一类方法。",
+      "第三层讲工程问题：输入分辨率怎么选、anchor 怎么配、正负样本怎么采、NMS 阈值怎么调、部署时吞吐和延迟怎么平衡、量化后精度掉多少、小目标和密集目标怎么补。",
+      "如果面试官问代码实现，不用从头背代码，重点说清数据流怎么走、张量 shape 怎么变化、label assign 怎么做、loss 怎么算、推理怎么 decode 和 NMS。"
+    ]
+  },
+  {
+    id: "Q141",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Anchor Free", "Hourglass", "mAP"],
+    question: "Anchor free 框架、基本思想、不同网络对比、Hourglass 结构好处、损失函数和性能对比怎么讲？",
+    answer: [
+      "这题偏项目面试，核心不是背名词，而是讲清你的设计逻辑。基本思想还是不依赖 anchor，直接从关键点或位置回归目标。",
+      "不同网络可以举 CenterNet、FCOS、CornerNet，一个偏中心点，一个偏 per-pixel regression，一个偏角点。",
+      "Hourglass 的英文全称是 Hourglass Network，中文一般叫沙漏网络。它的好处是能反复做下采样和上采样，把全局语义和局部细节结合起来，所以对关键点定位类任务比较友好。",
+      "损失函数方面，anchor free 常见会有热力图损失、中心偏移损失、宽高回归损失。如果你用了新损失，就重点回答它解决了什么问题，比如类别不均衡、正负样本极不平衡、定位和分类不一致等。",
+      "如果问和 SOTA 比性能怎么讲，就从 mAP、速度、模型大小三维说。mAP 的英文全称是 mean Average Precision，中文叫平均精度均值。不要只说 mAP 高，要说高了多少、速度损失多少、tradeoff 是什么。"
+    ]
+  },
+  {
+    id: "Q142",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Cascade R-CNN", "IoU", "级联"],
+    question: "介绍一下 Cascade R-CNN。",
+    answer: [
+      "Cascade R-CNN 可以理解成级联版的 Faster R-CNN。",
+      "它的核心想法是一个检测头回归完之后，再送到下一个更严格的检测头继续 refine，而且每一阶段用更高的 IoU 阈值训练，比如从 0.5 到 0.6 到 0.7。",
+      "这样做的原因是如果一开始就用很高 IoU 阈值训练，正样本太少；级联训练可以让前一阶段先把框调得更准，再让后一阶段学习更高质量的检测。",
+      "所以它特别适合提高高 IoU 区间下的检测精度。"
+    ]
+  },
+  {
+    id: "Q143",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["Two-Stage", "One-Stage", "框架"],
+    question: "目标检测框架里，two-stage 和 one-stage 怎么理解？",
+    answer: [
+      "Two-stage 先生成候选框，再对候选框分类和回归，代表是 Faster R-CNN、Cascade R-CNN。优点是通常精度高，尤其对复杂场景和小目标往往更稳；缺点是速度相对慢。",
+      "One-stage 不单独生成 proposal，直接在密集位置上预测类别和框，代表是 YOLO、SSD、RetinaNet。优点是快、结构简单、部署友好；缺点是早期对正负样本不平衡和小目标问题更敏感，不过后续已经改进很多。",
+      "一句话总结：two-stage 更偏精度，one-stage 更偏速度和工程落地。"
+    ]
+  },
+  {
+    id: "Q144",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["BN", "RoI Align", "FPN"],
+    question: "目标检测里很多细节怎么讲？比如 BN 训练、RoI Pooling 和 Align、FPN 细节。",
+    answer: [
+      "这题是在看你是不是只会背大框架，不会落细节。",
+      "BN 训练时用当前 mini-batch 的均值和方差，推理时用滑动统计量。小 batch 时 BN 可能不稳定，所以检测里常见 SyncBN 或者直接冻结 BN。SyncBN 的英文全称是 Synchronized Batch Normalization，中文叫同步批量归一化。",
+      "RoI Pooling 和 RoI Align 的核心区别前面说过：一个有量化误差，一个用双线性插值避免错位。",
+      "FPN 的核心是自顶向下路径加横向连接，把高层语义和低层分辨率结合起来，这对多尺度目标尤其重要。"
+    ]
+  },
+  {
+    id: "Q145",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "目标检测",
+    tags: ["YOLOv3", "SSD", "Faster R-CNN"],
+    question: "为什么选 YOLOv3？它和 Fast/Faster R-CNN、SSD 的区别是什么？",
+    answer: [
+      "如果面试官问为什么选 YOLOv3，就从工程视角答。第一，速度快，实时性好；第二，工程实现成熟，部署链路简单；第三，多尺度预测后，小目标能力比早期 YOLO 好很多；第四，对很多业务场景来说，速度和精度平衡比较合适。",
+      "它和 Fast/Faster R-CNN 类型的区别是：YOLOv3 是 one-stage，直接 dense prediction；Faster R-CNN 是 two-stage，要先 proposal 再分类回归，所以结构更复杂、通常更慢。",
+      "SSD 和 YOLOv3 的区别是两者都是 one-stage，但 SSD 主要靠多层特征图和 default boxes；YOLOv3 除了多尺度预测，还用更强的 backbone 和更统一的回归方式，工程里通常更常见一些。"
+    ]
+  },
+  {
     id: "Q129",
     updatedAt: "2026-04-06",
     company: "字节跳动",
