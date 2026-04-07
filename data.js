@@ -1,5 +1,130 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q218",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["Pooling", "下采样", "感受野"],
+    question: "池化层的作用是什么？",
+    answer: [
+      "池化层的作用可以概括成四点：第一，做下采样，减小特征图尺寸；第二，减少后续计算量和显存占用；第三，扩大感受野；第四，增强一定的局部平移鲁棒性。",
+      "一句话总结：池化的核心是压缩空间尺寸，同时尽量保留主要响应。"
+    ]
+  },
+  {
+    id: "Q219",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["Max Pooling", "Average Pooling", "Pooling"],
+    question: "max pooling 和 ave pooling 有什么区别？",
+    answer: [
+      "Max Pooling 取窗口里的最大值，更强调最强响应，所以更适合突出边缘、纹理、显著特征。",
+      "Average Pooling 取窗口平均值，更平滑，保留整体统计信息，但显著性没有 max pooling 那么强。",
+      "如果问使用感受：max pooling 更常见；average pooling 在分类头后面做 global average pooling 时很常见。"
+    ]
+  },
+  {
+    id: "Q220",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["Pooling", "Global Average Pooling", "Adaptive Pooling"],
+    question: "pooling 层为什么常用 max pool？有哪些 pooling 技术？各自对比和使用场景是什么？",
+    answer: [
+      "为什么常用 max pool？因为它会把局部区域里最强响应留下来，对特征检测更直接，也更适合视觉任务里某个模式是否出现的判断。",
+      "常见 pooling 技术有 Max Pooling、Average Pooling、Global Average Pooling、Global Max Pooling，以及一些自适应池化，比如 Adaptive Pooling。",
+      "Global Average Pooling 常用于分类头，把每个通道直接压成一个数，减少全连接参数。",
+      "一句话总结：max pooling 偏抓最强特征，average pooling 偏做平滑统计。"
+    ]
+  },
+  {
+    id: "Q221",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["Max Pooling", "反向传播", "梯度"],
+    question: "Max Pooling 是如何反向传播梯度的？",
+    answer: [
+      "前向时，max pooling 会记录每个池化窗口里最大值的位置。",
+      "反向传播时，梯度只传给这个最大值对应的位置，其他位置梯度为 0。",
+      "所以本质上就是：前向谁赢了，反向梯度就传给谁。"
+    ]
+  },
+  {
+    id: "Q222",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["ResNet", "残差连接", "AlexNet"],
+    question: "ResNet 主要解决什么问题？AlexNet 和 LeNet 比改进在哪？ReLU 比 sigmoid 好在哪？",
+    answer: [
+      "ResNet 主要解决的是深层网络训练困难和退化问题。这里的退化问题不是单纯过拟合，而是网络更深以后，训练误差反而变差。ResNet 通过 skip connection，也就是残差连接，让网络更容易学残差而不是完整映射，所以梯度传播更顺。",
+      "AlexNet 相比 LeNet，主要改进在网络更深更宽、用了 ReLU、用了 Dropout、用了数据增强，并且在大规模数据和 GPU 训练下效果显著提升。",
+      "ReLU 比 sigmoid 好的核心原因是：正半轴梯度不容易消失，训练更快；计算也更简单；更适合深层网络。sigmoid 的问题是两端容易饱和，梯度很小。"
+    ]
+  },
+  {
+    id: "Q223",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["skip connection", "ResNet", "梯度传播"],
+    question: "skip connection 有什么好处？",
+    answer: [
+      "skip connection 的好处主要有三点：第一，缓解梯度消失，让梯度更容易往前传；第二，让深层网络更容易优化；第三，保留一部分原始输入信息，降低信息丢失风险。",
+      "一句话总结：skip connection 让网络更深还能更稳地训。"
+    ]
+  },
+  {
+    id: "Q224",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["MobileNet", "ShuffleNet", "轻量化网络"],
+    question: "MobileNet、ShuffleNet 的原理是什么？",
+    answer: [
+      "MobileNet 的核心是 depthwise separable convolution，也就是深度可分离卷积，把标准卷积拆成逐通道卷积加 1×1 通道融合，从而显著减少参数量和计算量。",
+      "ShuffleNet 的核心是 group convolution 加 channel shuffle，也就是组卷积加通道重排。因为组卷积会限制通道间信息流动，所以它再加 channel shuffle 来恢复跨组信息交换。"
+    ]
+  },
+  {
+    id: "Q225",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["MobileNet", "FLOPs", "工程优化"],
+    question: "为什么 MobileNet 理论上速度很快，但工程上未必有特别大的提升？",
+    answer: [
+      "这是很典型的工程题。理论上 MobileNet 计算量低，是因为 depthwise separable convolution 把 FLOPs 降下来了。",
+      "但工程上不一定成比例提速，原因常见有：第一，深度可分离卷积虽然 FLOPs 低，但访存不一定友好；第二，很多小算子、group 操作、通道拆分在硬件上不一定高效；第三，真实部署瓶颈不只在算力，还在内存访问、并行度和算子实现。",
+      "一句话总结：理论 FLOPs 小，不等于真实延迟一定线性下降。"
+    ]
+  },
+  {
+    id: "Q226",
+    updatedAt: "2026-04-07",
+    company: "阿里巴巴",
+    topicGroup: "基础知识点",
+    category: "池化与网络结构",
+    tags: ["VGG", "ResNet", "MobileNet"],
+    question: "说下 VGG、ResNet 网络结构；介绍轻量级网络；讲一下 MobileNet 原理以及和 Xception、ShuffleNet 的对比。",
+    answer: [
+      "VGG 主打规整堆叠 3×3 小卷积，结构简单直观；ResNet 核心是残差连接；轻量级网络常见有 MobileNet、ShuffleNet、SqueezeNet、EfficientNet-lite 这类。",
+      "MobileNet 和传统卷积的参数量对比可以这么记：标准卷积参数量大致是 K×K×Cin×Cout，深度可分离卷积变成 K×K×Cin + Cin×Cout，所以明显更小。",
+      "Xception 可以看成更极致的 depthwise separable convolution；ShuffleNet 更强调组卷积加通道重排的真实效率；MobileNet 更偏通用、直观、工程上广泛使用。",
+      "一句话总结：三者都在做轻量化，但侧重点分别是 MobileNet 做卷积分解，Xception 做更极致分离，ShuffleNet 做组卷积和通道重排的硬件友好。"
+    ]
+  },
+  {
     id: "Q212",
     updatedAt: "2026-04-07",
     company: "阿里巴巴",
