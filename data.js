@@ -1,5 +1,480 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q203",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["xrange", "range", "yield"],
+    question: "xrange 与 range 的区别是什么？xrange 通过什么实现？yield 语句底层如何理解？",
+    answer: [
+      "这是 Python2 里的高频题。range 在 Python2 里会直接生成一个完整列表，所以更占内存；xrange 不会一次性把所有结果都生成出来，而是惰性地产生值，所以更省内存。",
+      "它的思想和生成器很像，本质上都是按需产出。yield 可以把普通函数变成生成器函数。底层理解上，就是函数执行到 yield 时不会真正结束，而是把当前执行现场保存下来，下次继续从这个位置往后跑。",
+      "一句话总结：xrange 是惰性迭代，yield 是通过保存函数执行上下文来实现生成器。"
+    ]
+  },
+  {
+    id: "Q204",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["is", "==", "对象身份"],
+    question: "Python 中 is 与 == 的区别是什么？",
+    answer: [
+      "== 比较的是值是否相等；is 比较的是是不是同一个对象，也就是对象身份。",
+      "比如两个列表内容一样，== 可能是 True，但 is 往往是 False。",
+      "一句话答法：== 看值，is 看地址身份。"
+    ]
+  },
+  {
+    id: "Q205",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["new", "malloc", "C++"],
+    question: "new 和 malloc 有什么区别？",
+    answer: [
+      "malloc 来自 C，负责分配原始内存，不会调用构造函数，返回 void 指针。",
+      "new 来自 C++，除了分配内存，还会调用构造函数，并且返回对应类型指针。",
+      "对应地，free 只释放内存；delete 会先调用析构函数，再释放内存。",
+      "一句话总结：malloc 和 free 偏底层内存分配，new 和 delete 是带对象语义的内存管理。"
+    ]
+  },
+  {
+    id: "Q206",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["map", "unordered_map", "红黑树"],
+    question: "map 和 unordered_map 有什么区别？",
+    answer: [
+      "map 底层通常是红黑树，所以元素有序，查找、插入、删除一般是 O(log n)。",
+      "unordered_map 底层通常是哈希表，所以元素无序，平均查找、插入、删除是 O(1)，最坏可能退化。",
+      "如果要有序遍历，用 map；如果更看重平均查找速度，通常用 unordered_map。"
+    ]
+  },
+  {
+    id: "Q207",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["UTF-8", "UTF-16", "编码"],
+    question: "了解 UTF-8 吗？UTF-8 有几位？英文在 UTF-8 中占几位？UTF-8 和 UTF-16 有什么区别？",
+    answer: [
+      "先纠正一个容易混的点：UTF-8 不是固定几位编码，它是变长编码。",
+      "英文字符通常占 1 个字节，也就是 8 bit。常见中文一般占 3 个字节，有些更大的 Unicode 字符会占 4 个字节。",
+      "UTF-16 也是变长，但通常以 2 字节为基本单元，部分字符会用 4 字节。",
+      "区别核心是：UTF-8 对英文更省空间，而且和 ASCII 兼容；UTF-16 对很多东亚字符更整齐，但英文文本通常不如 UTF-8 节省。"
+    ]
+  },
+  {
+    id: "Q208",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["Python2", "Python3", "print"],
+    question: "Python2 和 Python3 的区别是什么？为什么 Python2 要升级成 Python3，print 为什么要加括号？",
+    answer: [
+      "核心区别可以讲字符串和编码体系更清晰、整数除法行为更统一、标准库有调整、很多语法和行为更现代化。",
+      "为什么要更新到 Python3？因为 Python2 已经停止维护，而且 Python3 在语言设计、Unicode 支持、生态和长期可维护性上更好。",
+      "print 为什么加括号？因为在 Python2 里，print 更像语句；在 Python3 里，print() 是函数。这样语言设计更统一，也更符合一等函数风格。"
+    ]
+  },
+  {
+    id: "Q209",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "讲解原理",
+    tags: ["装饰器", "迭代器", "生成器"],
+    question: "Python 装饰器、迭代器和生成器介绍一下。",
+    answer: [
+      "装饰器本质上是接受函数并返回新函数的函数，常用于给原函数加功能，比如日志、权限、缓存。",
+      "迭代器是实现了迭代协议的对象，核心是有 __iter__() 和 __next__()。",
+      "生成器是更方便地写迭代器的一种方式。带 yield 的函数调用后会返回生成器对象，不需要你手动写完整迭代器类。",
+      "一句话总结：生成器是一种特殊迭代器，装饰器是一种包装函数的语法糖。"
+    ]
+  },
+  {
+    id: "Q210",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "讲解原理",
+    tags: ["GIL", "list", "dict"],
+    question: "Python 全局锁是什么？动态数组如何实现？dict 和 list 的底层分别是什么？Python 有多线程吗？生成器是什么？",
+    answer: [
+      "Python 全局锁就是 GIL，前面那题已经讲过，一句话版：它是 CPython 里保证同一时刻只有一个线程执行 Python 字节码的机制。",
+      "Python 的 list 底层本质上就是动态数组，存的是对象指针数组，不是对象本体直接连续摆放。它会有当前长度和预留容量，当元素增多放不下时会做 over-allocation，所以 append 的均摊复杂度接近 O(1)。",
+      "dict 底层本质是哈希表，它通过 key 的哈希值定位槽位，再处理冲突。现代 Python 里 dict 还保持插入顺序。",
+      "Python 有多线程，但 CPython 下受 GIL 限制，更适合 I/O 密集型。生成器就是带 yield 的函数返回的对象，它支持惰性生成数据并保留执行状态。"
+    ]
+  },
+  {
+    id: "Q211",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "讲解应用",
+    tags: ["数据结构", "C扩展", "pybind11"],
+    question: "Python 数据结构有哪些？Python 中的 C 扩展有什么具体例子？",
+    answer: [
+      "内置常见数据结构有 list、tuple、dict、set、str；如果加上标准库常用的，还可以说 deque、heapq、Counter、defaultdict。面试里更关键不是背名字，而是能讲出哪些可变、哪些不可变，哪些适合查找，哪些适合顺序访问。",
+      "Python 中 C 扩展的常见例子有 NumPy，底层大量是 C 和 C++ 实现，所以数值计算快，而且很多操作会释放 GIL。",
+      "如果偏深度学习，也可以说 PyTorch、OpenCV 的 Python 接口，底层核心很多也是 C++ 或 CUDA 实现。",
+      "如果问自己会怎么做一个 C 扩展，可以说可以通过 CPython C API、Cython、pybind11 这些方式把 C 或 C++ 能力暴露给 Python。"
+    ]
+  },
+  {
+    id: "Q194",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["Python", "多线程", "GIL"],
+    question: "你比较熟悉 Python？你了解它的多线程么？为什么多线程比较鸡肋？",
+    answer: [
+      "如果你是第一次接触这些概念，可以先把进程理解成一个正在运行的程序，比如一个 Python 脚本跑起来就是一个进程。",
+      "线程可以理解成这个程序内部的执行小分队。一个程序里可以只有一个线程，也可以同时开多个线程去做不同事情。",
+      "比如浏览器就是一个进程，但它内部可能有线程在渲染页面、有线程在下载图片、有线程在响应点击。",
+      "Python 当然有多线程，但在 CPython 里有一个 GIL，也就是全局解释器锁，它会限制同一时刻只有一个线程执行 Python 字节码。",
+      "所以如果任务是 CPU 密集型，比如死命做大循环计算，多线程很难真的把多个 CPU 核同时跑满；但如果任务是 I/O 密集型，比如网络请求、读写文件、数据库访问，线程在等待 I/O 时会让出执行机会，所以多线程还是很有用。",
+      "一句话总结：线程是程序里的多条执行线；Python 多线程不是没用，而是更适合 I/O 密集型，不适合纯 CPU 密集型并行。"
+    ]
+  },
+  {
+    id: "Q195",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["GIL", "CPython", "线程"],
+    question: "Python 的 GIL 解释一下。",
+    answer: [
+      "GIL 的英文全称是 Global Interpreter Lock，中文叫全局解释器锁。",
+      "你可以把它理解成一把大锁。很多 Python 线程都想进来执行 Python 代码，但同一时刻只允许一个线程拿到这把锁。",
+      "它存在的原因，简单理解就是为了让 CPython 内部对象管理更安全，特别是引用计数这类共享数据更容易维护。",
+      "它的直接影响是：如果任务主要在算 CPU，比如大量数值循环，那多个线程会轮流拿锁，不能真正同时并行跑；但如果任务主要在等 I/O，比如等网络、等磁盘，那线程在等待时会让出锁，所以多线程仍然能提高效率。"
+    ]
+  },
+  {
+    id: "Q196",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["多线程", "多进程", "吃满核"],
+    question: "Python 里的多线程，怎么让它吃满核呢？",
+    answer: [
+      "先说结论：如果你想让 Python 的 CPU 密集型任务把多核真正跑起来，最常见办法不是多线程，而是多进程。",
+      "原因是多线程会被 GIL 卡住，但多个进程各自有自己的 Python 解释器和 GIL，所以可以真正分到不同 CPU 核上。",
+      "最常见做法是用 multiprocessing，或者用进程池。",
+      "另外还有两条路：一是用 NumPy、PyTorch 这类底层会释放 GIL 的库；二是把核心计算写到 C++、CUDA 里。",
+      "一句话总结：想吃满核，CPU 密集型优先多进程，不要优先指望 Python 原生多线程。"
+    ]
+  },
+  {
+    id: "Q197",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["进程", "线程", "并发"],
+    question: "Python 中的进程和线程？线程有什么缺点吗？",
+    answer: [
+      "进程可以理解成一个独立运行的程序实例。比如你同时开两个 Python 脚本，它们通常就是两个进程。",
+      "线程可以理解成进程内部的执行单元。一个进程里可以开多个线程，它们共享同一块内存，所以传数据方便。",
+      "线程的优点是创建和切换更轻，共享数据更方便；缺点是因为共享内存，所以更容易写出竞争条件、死锁这类并发 bug。",
+      "放到 Python 里，还要再补一句：线程在 CPU 密集型任务里会受 GIL 限制，并行能力差。",
+      "进程的优点是隔离更好、能真正利用多核；缺点是创建更重，进程之间通信也比线程麻烦。"
+    ]
+  },
+  {
+    id: "Q198",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["GIL", "I/O", "多线程"],
+    question: "既然 Python 线程有全局锁，是不是就没有什么用？",
+    answer: [
+      "不是没有用，这个问题最容易答偏。",
+      "GIL 限制的是多个线程同时执行 Python 计算代码，不等于线程完全没价值。",
+      "如果你的程序很多时间都花在等待外部资源，比如等网络返回、等文件读完、等数据库响应，这些时间里 CPU 其实是空着的，线程可以切去做别的事。",
+      "所以像爬虫、Web 服务、日志采集、文件下载、数据库访问这类场景，多线程仍然很常见。",
+      "更准确的说法是：GIL 限制的是 CPU 密集型并行，不等于 Python 线程完全没用。"
+    ]
+  },
+  {
+    id: "Q199",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["多进程", "多线程", "应用场景"],
+    question: "Python 中多进程多线程各适合什么应用？",
+    answer: [
+      "可以先按任务是不是在等东西来分。",
+      "如果程序大部分时间都在等网络、等磁盘、等数据库，这叫 I/O 密集型任务，更适合多线程，比如爬虫、下载器、日志收集、接口请求。",
+      "如果程序大部分时间都在算，比如图像处理、数值计算、数据预处理、大循环运算，这叫 CPU 密集型任务，更适合多进程。",
+      "一句话总结：I/O 密集型优先线程，CPU 密集型优先进程。"
+    ]
+  },
+  {
+    id: "Q200",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["vector", "动态数组", "复杂度"],
+    question: "STL 中 vector 的底层实现是什么？插入操作时间复杂度怎么分析？要考虑内存复制扩充。",
+    answer: [
+      "vector 底层可以直接理解成动态数组，也就是一块连续内存。",
+      "它通常至少记三样东西：数组起点、当前用了多少个元素，也就是 size、以及总共预留了多少空间，也就是 capacity。",
+      "尾部插入 push_back 时，如果还有空位，直接放进去就行，所以这次很快；如果没空位了，就要重新申请一块更大的连续内存，把旧数据整体搬过去，再插入新元素。",
+      "所以 push_back 平均下来是 O(1)，但某一次扩容时会变成 O(n)。",
+      "中间插入更慢，因为后面的元素都要往后挪，所以一般是 O(n)。"
+    ]
+  },
+  {
+    id: "Q201",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["栈", "动态扩充", "数据结构"],
+    question: "如何实现一个栈，并支持动态扩充？",
+    answer: [
+      "最直接思路就是用动态数组做一个栈。",
+      "你只需要维护三样东西：一块数组、当前元素个数 size、当前容量 capacity。",
+      "push 时，如果还有空间，就把新元素放到末尾；如果空间满了，就先扩容，比如容量乘 2，再继续放。",
+      "pop 时只需要把 size 减 1；top 就是返回最后一个元素。",
+      "所以本质上，这就是一个只允许在尾部操作的简化版 vector。"
+    ]
+  },
+  {
+    id: "Q202",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "基础知识",
+    tags: ["深拷贝", "浅拷贝", "垃圾回收"],
+    question: "Python 里面的深拷贝和浅拷贝、回收机制，以及 Python 是解释语言还是编译语言？",
+    answer: [
+      "浅拷贝可以理解成只复制最外面这一层盒子，但盒子里面装的子对象还是指向原来的内容；深拷贝则是连里面的子对象也一起重新复制，所以改新的不会影响旧的。",
+      "Python 的回收机制主要有两部分：第一是引用计数，也就是一个对象如果没人引用了，就可以回收；第二是垃圾回收器专门处理循环引用问题，比如 A 引 B，B 又引 A，这种只靠引用计数就不够了。",
+      "至于 Python 是解释语言还是编译语言，更准确的说法是：Python 平时被叫作解释型语言，但像 CPython 也会先把源码编译成字节码，再由虚拟机解释执行，所以它不是一句话就能说成只有解释、完全没有编译。"
+    ]
+  },
+  {
+    id: "Q190",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "PyTorch",
+    tags: ["torch.Tensor", "torch.tensor", "dtype"],
+    question: "torch.Tensor 和 torch.tensor 有什么区别？",
+    answer: [
+      "这两个名字很像，但语义不完全一样。",
+      "torch.Tensor 更像一个张量类，历史包袱更重。很多时候你写 torch.Tensor([1, 2, 3])，它默认更偏向创建 float32 张量。",
+      "torch.tensor 更像推荐使用的工厂函数，它会根据你传入的数据推断 dtype，比如整数列表通常会推成整型张量。",
+      "所以更稳妥的说法是：torch.tensor 是更推荐的显式创建方式，行为更清晰；torch.Tensor 更像类构造器，历史上容易带来 dtype 误解。",
+      "一句话记忆：日常创建张量优先用 torch.tensor(...)，不要优先写 torch.Tensor(...)。"
+    ]
+  },
+  {
+    id: "Q191",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "PyTorch",
+    tags: ["torch.no_grad", "requires_grad", "计算图"],
+    question: "torch.no_grad 和 requires_grad=False 的区别是什么？",
+    answer: [
+      "先纠正一个细节，通常写的是 requires_grad=False，不是 required_grad=False。",
+      "requires_grad=False 是张量级别的属性，意思是这个张量本身不需要对它求梯度。",
+      "torch.no_grad() 是上下文级别的开关，在这个作用域里，PyTorch 不去构建计算图，整个前向过程都不记录梯度。",
+      "所以如果你只是让某个参数不训练，可以设置它 requires_grad=False；如果你是在验证或推理阶段，想整体关闭梯度记录，更常用 torch.no_grad()。",
+      "一句话总结：requires_grad=False 是某个张量不求梯度，torch.no_grad() 是这段计算都不建图。"
+    ]
+  },
+  {
+    id: "Q192",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "PyTorch",
+    tags: ["function", "module", "torch.nn.functional"],
+    question: "PyTorch 里 function 和 module 有什么区别？",
+    answer: [
+      "这里一般是在问 torch.nn.functional 里的函数和 torch.nn.Module 里的模块有什么区别。",
+      "区别核心是：function 通常是无状态操作，module 通常是有状态对象。",
+      "比如 F.relu(x) 是函数调用，nn.ReLU() 是模块对象。再比如 F.conv2d 需要你自己传权重，nn.Conv2d 会自己持有可学习参数 weight 和 bias。",
+      "所以一句话答法是：function 更像纯算子，不保存参数；module 更像网络层，会管理参数、缓冲区和训练推理状态。"
+    ]
+  },
+  {
+    id: "Q193",
+    updatedAt: "2026-04-07",
+    company: "字节跳动",
+    topicGroup: "编程高频问题",
+    category: "PyTorch",
+    tags: ["Dataset", "DataLoader", "Sampler"],
+    question: "PyTorch 里 dataset、dataloader、sampler 有什么区别？",
+    answer: [
+      "这三个可以按谁管数据、谁管怎么取、谁管怎么装批来记。",
+      "Dataset 负责定义数据是什么，也就是怎么根据索引取一个样本，核心一般实现 __len__ 和 __getitem__。",
+      "Sampler 负责定义索引怎么取，比如顺序取、随机取、加权取。它不真的返回样本，而是返回索引顺序。",
+      "DataLoader 负责把 Dataset 和 Sampler 组织起来，再做 batch、并行加载、拼接，也就是把样本真正喂给训练循环。",
+      "一句话总结：Dataset 定义样本内容，Sampler 定义取样顺序，DataLoader 定义如何批量加载。"
+    ]
+  },
+  {
+    id: "Q180",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图形图像",
+    tags: ["Phong", "能量守恒", "PBR"],
+    question: "Phong 模型如果能量不守恒怎么办？",
+    answer: [
+      "Phong 模型是经典经验光照模型，优点是简单，但它本身不严格满足能量守恒。",
+      "如果面试官问能量不守恒怎么办，更稳妥的回答是：对高光项做归一化，限制 diffuse 和 specular 总能量不要超过入射能量，或者进一步直接换到 PBR，也就是 Physically Based Rendering，中文叫基于物理的渲染。",
+      "一句话总结：Phong 更像经验模型，真要严格能量守恒，通常会转到物理一致的 BRDF 和 PBR 框架。"
+    ]
+  },
+  {
+    id: "Q181",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图形图像",
+    tags: ["渲染管线", "顶点着色器", "光栅化"],
+    question: "渲染管线怎么讲？",
+    answer: [
+      "经典图形渲染管线可以顺着 GPU 流程讲：顶点输入，顶点着色器，图元装配，裁剪，光栅化，片元着色器，深度和模板测试，混合，最后写入 FrameBuffer。",
+      "如果面试是 OpenGL 或图形岗，至少要把顶点阶段、光栅化、片元阶段、深度测试、混合这几个讲清。"
+    ]
+  },
+  {
+    id: "Q182",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图形图像",
+    tags: ["Deferred Rendering", "Forward Rendering", "Tile-Based"],
+    question: "延迟渲染和前向渲染有什么区别？Tile-Based Rendering 怎么理解？",
+    answer: [
+      "Forward Rendering 是前向渲染，物体一边画一边算光照，结构简单，但光源很多时成本高。",
+      "Deferred Rendering 是延迟渲染，先把几何信息写进 G-Buffer，再统一做光照计算。优点是多光源场景更高效，缺点是显存带宽压力大，透明物体处理麻烦。",
+      "Tile-Based Rendering 的中文叫基于瓦片的渲染。核心是把屏幕分块，在 tile 内做几何和光照处理，减少带宽访问，移动 GPU 上尤其常见。"
+    ]
+  },
+  {
+    id: "Q183",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图形图像",
+    tags: ["MRT", "FrameBuffer", "G-Buffer"],
+    question: "MRT 和 FrameBuffer 是什么？",
+    answer: [
+      "MRT 的英文全称是 Multiple Render Targets，中文叫多渲染目标，意思是一趟渲染同时输出到多个 render target。延迟渲染里很常见，比如一次把法线、颜色和深度相关信息一起写进 G-Buffer。",
+      "FrameBuffer 是帧缓冲，可以理解成 GPU 最终或中间渲染结果写入的目标内存区域，里面通常会挂颜色附件、深度附件和模板附件。离屏渲染、后处理、阴影贴图都会用到自定义 FrameBuffer。"
+    ]
+  },
+  {
+    id: "Q184",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图形图像",
+    tags: ["Z Fighting", "深度缓冲", "求交"],
+    question: "什么是 Z fighting？光线与三角形求交怎么做？",
+    answer: [
+      "Z Fighting 是两个表面深度太接近，深度缓冲精度不够，导致显示时一会儿这个在前、一会儿那个在前，出现闪烁。常见解决方法有拉开几何间距、提高深度精度、调整 near 和 far plane，或者用 polygon offset。",
+      "光线与三角形求交最常见是 Moller-Trumbore 算法。本质就是把交点表示成三角形重心坐标，再解方程判断：光线是否和平面相交、交点是否在三角形内部、以及交点参数 t 是否大于 0。"
+    ]
+  },
+  {
+    id: "Q185",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图形图像",
+    tags: ["PBR", "MSAA", "TAA"],
+    question: "你怎么理解 PBR？抗锯齿技术比如 MSAA、TAA 怎么讲？",
+    answer: [
+      "PBR 的英文全称是 Physically Based Rendering，中文叫基于物理的渲染。核心目标是让材质、光照和能量关系更符合真实物理。常见关键词有能量守恒、BRDF、金属度、粗糙度和 Fresnel 项。",
+      "MSAA 的英文全称是 Multisample Anti-Aliasing，中文叫多重采样抗锯齿，主要在几何边缘多采样，效果不错，但成本比较高。",
+      "TAA 的英文全称是 Temporal Anti-Aliasing，中文叫时间抗锯齿。它利用历史帧信息做时域平滑，成本相对可控，但容易带来 ghosting。",
+      "一句话总结：空间抗锯齿更直接，时域抗锯齿更省，但更依赖历史重投影质量。"
+    ]
+  },
+  {
+    id: "Q186",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "图形图像",
+    tags: ["Blend", "透明", "OIT"],
+    question: "OpenGL 中 Blend 方式怎么讲？半透明物体怎么做次序无关透明？",
+    answer: [
+      "Blend 就是颜色混合，常见公式是 C_out = C_src × F_src + C_dst × F_dst。最常见透明混合是 src alpha 和 one minus src alpha，也就是前景颜色按自身 alpha，背景按剩余比例混合。",
+      "半透明最麻烦的是顺序问题，因为普通 alpha blend 对绘制顺序敏感。Depth Peeling 的思路是分层剥离，每次 peel 一层最前面的透明片元，多次渲染后再合成，优点是准确，缺点是代价高。",
+      "Per-Pixel Linked Lists 的思路是每个像素存一个链表，把所有透明片元挂进去，最后按深度排序再混合。它属于 OIT，也就是 Order-Independent Transparency，中文叫次序无关透明。优点是更通用，缺点是实现复杂、显存压力更大。"
+    ]
+  },
+  {
+    id: "Q187",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "视频编解码",
+    tags: ["VVC", "AMVP", "运动补偿"],
+    question: "VVC 你都了解哪些部分？AMVP 参数获取流程和运动补偿插值怎么讲？",
+    answer: [
+      "VVC 的英文全称是 Versatile Video Coding，中文叫新一代通用视频编码标准。常见可以讲更灵活的块划分、更复杂的帧内帧间预测、更强的环路滤波、更丰富的运动建模，以及更高压缩率但更高复杂度。",
+      "AMVP 的英文全称是 Advanced Motion Vector Prediction，中文叫高级运动向量预测。它的核心是从空域、时域邻居构造运动向量候选列表，再选择更合适的预测值来减少编码残差。流程大致是：收集空间邻居 mv，再补时间邻居 mv，构造候选列表，编码端在候选上做代价比较，选中 predictor，再编码残差 mv difference。",
+      "运动补偿里的插值，本质上是为了得到亚像素位置的参考值。因为运动向量不一定正好落在整数像素上，所以需要用插值滤波得到半像素、四分之一像素甚至更细位置的值。"
+    ]
+  },
+  {
+    id: "Q188",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "视频编解码",
+    tags: ["merge", "DMVR", "BDOF"],
+    question: "merge 列表构造过程，以及 DMVR、PROF、BDOF 这些怎么理解？",
+    answer: [
+      "merge 的本质是尽量直接复用邻居块已有的运动信息，少发参数。候选一般来自空域相邻块、时域相关块、基于历史运动信息、成对平均或双向组合，以及零 mv 等补充候选。",
+      "DMVR 的英文全称是 Decoder-side Motion Vector Refinement，中文叫解码端运动向量细化，核心是解码端局部再搜索，微调双向预测位置。",
+      "PROF 一般可理解成基于光流思想的预测细化。BDOF 的英文全称是 Bi-Directional Optical Flow，中文叫双向光流，它通过局部光流近似改善双向预测精度。",
+      "一句话理解：这些技术都是为了让双向预测更准，从而降低残差。"
+    ]
+  },
+  {
+    id: "Q189",
+    updatedAt: "2026-04-06",
+    company: "字节跳动",
+    topicGroup: "项目知识点",
+    category: "手写代码",
+    tags: ["PSNR", "十进制转十六进制", "视频编解码"],
+    question: "编码代码：PSNR 计算函数，以及十进制转十六进制函数。",
+    answer: [
+      "PSNR 的英文全称是 Peak Signal-to-Noise Ratio，中文叫峰值信噪比。公式是下面这样。",
+      { type: "formula", latex: "PSNR=10\\log_{10}\\frac{MAX^2}{MSE}" },
+      "如果图像是 8bit，MAX 一般取 255。十进制转十六进制本质上就是循环取余再逆序。下面这两段代码都适合面试手写。",
+      { type: "code", language: "python", code: "import math\n\ndef calc_psnr(img1, img2, max_val=255.0):\n    mse = ((img1 - img2) ** 2).mean()\n    if mse == 0:\n        return float('inf')\n    return 10 * math.log10((max_val * max_val) / mse)\n\ndef dec_to_hex(n):\n    if n == 0:\n        return '0'\n    digits = '0123456789ABCDEF'\n    sign = ''\n    if n < 0:\n        sign = '-'\n        n = -n\n\n    res = []\n    while n > 0:\n        res.append(digits[n % 16])\n        n //= 16\n    return sign + ''.join(res[::-1])" }
+    ]
+  },
+  {
     id: "Q168",
     updatedAt: "2026-04-06",
     company: "字节跳动",
@@ -93,7 +568,7 @@
     question: "图像分类一般用什么损失函数？交叉熵的形式和来源是什么？如果数据集有 20% 噪声标签会怎样？",
     answer: [
       "分类里最常见的是交叉熵，公式通常写成下面这样。",
-      { type: "formula", latex: "L=-\sum_i y_i\log p_i" },
+      { type: "formula", latex: "L=-\\sum_i y_i\\log p_i" },
       "如果真实标签是 one-hot，本质上就是正确类别概率的负对数。它怎么来的，可以从最大似然讲：假设标签服从离散分布，最大化真实标签概率；取负对数之后，就得到交叉熵。",
       "如果有 20% 噪声标签，直接影响就是模型会学到错误监督，训练后期更容易过拟合错标样本，泛化下降。",
       "这时一般要配合 label smoothing、鲁棒损失、样本筛选或数据清洗。"
@@ -163,7 +638,7 @@
     question: "FaceNet 里的 triplet loss 公式是什么？反向传播如何更新？",
     answer: [
       "Triplet Loss 的核心是让 anchor 和 positive 更近，让 anchor 和 negative 更远。公式通常写成下面这样。",
-      { type: "formula", latex: "L=\max(0, d(a,p)-d(a,n)+margin)" },
+      { type: "formula", latex: "L=\\max(0, d(a,p)-d(a,n)+margin)" },
       "这里 a 是 anchor，p 是 positive，n 是 negative，margin 是间隔。",
       "如果损失大于 0，就说明约束还没满足，这时梯度会推动把 anchor 往 positive 拉近，把 anchor 和 negative 拉远。",
       "面试里一般不用把完整梯度全展开到每一项坐标，只要说清更新方向：对 a 和 p 这对，会减小距离；对 a 和 n 这对，会增大距离，核心还是基于链式法则对距离项求导。"
