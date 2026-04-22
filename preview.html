@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>题目与答案整理（美化版）</title>
+  <style>
+    :root {
+      --bg1: #eef4ff;
+      --bg2: #f7f3ff;
+      --bg3: #f6fbf8;
+      --text: #182230;
+      --muted: #5f6b7a;
+      --line: rgba(148, 163, 184, 0.22);
+      --card: rgba(255,255,255,0.84);
+      --card-solid: #ffffff;
+      --accent: #4f46e5;
+      --accent-2: #0f766e;
+      --accent-soft: rgba(79, 70, 229, 0.10);
+      --ok-bg: #ecfdf5;
+      --ok-text: #047857;
+      --shadow: 0 18px 48px rgba(15, 23, 42, 0.09);
+      --radius-xl: 26px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --code-bg: #0f172a;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.75;
+      background:
+        radial-gradient(circle at top left, #dbeafe 0%, rgba(219,234,254,0) 34%),
+        radial-gradient(circle at top right, #ede9fe 0%, rgba(237,233,254,0) 36%),
+        linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 48%, var(--bg3) 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 18px 64px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 34px 28px;
+      border-radius: 32px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.74));
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.65);
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(10px);
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .hero::before {
+      width: 260px; height: 260px; right: -60px; top: -70px;
+      background: radial-gradient(circle, #c7d2fe 0%, rgba(199,210,254,0) 68%);
+    }
+    .hero::after {
+      width: 240px; height: 240px; left: -40px; bottom: -90px;
+      background: radial-gradient(circle, #bfdbfe 0%, rgba(191,219,254,0) 68%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(79,70,229,0.09);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .04em;
+    }
+    h1 {
+      margin: 16px 0 10px;
+      font-size: clamp(28px, 4.2vw, 46px);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    .hero p { margin: 0; color: var(--muted); max-width: 860px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .stat {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 18px;
+      backdrop-filter: blur(12px);
+    }
+    .stat .k { color: var(--muted); font-size: 13px; }
+    .stat .v { font-size: 26px; font-weight: 800; margin-top: 4px; letter-spacing: -0.03em; }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding: 12px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.9);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+    .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav a, .ghost-btn, .solid-btn {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: .2s ease;
+      cursor: pointer;
+    }
+    .nav a {
+      color: var(--accent);
+      background: rgba(79, 70, 229, 0.08);
+      border-color: rgba(79,70,229,0.12);
+    }
+    .nav a:hover { transform: translateY(-1px); }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .ghost-btn {
+      background: rgba(255,255,255,0.75);
+      color: var(--text);
+      border-color: var(--line);
+    }
+    .solid-btn {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      box-shadow: 0 10px 20px rgba(79,70,229,0.22);
+    }
+
+    .notice {
+      margin-bottom: 22px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 251, 235, 0.88);
+      border: 1px solid rgba(245, 158, 11, 0.22);
+      color: #92400e;
+      box-shadow: 0 10px 24px rgba(146, 64, 14, 0.05);
+    }
+
+    .section { margin-top: 34px; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 34px);
+      letter-spacing: -0.03em;
+    }
+    .section-sub { color: var(--muted); font-size: 14px; }
+
+    .q-grid { display: grid; gap: 18px; }
+    .q-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .q-card:hover { transform: translateY(-2px); box-shadow: 0 22px 52px rgba(15, 23, 42, 0.11); }
+
+    .q-head {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 20px 22px 14px;
+    }
+    .q-no {
+      width: 56px; height: 56px;
+      display: grid; place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(79,70,229,0.14), rgba(14,165,233,0.12));
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 20px;
+      border: 1px solid rgba(79,70,229,0.16);
+    }
+    .q-type {
+      display: inline-flex;
+      width: fit-content;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.08);
+      color: var(--accent-2);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .q-meta h3 { margin: 0; font-size: 22px; letter-spacing: -0.02em; }
+    .answer-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--ok-bg);
+      color: var(--ok-text);
+      border: 1px solid rgba(16,185,129,0.18);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .q-body { padding: 0 22px 22px; }
+    .q-stem {
+      padding: 18px 18px;
+      border-radius: 18px;
+      background: rgba(248,250,252,0.82);
+      border: 1px solid var(--line);
+      font-size: 15px;
+    }
+    .q-stem br { content: ""; display: block; margin-top: 8px; }
+
+    .analysis-box {
+      margin-top: 14px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(79,70,229,0.06), rgba(14,165,233,0.04));
+      border: 1px solid rgba(99,102,241,0.14);
+    }
+    .analysis-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .program-wrap { display: grid; gap: 20px; }
+    .prog-card {
+      background: var(--card-solid);
+      border: 1px solid rgba(226,232,240,0.9);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .prog-top {
+      padding: 24px 24px 16px;
+      background: linear-gradient(135deg, rgba(239,246,255,0.96), rgba(245,243,255,0.96));
+      border-bottom: 1px solid rgba(226,232,240,0.9);
+    }
+    .prog-top h3 { margin: 0 0 10px; font-size: 26px; letter-spacing: -0.03em; }
+    .prog-top p { margin: 0; color: var(--muted); }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px 24px 0;
+    }
+    .meta-card {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+    }
+    .meta-card .k { color: var(--muted); font-size: 13px; }
+    .meta-card .v { margin-top: 6px; font-weight: 800; }
+    .prog-body { padding: 12px 24px 24px; }
+    pre {
+      margin: 14px 0 0;
+      background: var(--code-bg);
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 22px;
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.65;
+      border: 1px solid rgba(51,65,85,0.9);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+
+    .footer {
+      margin-top: 34px;
+      padding: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .collapsed .analysis-box { display: none; }
+
+    @media (max-width: 900px) {
+      .stats, .meta-grid { grid-template-columns: 1fr 1fr; }
+      .q-head { grid-template-columns: auto 1fr; }
+      .q-answer-wrap { grid-column: 1 / -1; }
+      .topbar { flex-direction: column; align-items: stretch; }
+    }
+    @media (max-width: 640px) {
+      .shell { padding: 16px 12px 48px; }
+      .hero { padding: 24px 18px; border-radius: 24px; }
+      .stats, .meta-grid { grid-template-columns: 1fr; }
+      .q-head, .q-body, .prog-top, .prog-body, .meta-grid { padding-left: 16px; padding-right: 16px; }
+      .q-meta h3 { font-size: 20px; }
+    }
+
+    @media print {
+      body { background: white; }
+      .topbar { display: none; }
+      .hero, .q-card, .prog-card { box-shadow: none; background: white; }
+      .q-card, .prog-card, .hero { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <div class="eyebrow">题库整理 · 美化版</div>
+      <h1>题目与答案整理</h1>
+      <p>按 <strong>单选题 / 多选题 / 编程题</strong> 三个模块重新排版。这个版本重点优化了观感、阅读节奏和信息层级，适合直接浏览、打印或继续二次编辑。</p>
+      <div class="stats">
+        <div class="stat"><div class="k">单选题</div><div class="v">15</div></div>
+        <div class="stat"><div class="k">多选题</div><div class="v">5</div></div>
+        <div class="stat"><div class="k">编程题</div><div class="v">2</div></div>
+        <div class="stat"><div class="k">内容形态</div><div class="v">答案 + 解析 + 代码</div></div>
+      </div>
+    </section>
+
+    <div class="topbar">
+      <nav class="nav">
+        <a href="#single">单选题</a>
+        <a href="#multi">多选题</a>
+        <a href="#program">编程题</a>
+      </nav>
+      <div class="actions">
+        <button class="ghost-btn" id="toggleAnalysis">收起解析</button>
+        <button class="solid-btn" onclick="window.print()">打印 / 导出 PDF</button>
+      </div>
+    </div>
+
+    <div class="notice">
+      说明：原始题目来自口述整理，个别地方存在重复词、英文口音转写或表述不够规范的问题。当前页面已做适度规范化，答案按常见考试语义和工程语境整理。
+    </div>
+
+    <section class="section" id="single">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">单选题</h2>
+          <div class="section-sub">共 15 题，按题卡形式展示，答案和解析直接可见。</div>
+        </div>
+      </div>
+      <div class="q-grid">
+        
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">01</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 1 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：C</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">在部署阶段，将卷积层与批归一化层进行融合。下列关于卷积和批归一化层融合的描述中，最准确的是？<br>A. 融合是在运行时将 BN 的均值和方差传入卷积底层算子中并行计算。<br>B. 融合是为了让 BN 的梯度更快反向传播到卷积层，从而加速推理。<br>C. 融合是一种纯代数等价变换，在模型编译期就将 BN 的缩放和偏移参数吸收到卷积的权重和偏置中，运行时完全没有独立 BN 层的开销。<br>D. 卷积层和批归一化层融合会轻微改变模型输出精度，因为融合后的算子无法使用 Tensor Core 加速。</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">Conv+BN 融合本质上是推理期的参数折叠（parameter folding），属于编译期代数等价变换。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">02</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 2 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：D</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">在多轮对话推理系统中，如果 GPU / NPU 内存已满，但仍有新的 token 需要生成，系统通常采用什么策略？<br>A. 自动降低模型精度<br>B. 直接杀掉进程<br>C. 重启服务器<br>D. 将部分 KV Cache swap 到 CPU 或进行 recomputation</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">在线推理系统常见做法是 KV Cache 分层存储、换出到 CPU，或者做重计算来换显存。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">03</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 3 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：A</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">在大模型指令微调实验中，对比三种训练数据配比（纯指令、指令+多轮对话、指令+知识）的模型响应准确率，需直观展示不同配比的准确率差异并便于组间对比，最适合的可视化图表是？<br>A. 分组柱状图<br>B. 饼图<br>C. 直方图<br>D. 雷达图</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">这是典型的“多组类别、横向对比数值”场景，分组柱状图最直观。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">04</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 4 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：A</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">适合高维稀疏向量相似度计算的是？<br>A. 余弦相似度<br>B. 曼哈顿距离<br>C. 切比雪夫距离<br>D. 欧氏距离</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">高维稀疏向量更关注方向而非模长，余弦相似度是最常见选择。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">05</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 5 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：D</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">下列哪个矩阵一定是可逆的？<br>A. 所有元素都为 0 的矩阵<br>B. 对称矩阵<br>C. 行列式为 0 的矩阵<br>D. 单位矩阵</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">单位矩阵的逆还是它自己；其余三项都不保证可逆。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">06</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 6 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：B</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">在层次聚类分析中，以下哪一种方法是用于定义簇间距离的常见方式？<br>A. DBSCAN<br>B. Complete Linkage<br>C. K-means<br>D. Expectation Maximization</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">Complete Linkage（最长距离法）就是层次聚类里常见的簇间距离定义方式。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">07</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 7 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：D</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">Transformer 的编码器—解码器注意力（cross-attention）中，Query 来自哪里？<br>A. 编码器的输出<br>B. 位置编码<br>C. 输入序列<br>D. 解码器上一层（或前一子层）的输出</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">在 cross-attention 中，Q 来自解码器侧，K / V 来自编码器输出。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">08</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 8 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：B</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">在流水线并行中，一个模型被切分为多个 stage，分布在不同 GPU 上。当某些 GPU 在等待上游 stage 的计算结果时出现空闲，这种现象被称为什么？<br>A. GPU context switch<br>B. Pipeline bubble<br>C. 显存碎片<br>D. 网络拥堵</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">流水线前后填充阶段的空闲等待，典型现象就是 pipeline bubble。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">09</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 9 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：32 / (√14 × √77) = 32 / √1078 ≈ 0.9746</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">给定两个向量 A = [1, 2, 3]，B = [4, 5, 6]，它们的余弦相似度为多少？</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">余弦相似度 = (A·B) / (||A|| ||B||)。其中 A·B = 32，||A|| = √14，||B|| = √77。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">10</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 10 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：D</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">某多分类任务中，类别 A 有 1000 个样本，类别 B 有 10 个样本。若使用 Micro-F1 计算，主要反映的是哪个类别的性能？<br>A. 两者权重相同<br>B. 取决于具体 F1 公式<br>C. 类别 B<br>D. 类别 A</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">Micro-F1 按全体样本汇总 TP / FP / FN，样本多的类别影响更大。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">11</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 11 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：x_{n+1} = x_n - f(x_n) / f&#x27;(x_n)</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">牛顿迭代法的迭代公式是什么？也就是 x_{n+1} 等于 x_n 加上什么还是减去什么？</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">是“减去”当前函数值与导数值之比。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">12</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 12 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：B</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">某运营商构建“网络配置命令 + 设备运行日志 + 故障案例”一体化检索系统。文本中包含大量命令行、IP / MAC / 端口号 / VLAN ID / OID 等结构化内容。关于 tokenizer、文档切分、embedding 的工程策略，下列最优的是？<br>A. 只使用关键词检索<br>B. 对命令行、IP、MAC、端口等增加专用词表，按命令块或日志条目切分，使用通信领域微调 embedding<br>C. 全部文本统一转小写并去掉符号，避免分词异常<br>D. 直接按固定长度切分，使用通用分词与通用 embedding</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">通信运维文本结构化特征强，最好做领域词表增强、结构感知切分和领域 embedding。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">13</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 13 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：optimizer.step()</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">在 PyTorch 中，哪个函数是执行优化器一步更新的？</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">标准训练循环一般是：zero_grad() → backward() → step()。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">14</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 14 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：B</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">张量并行主要是解决单卡显存无法容纳单个模型层权重的问题。其切分逻辑是什么？<br>A. 按优化器状态切分，不同 GPU 维护不同优化器状态<br>B. 按矩阵运算的维度切分，同一层内的权重被拆到不同 GPU 上<br>C. 按网络层深度切分，不同层放到不同 GPU 上<br>D. 按批次大小切分，不同样本放在不同 GPU 上</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">张量并行是“层内切分”，核心就是把同一层的矩阵权重按维度拆分到多卡。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">15</div>
+        <div class="q-meta">
+          <div class="q-type">单选题</div>
+          <h3>第 15 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：B</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">工程师需要计算复杂函数 f(x) 在区间 [0,1] 上的定积分。以下关于蒙特卡罗积分与黎曼积分的对比说法，正确的是？<br>A. 蒙特卡罗积分复杂度远低于黎曼积分，因此总是首选<br>B. 蒙特卡罗积分收敛速度通常为 O(N^-1/2)；在常见一维数值积分题目语境下，黎曼 / 梯形类方法可达到更快收敛，因此本题选 B<br>C. 蒙特卡罗积分仅适用于低维问题，高维时应使用黎曼积分<br>D. 蒙特卡罗积分收敛速度为 O(N^-2)，黎曼积分为 O(N^-1)</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">按常见考试题意，蒙特卡罗收敛较慢但维度鲁棒；低维规则积分法通常更快。</div>
+        </div>
+      </div>
+    </article>
+    
+      </div>
+    </section>
+
+    <section class="section" id="multi">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">多选题</h2>
+          <div class="section-sub">共 5 题，统一给出标准答案和简明说明。</div>
+        </div>
+      </div>
+      <div class="q-grid">
+        
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">01</div>
+        <div class="q-meta">
+          <div class="q-type">多选题</div>
+          <h3>第 1 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：A、B、C</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">多模态大模型中常见的视觉语言连接器包括：<br>A. Q-Former<br>B. MLP<br>C. 线性投影层<br>D. 卷积池化层</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">常见 connector 包括 Q-Former、MLP、Linear Projection；卷积池化更常见于视觉编码内部，不是最主流的跨模态连接器答案。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">02</div>
+        <div class="q-meta">
+          <div class="q-type">多选题</div>
+          <h3>第 2 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：A、B、C</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">设 X1,…,Xn ~ N(μ, σ²)，下列正确的有：<br>A. μ 的 MLE 是无偏的<br>B. σ² 的 MLE 是 (1/n) Σ(Xi - X̄)²<br>C. μ 的 MLE 是样本均值 X̄<br>D. σ² 的 MLE 是无偏的</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">μ 的 MLE 就是样本均值且无偏；σ² 的 MLE 形式是 1/n 版本，但它有偏。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">03</div>
+        <div class="q-meta">
+          <div class="q-type">多选题</div>
+          <h3>第 3 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：A、B、D</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">以下关于反向传播计算效率的说法，正确的是：<br>A. 相比数值微分，解析 / 自动微分类方法求梯度更快<br>B. 反向传播需要存储中间层激活值，因此显存消耗较大<br>C. 一个模型训练时只能使用符号微分或数值微分中的一种，不能共存<br>D. 反向传播的计算量通常与一次前向传播同量级，常粗略看作约为前向的两倍</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">A、B、D 都是常见结论；C 明显不对。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">04</div>
+        <div class="q-meta">
+          <div class="q-type">多选题</div>
+          <h3>第 4 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：A、B、C</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">适用于机器学习中度量两个特征向量相似度 / 距离的有：<br>A. 汉明距离<br>B. 欧氏距离<br>C. 余弦相似度<br>D. KL 散度</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">汉明、欧氏、余弦都常用于特征向量；KL 散度更适合概率分布，不是一般意义上的通用特征向量相似度。</div>
+        </div>
+      </div>
+    </article>
+    
+    <article class="q-card">
+      <div class="q-head">
+        <div class="q-no">05</div>
+        <div class="q-meta">
+          <div class="q-type">多选题</div>
+          <h3>第 5 题</h3>
+        </div>
+        <div class="q-answer-wrap">
+          <span class="answer-tag">答案：A、D</span>
+        </div>
+      </div>
+      <div class="q-body">
+        <div class="q-stem">你维护的在线问答服务在晚高峰时出现：TTFT 从 0.9s 变成 2.4s，decode tokens/s 基本不变，平均输入长度由 700 变成 2200，GPU 利用率接近满载。你本班次可立即执行哪些动作？<br>A. 开启或优化 Prefix Cache（固定 System Prompt 场景）<br>B. 把 Max New Tokens 从 512 调到 1024<br>C. 增大 Temperature 到 1.2<br>D. 对超长输入先走摘要压缩链路再送主模型</div>
+        <div class="analysis-box">
+          <div class="analysis-label">解析</div>
+          <div class="analysis-text">问题出在 prefill 变重而不是 decode 变慢，立即有效的动作是减少前缀重复计算和缩短输入。</div>
+        </div>
+      </div>
+    </article>
+    
+      </div>
+    </section>
+
+    <section class="section" id="program">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">编程题</h2>
+          <div class="section-sub">包含题意提炼、核心思路、复杂度分析和参考 Python 实现。</div>
+        </div>
+      </div>
+
+      <div class="program-wrap">
+        <article class="prog-card">
+          <div class="prog-top">
+            <h3>1. 统计二叉树中平衡路径的数量</h3>
+            <p>路径可从任意节点出发，但只能向下延伸；要求路径节点和为 0，且路径长度至少为 2。</p>
+          </div>
+          <div class="meta-grid">
+            <div class="meta-card"><div class="k">核心思路</div><div class="v">DFS + 前缀和计数</div></div>
+            <div class="meta-card"><div class="k">时间复杂度</div><div class="v">O(n)</div></div>
+            <div class="meta-card"><div class="k">空间复杂度</div><div class="v">O(h)</div></div>
+          </div>
+          <div class="prog-body">
+            <p>这题本质上是“向下路径和”变体。沿根到当前节点维护前缀和，当某个前缀和值重复出现时，就意味着中间那一段向下路径的和为 0。额外注意把长度为 1 的单节点路径剔除掉。</p>
+            <pre><code>from collections import deque, defaultdict
+import ast
+import sys
+
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+def build_tree(level_list):
+    if not level_list or level_list[0] is None:
+        return None
+
+    root = TreeNode(level_list[0])
+    q = deque([root])
+    i = 1
+
+    while q and i &lt; len(level_list):
+        node = q.popleft()
+
+        if i &lt; len(level_list) and level_list[i] is not None:
+            node.left = TreeNode(level_list[i])
+            q.append(node.left)
+        i += 1
+
+        if i &lt; len(level_list) and level_list[i] is not None:
+            node.right = TreeNode(level_list[i])
+            q.append(node.right)
+        i += 1
+
+    return root
+
+
+def count_balanced_paths(root):
+    # 统计“从任意节点出发、仅向下、节点和为 0、长度至少为 2”的路径数
+    prefix_count = defaultdict(int)
+    prefix_count[0] = 1  # 空前缀
+    ans = 0
+
+    def dfs(node, prefix_sum):
+        nonlocal ans
+        if not node:
+            return
+
+        cur_sum = prefix_sum + node.val
+
+        # 所有以前出现过的相同前缀，都对应一条以当前节点结尾、和为 0 的向下路径
+        ans += prefix_count[cur_sum]
+
+        # 但如果当前节点值本身就是 0，会把“长度为 1 的单节点路径”也算进去，需去掉
+        if node.val == 0:
+            ans -= 1
+
+        prefix_count[cur_sum] += 1
+        dfs(node.left, cur_sum)
+        dfs(node.right, cur_sum)
+        prefix_count[cur_sum] -= 1
+
+    dfs(root, 0)
+    return ans
+
+
+def parse_input(text):
+    text = text.strip()
+    if not text:
+        return []
+
+    # 支持两种输入：
+    # 1) [1, -1, 0, None, 2]
+    # 2) 1 -1 0 None 2
+    try:
+        data = ast.literal_eval(text)
+        if isinstance(data, list):
+            return data
+    except Exception:
+        pass
+
+    vals = []
+    for token in text.replace(&#x27;,&#x27;, &#x27; &#x27;).split():
+        if token.lower() == &#x27;none&#x27;:
+            vals.append(None)
+        else:
+            vals.append(int(token))
+    return vals
+
+
+def func():
+    data = sys.stdin.read()
+    level_list = parse_input(data)
+    root = build_tree(level_list)
+    print(count_balanced_paths(root))
+
+
+if __name__ == &#x27;__main__&#x27;:
+    func()
+</code></pre>
+          </div>
+        </article>
+
+        <article class="prog-card">
+          <div class="prog-top">
+            <h3>2. 网络异常流量传播链路溯源</h3>
+            <p>先筛选关键节点，再根据空间关联和时间先后建立有向边，最后求传播链条可覆盖的最大用户数。</p>
+          </div>
+          <div class="meta-grid">
+            <div class="meta-card"><div class="k">核心思路</div><div class="v">关键节点筛选 + DAG 最长路</div></div>
+            <div class="meta-card"><div class="k">时间复杂度</div><div class="v">O(n²)</div></div>
+            <div class="meta-card"><div class="k">空间复杂度</div><div class="v">O(n²)</div></div>
+          </div>
+          <div class="prog-body">
+            <p>因为链路只会从更早时间指向更晚时间，所以图天然是 DAG。先按曼哈顿距离构建邻接关系并计算邻域负载和，筛出关键节点；再按时间排序做动态规划，求至少包含 2 个节点的最大 users 总和。</p>
+            <pre><code>import sys
+
+
+def func():
+    data = sys.stdin.read().strip().split()
+    if not data:
+        print(0)
+        return
+
+    it = iter(data)
+    n = int(next(it))
+    epsilon = int(next(it))
+    w_threshold = int(next(it))
+
+    nodes = []
+    for _ in range(n):
+        x = int(next(it))
+        y = int(next(it))
+        t = int(next(it))
+        w = int(next(it))
+        users = int(next(it))
+        nodes.append((x, y, t, w, users))
+
+    # 1) 先判断关键节点：邻域内（含自身）负载和 &gt;= 阈值
+    neighbor_load_sum = [0] * n
+    adjacent = [[False] * n for _ in range(n)]
+
+    for i in range(n):
+        xi, yi, _, _, _ = nodes[i]
+        for j in range(i, n):
+            xj, yj, _, _, _ = nodes[j]
+            if abs(xi - xj) + abs(yi - yj) &lt;= epsilon:
+                adjacent[i][j] = adjacent[j][i] = True
+                neighbor_load_sum[i] += nodes[j][3]
+                if i != j:
+                    neighbor_load_sum[j] += nodes[i][3]
+
+    key_nodes = [i for i in range(n) if neighbor_load_sum[i] &gt;= w_threshold]
+    if len(key_nodes) &lt; 2:
+        print(0)
+        return
+
+    # 2) 在关键节点之间建有向图：邻接且时间更早 -&gt; 时间更晚
+    key_nodes.sort(key=lambda idx: nodes[idx][2])  # 按时间升序
+    k = len(key_nodes)
+
+    dp = [0] * k  # 以第 i 个关键节点结尾的最大 users 和
+    has_in_edge = [False] * k
+    has_any_edge = False
+
+    for i in range(k):
+        idx_i = key_nodes[i]
+        dp[i] = nodes[idx_i][4]  # 至少可以从自己开始，后面会专门判断是否真的形成链路
+        ti = nodes[idx_i][2]
+
+        for j in range(i):
+            idx_j = key_nodes[j]
+            tj = nodes[idx_j][2]
+            if tj &lt; ti and adjacent[idx_j][idx_i]:
+                has_in_edge[i] = True
+                has_any_edge = True
+                dp[i] = max(dp[i], dp[j] + nodes[idx_i][4])
+
+    if not has_any_edge:
+        print(0)
+        return
+
+    # 只统计真正由至少 2 个节点构成的链路
+    ans = 0
+    for i in range(k):
+        if has_in_edge[i]:
+            ans = max(ans, dp[i])
+
+    print(ans)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    func()
+</code></pre>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="footer">整理完成：当前文件为单页 HTML，可直接在浏览器打开查看，也适合打印保存。</div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('toggleAnalysis');
+    let collapsed = false;
+    btn.addEventListener('click', () => {
+      collapsed = !collapsed;
+      document.querySelectorAll('.q-card').forEach(card => card.classList.toggle('collapsed', collapsed));
+      btn.textContent = collapsed ? '展开解析' : '收起解析';
+    });
+  </script>
+</body>
+</html>

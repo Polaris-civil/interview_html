@@ -1,5 +1,297 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q266",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "模型部署",
+    tags: ["华为", "机考", "单选题", "模型部署", "Conv+BN", "BatchNorm", "推理优化"],
+    question: "在部署阶段，将卷积层与批归一化层进行融合。下列关于卷积和批归一化层融合的描述中，最准确的是？\nA. 融合是在运行时将 BN 的均值和方差传入卷积底层算子中并行计算。\nB. 融合是为了让 BN 的梯度更快反向传播到卷积层，从而加速推理。\nC. 融合是一种纯代数等价变换，在模型编译期就将 BN 的缩放和偏移参数吸收到卷积的权重和偏置中，运行时完全没有独立 BN 层的开销。\nD. 卷积层和批归一化层融合会轻微改变模型输出精度，因为融合后的算子无法使用 Tensor Core 加速。",
+    answer: [
+      "答案：C",
+      "解析：Conv+BN 融合本质上是推理期的参数折叠（parameter folding），属于编译期代数等价变换。"
+    ]
+  },
+  {
+    id: "Q267",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "大模型推理",
+    tags: ["华为", "机考", "单选题", "大模型推理", "KV Cache", "显存管理", "recomputation"],
+    question: "在多轮对话推理系统中，如果 GPU / NPU 内存已满，但仍有新的 token 需要生成，系统通常采用什么策略？\nA. 自动降低模型精度\nB. 直接杀掉进程\nC. 重启服务器\nD. 将部分 KV Cache swap 到 CPU 或进行 recomputation",
+    answer: [
+      "答案：D",
+      "解析：在线推理系统常见做法是 KV Cache 分层存储、换出到 CPU，或者做重计算来换显存。"
+    ]
+  },
+  {
+    id: "Q268",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "数据可视化",
+    tags: ["华为", "机考", "单选题", "数据可视化", "分组柱状图", "实验对比"],
+    question: "在大模型指令微调实验中，对比三种训练数据配比（纯指令、指令+多轮对话、指令+知识）的模型响应准确率，需直观展示不同配比的准确率差异并便于组间对比，最适合的可视化图表是？\nA. 分组柱状图\nB. 饼图\nC. 直方图\nD. 雷达图",
+    answer: [
+      "答案：A",
+      "解析：这是典型的“多组类别、横向对比数值”场景，分组柱状图最直观。"
+    ]
+  },
+  {
+    id: "Q269",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "相似度度量",
+    tags: ["华为", "机考", "单选题", "相似度度量", "余弦相似度", "高维稀疏向量"],
+    question: "适合高维稀疏向量相似度计算的是？\nA. 余弦相似度\nB. 曼哈顿距离\nC. 切比雪夫距离\nD. 欧氏距离",
+    answer: [
+      "答案：A",
+      "解析：高维稀疏向量更关注方向而非模长，余弦相似度是最常见选择。"
+    ]
+  },
+  {
+    id: "Q270",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "线性代数",
+    tags: ["华为", "机考", "单选题", "线性代数", "可逆矩阵", "单位矩阵"],
+    question: "下列哪个矩阵一定是可逆的？\nA. 所有元素都为 0 的矩阵\nB. 对称矩阵\nC. 行列式为 0 的矩阵\nD. 单位矩阵",
+    answer: [
+      "答案：D",
+      "解析：单位矩阵的逆还是它自己；其余三项都不保证可逆。"
+    ]
+  },
+  {
+    id: "Q271",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "聚类算法",
+    tags: ["华为", "机考", "单选题", "聚类算法", "层次聚类", "Complete Linkage"],
+    question: "在层次聚类分析中，以下哪一种方法是用于定义簇间距离的常见方式？\nA. DBSCAN\nB. Complete Linkage\nC. K-means\nD. Expectation Maximization",
+    answer: [
+      "答案：B",
+      "解析：Complete Linkage（最长距离法）就是层次聚类里常见的簇间距离定义方式。"
+    ]
+  },
+  {
+    id: "Q272",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "Transformer",
+    tags: ["华为", "机考", "单选题", "Transformer", "cross-attention", "Query"],
+    question: "Transformer 的编码器—解码器注意力（cross-attention）中，Query 来自哪里？\nA. 编码器的输出\nB. 位置编码\nC. 输入序列\nD. 解码器上一层（或前一子层）的输出",
+    answer: [
+      "答案：D",
+      "解析：在 cross-attention 中，Q 来自解码器侧，K / V 来自编码器输出。"
+    ]
+  },
+  {
+    id: "Q273",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "并行训练",
+    tags: ["华为", "机考", "单选题", "并行训练", "流水线并行", "Pipeline Bubble"],
+    question: "在流水线并行中，一个模型被切分为多个 stage，分布在不同 GPU 上。当某些 GPU 在等待上游 stage 的计算结果时出现空闲，这种现象被称为什么？\nA. GPU context switch\nB. Pipeline bubble\nC. 显存碎片\nD. 网络拥堵",
+    answer: [
+      "答案：B",
+      "解析：流水线前后填充阶段的空闲等待，典型现象就是 pipeline bubble。"
+    ]
+  },
+  {
+    id: "Q274",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "相似度度量",
+    tags: ["华为", "机考", "单选题", "相似度度量", "余弦相似度", "向量计算"],
+    question: "给定两个向量 A = [1, 2, 3]，B = [4, 5, 6]，它们的余弦相似度为多少？",
+    answer: [
+      "答案：32 / (√14 × √77) = 32 / √1078 ≈ 0.9746",
+      "解析：余弦相似度 = (A·B) / (||A|| ||B||)。其中 A·B = 32，||A|| = √14，||B|| = √77。"
+    ]
+  },
+  {
+    id: "Q275",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "评价指标",
+    tags: ["华为", "机考", "单选题", "评价指标", "Micro-F1", "类别不均衡"],
+    question: "某多分类任务中，类别 A 有 1000 个样本，类别 B 有 10 个样本。若使用 Micro-F1 计算，主要反映的是哪个类别的性能？\nA. 两者权重相同\nB. 取决于具体 F1 公式\nC. 类别 B\nD. 类别 A",
+    answer: [
+      "答案：D",
+      "解析：Micro-F1 按全体样本汇总 TP / FP / FN，样本多的类别影响更大。"
+    ]
+  },
+  {
+    id: "Q276",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "数值优化",
+    tags: ["华为", "机考", "单选题", "数值优化", "牛顿迭代", "Newton Method"],
+    question: "牛顿迭代法的迭代公式是什么？也就是 x_{n+1} 等于 x_n 加上什么还是减去什么？",
+    answer: [
+      "答案：x_{n+1} = x_n - f(x_n) / f'(x_n)",
+      "解析：是“减去”当前函数值与导数值之比。"
+    ]
+  },
+  {
+    id: "Q277",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "检索系统",
+    tags: ["华为", "机考", "单选题", "检索系统", "tokenizer", "embedding", "通信运维"],
+    question: "某运营商构建“网络配置命令 + 设备运行日志 + 故障案例”一体化检索系统。文本中包含大量命令行、IP / MAC / 端口号 / VLAN ID / OID 等结构化内容。关于 tokenizer、文档切分、embedding 的工程策略，下列最优的是？\nA. 只使用关键词检索\nB. 对命令行、IP、MAC、端口等增加专用词表，按命令块或日志条目切分，使用通信领域微调 embedding\nC. 全部文本统一转小写并去掉符号，避免分词异常\nD. 直接按固定长度切分，使用通用分词与通用 embedding",
+    answer: [
+      "答案：B",
+      "解析：通信运维文本结构化特征强，最好做领域词表增强、结构感知切分和领域 embedding。"
+    ]
+  },
+  {
+    id: "Q278",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "PyTorch",
+    tags: ["华为", "机考", "单选题", "PyTorch", "optimizer.step", "训练循环"],
+    question: "在 PyTorch 中，哪个函数是执行优化器一步更新的？",
+    answer: [
+      "答案：optimizer.step()",
+      "解析：标准训练循环一般是：zero_grad() → backward() → step()。"
+    ]
+  },
+  {
+    id: "Q279",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "并行训练",
+    tags: ["华为", "机考", "单选题", "并行训练", "张量并行", "模型并行"],
+    question: "张量并行主要是解决单卡显存无法容纳单个模型层权重的问题。其切分逻辑是什么？\nA. 按优化器状态切分，不同 GPU 维护不同优化器状态\nB. 按矩阵运算的维度切分，同一层内的权重被拆到不同 GPU 上\nC. 按网络层深度切分，不同层放到不同 GPU 上\nD. 按批次大小切分，不同样本放在不同 GPU 上",
+    answer: [
+      "答案：B",
+      "解析：张量并行是“层内切分”，核心就是把同一层的矩阵权重按维度拆分到多卡。"
+    ]
+  },
+  {
+    id: "Q280",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "单选题",
+    category: "数值积分",
+    tags: ["华为", "机考", "单选题", "数值积分", "蒙特卡罗积分", "黎曼积分"],
+    question: "工程师需要计算复杂函数 f(x) 在区间 [0,1] 上的定积分。以下关于蒙特卡罗积分与黎曼积分的对比说法，正确的是？\nA. 蒙特卡罗积分复杂度远低于黎曼积分，因此总是首选\nB. 蒙特卡罗积分收敛速度通常为 O(N^-1/2)；在常见一维数值积分题目语境下，黎曼 / 梯形类方法可达到更快收敛，因此本题选 B\nC. 蒙特卡罗积分仅适用于低维问题，高维时应使用黎曼积分\nD. 蒙特卡罗积分收敛速度为 O(N^-2)，黎曼积分为 O(N^-1)",
+    answer: [
+      "答案：B",
+      "解析：按常见考试题意，蒙特卡罗收敛较慢但维度鲁棒；低维规则积分法通常更快。"
+    ]
+  },
+  {
+    id: "Q281",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "多选题",
+    category: "多模态大模型",
+    tags: ["华为", "机考", "多选题", "多模态大模型", "Q-Former", "MLP", "视觉语言连接器"],
+    question: "多模态大模型中常见的视觉语言连接器包括：\nA. Q-Former\nB. MLP\nC. 线性投影层\nD. 卷积池化层",
+    answer: [
+      "答案：A、B、C",
+      "解析：常见 connector 包括 Q-Former、MLP、Linear Projection；卷积池化更常见于视觉编码内部，不是最主流的跨模态连接器答案。"
+    ]
+  },
+  {
+    id: "Q282",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "多选题",
+    category: "统计估计",
+    tags: ["华为", "机考", "多选题", "统计估计", "MLE", "正态分布", "无偏估计"],
+    question: "设 X1,…,Xn ~ N(μ, σ²)，下列正确的有：\nA. μ 的 MLE 是无偏的\nB. σ² 的 MLE 是 (1/n) Σ(Xi - X̄)²\nC. μ 的 MLE 是样本均值 X̄\nD. σ² 的 MLE 是无偏的",
+    answer: [
+      "答案：A、B、C",
+      "解析：μ 的 MLE 就是样本均值且无偏；σ² 的 MLE 形式是 1/n 版本，但它有偏。"
+    ]
+  },
+  {
+    id: "Q283",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "多选题",
+    category: "反向传播",
+    tags: ["华为", "机考", "多选题", "反向传播", "自动微分", "显存", "计算效率"],
+    question: "以下关于反向传播计算效率的说法，正确的是：\nA. 相比数值微分，解析 / 自动微分类方法求梯度更快\nB. 反向传播需要存储中间层激活值，因此显存消耗较大\nC. 一个模型训练时只能使用符号微分或数值微分中的一种，不能共存\nD. 反向传播的计算量通常与一次前向传播同量级，常粗略看作约为前向的两倍",
+    answer: [
+      "答案：A、B、D",
+      "解析：A、B、D 都是常见结论；C 明显不对。"
+    ]
+  },
+  {
+    id: "Q284",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "多选题",
+    category: "距离度量",
+    tags: ["华为", "机考", "多选题", "距离度量", "汉明距离", "欧氏距离", "KL散度"],
+    question: "适用于机器学习中度量两个特征向量相似度 / 距离的有：\nA. 汉明距离\nB. 欧氏距离\nC. 余弦相似度\nD. KL 散度",
+    answer: [
+      "答案：A、B、C",
+      "解析：汉明、欧氏、余弦都常用于特征向量；KL 散度更适合概率分布，不是一般意义上的通用特征向量相似度。"
+    ]
+  },
+  {
+    id: "Q285",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "多选题",
+    category: "大模型推理",
+    tags: ["华为", "机考", "多选题", "大模型推理", "TTFT", "Prefix Cache", "prefill"],
+    question: "你维护的在线问答服务在晚高峰时出现：TTFT 从 0.9s 变成 2.4s，decode tokens/s 基本不变，平均输入长度由 700 变成 2200，GPU 利用率接近满载。你本班次可立即执行哪些动作？\nA. 开启或优化 Prefix Cache（固定 System Prompt 场景）\nB. 把 Max New Tokens 从 512 调到 1024\nC. 增大 Temperature 到 1.2\nD. 对超长输入先走摘要压缩链路再送主模型",
+    answer: [
+      "答案：A、D",
+      "解析：问题出在 prefill 变重而不是 decode 变慢，立即有效的动作是减少前缀重复计算和缩短输入。"
+    ]
+  },
+  {
+    id: "Q286",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "编程题",
+    category: "树与前缀和",
+    tags: ["华为", "机考", "编程题", "树与前缀和", "DFS", "前缀和", "二叉树"],
+    question: "统计二叉树中平衡路径的数量\n路径可从任意节点出发，但只能向下延伸；要求路径节点和为 0，且路径长度至少为 2。",
+    answer: [
+      "核心思路：DFS + 前缀和计数",
+      "时间复杂度：O(n)",
+      "空间复杂度：O(h)",
+      "解法说明：这题本质上是“向下路径和”变体。沿根到当前节点维护前缀和，当某个前缀和值重复出现时，就意味着中间那一段向下路径的和为 0。额外注意把长度为 1 的单节点路径剔除掉。",
+      { type: "code", language: "python", code: "from collections import deque, defaultdict\nimport ast\nimport sys\n\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\n\ndef build_tree(level_list):\n    if not level_list or level_list[0] is None:\n        return None\n\n    root = TreeNode(level_list[0])\n    q = deque([root])\n    i = 1\n\n    while q and i < len(level_list):\n        node = q.popleft()\n\n        if i < len(level_list) and level_list[i] is not None:\n            node.left = TreeNode(level_list[i])\n            q.append(node.left)\n        i += 1\n\n        if i < len(level_list) and level_list[i] is not None:\n            node.right = TreeNode(level_list[i])\n            q.append(node.right)\n        i += 1\n\n    return root\n\n\ndef count_balanced_paths(root):\n    # 统计“从任意节点出发、仅向下、节点和为 0、长度至少为 2”的路径数\n    prefix_count = defaultdict(int)\n    prefix_count[0] = 1  # 空前缀\n    ans = 0\n\n    def dfs(node, prefix_sum):\n        nonlocal ans\n        if not node:\n            return\n\n        cur_sum = prefix_sum + node.val\n\n        # 所有以前出现过的相同前缀，都对应一条以当前节点结尾、和为 0 的向下路径\n        ans += prefix_count[cur_sum]\n\n        # 但如果当前节点值本身就是 0，会把“长度为 1 的单节点路径”也算进去，需去掉\n        if node.val == 0:\n            ans -= 1\n\n        prefix_count[cur_sum] += 1\n        dfs(node.left, cur_sum)\n        dfs(node.right, cur_sum)\n        prefix_count[cur_sum] -= 1\n\n    dfs(root, 0)\n    return ans\n\n\ndef parse_input(text):\n    text = text.strip()\n    if not text:\n        return []\n\n    # 支持两种输入：\n    # 1) [1, -1, 0, None, 2]\n    # 2) 1 -1 0 None 2\n    try:\n        data = ast.literal_eval(text)\n        if isinstance(data, list):\n            return data\n    except Exception:\n        pass\n\n    vals = []\n    for token in text.replace(',', ' ').split():\n        if token.lower() == 'none':\n            vals.append(None)\n        else:\n            vals.append(int(token))\n    return vals\n\n\ndef func():\n    data = sys.stdin.read()\n    level_list = parse_input(data)\n    root = build_tree(level_list)\n    print(count_balanced_paths(root))\n\n\nif __name__ == '__main__':\n    func()" }
+    ]
+  },
+  {
+    id: "Q287",
+    updatedAt: "2026-04-22",
+    company: "华为",
+    topicGroup: "编程题",
+    category: "图与动态规划",
+    tags: ["华为", "机考", "编程题", "图与动态规划", "DAG", "动态规划", "最长路"],
+    question: "网络异常流量传播链路溯源\n先筛选关键节点，再根据空间关联和时间先后建立有向边，最后求传播链条可覆盖的最大用户数。",
+    answer: [
+      "核心思路：关键节点筛选 + DAG 最长路",
+      "时间复杂度：O(n²)",
+      "空间复杂度：O(n²)",
+      "解法说明：因为链路只会从更早时间指向更晚时间，所以图天然是 DAG。先按曼哈顿距离构建邻接关系并计算邻域负载和，筛出关键节点；再按时间排序做动态规划，求至少包含 2 个节点的最大 users 总和。",
+      { type: "code", language: "python", code: "import sys\n\n\ndef func():\n    data = sys.stdin.read().strip().split()\n    if not data:\n        print(0)\n        return\n\n    it = iter(data)\n    n = int(next(it))\n    epsilon = int(next(it))\n    w_threshold = int(next(it))\n\n    nodes = []\n    for _ in range(n):\n        x = int(next(it))\n        y = int(next(it))\n        t = int(next(it))\n        w = int(next(it))\n        users = int(next(it))\n        nodes.append((x, y, t, w, users))\n\n    # 1) 先判断关键节点：邻域内（含自身）负载和 >= 阈值\n    neighbor_load_sum = [0] * n\n    adjacent = [[False] * n for _ in range(n)]\n\n    for i in range(n):\n        xi, yi, _, _, _ = nodes[i]\n        for j in range(i, n):\n            xj, yj, _, _, _ = nodes[j]\n            if abs(xi - xj) + abs(yi - yj) <= epsilon:\n                adjacent[i][j] = adjacent[j][i] = True\n                neighbor_load_sum[i] += nodes[j][3]\n                if i != j:\n                    neighbor_load_sum[j] += nodes[i][3]\n\n    key_nodes = [i for i in range(n) if neighbor_load_sum[i] >= w_threshold]\n    if len(key_nodes) < 2:\n        print(0)\n        return\n\n    # 2) 在关键节点之间建有向图：邻接且时间更早 -> 时间更晚\n    key_nodes.sort(key=lambda idx: nodes[idx][2])  # 按时间升序\n    k = len(key_nodes)\n\n    dp = [0] * k  # 以第 i 个关键节点结尾的最大 users 和\n    has_in_edge = [False] * k\n    has_any_edge = False\n\n    for i in range(k):\n        idx_i = key_nodes[i]\n        dp[i] = nodes[idx_i][4]  # 至少可以从自己开始，后面会专门判断是否真的形成链路\n        ti = nodes[idx_i][2]\n\n        for j in range(i):\n            idx_j = key_nodes[j]\n            tj = nodes[idx_j][2]\n            if tj < ti and adjacent[idx_j][idx_i]:\n                has_in_edge[i] = True\n                has_any_edge = True\n                dp[i] = max(dp[i], dp[j] + nodes[idx_i][4])\n\n    if not has_any_edge:\n        print(0)\n        return\n\n    # 只统计真正由至少 2 个节点构成的链路\n    ans = 0\n    for i in range(k):\n        if has_in_edge[i]:\n            ans = max(ans, dp[i])\n\n    print(ans)\n\n\nif __name__ == '__main__':\n    func()" }
+    ]
+  },
+{
     id: "Q256",
     updatedAt: "2026-04-11",
     company: "阿里巴巴",
