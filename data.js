@@ -1,5 +1,68 @@
 ﻿window.INTERVIEW_QA = [
   {
+    id: "Q288",
+    updatedAt: "2026-05-13",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "Transformer",
+    tags: ["字节跳动", "基础知识点", "Transformer", "Attention", "Self-Attention", "Position Embedding"],
+    question: "细讲 Transformer 中的 attention 和 position embedding。",
+    answer: [
+      "可以先把 Transformer 理解成两件事：第一，用 attention 建模 token 之间的依赖；第二，用 position embedding 补上序列顺序信息。",
+      "`Attention` = 注意力机制，核心是让每个 token 根据 Query、Key、Value 去动态聚合其它 token 的信息。`Q` 是 Query，表示当前 token 想找什么；`K` 是 Key，表示每个 token 能提供什么索引；`V` 是 Value，表示真正被聚合的内容。",
+      "在 self-attention 里，Q、K、V 都来自同一个序列。计算时先用 Q 和 K 做点积得到相关性分数，再除以 sqrt(d_k) 控制数值尺度，然后经过 softmax 得到权重，最后对 V 做加权求和。",
+      "公式可以记成 Attention(Q,K,V) = softmax(QK^T / sqrt(d_k))V。多头注意力就是把 hidden states 投影成多个子空间分别做 attention，再拼接回来，这样不同 head 可以关注不同关系，比如局部词义、长距离依赖、句法关系等。",
+      "`Position Embedding` = 位置嵌入，用来告诉模型 token 在序列中的位置。因为 self-attention 本身对输入顺序不敏感，如果不加入位置信息，模型只知道有哪些 token，不知道它们的先后顺序。",
+      "常见位置编码包括固定的正弦余弦位置编码、可学习绝对位置编码、相对位置编码，以及大模型里常见的 RoPE。面试里可以强调：attention 负责内容之间的信息交互，position embedding 负责注入顺序结构。"
+    ]
+  },
+  {
+    id: "Q289",
+    updatedAt: "2026-05-13",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "Transformer",
+    tags: ["字节跳动", "基础知识点", "Transformer", "Position Embedding", "序列建模", "Self-Attention"],
+    question: "输入的序列本来就有先后，为什么 Transformer 还要加 position embedding？",
+    answer: [
+      "因为 Transformer 的 self-attention 计算本身没有天然的顺序感。输入虽然是按顺序排进来的，但 attention 看的是 token 两两之间的相似度和加权聚合，单独看这个操作，对调 token 的顺序后，模型并不会自动知道谁在前谁在后。",
+      "更直观地说，RNN 是一步一步读序列，所以顺序天然写进了计算过程；CNN 通过局部窗口和卷积位置也保留了一定顺序结构；但 Transformer 是并行处理所有 token 的，如果不额外加入位置信息，它更像是在处理一个 token 集合。",
+      "position embedding 的作用就是把“第几个位置”编码进 token 表示里，让同一个词出现在不同位置时拥有不同表示。例如“我喜欢你”和“你喜欢我”词集合相同，但语义完全不同，模型必须知道相对或绝对顺序。",
+      "所以面试里可以总结为：输入顺序只是数据排列顺序，不等于模型计算中显式使用了顺序；position embedding 是把顺序信息注入 Transformer 表示空间的必要机制。"
+    ]
+  },
+  {
+    id: "Q290",
+    updatedAt: "2026-05-13",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "大模型微调",
+    tags: ["字节跳动", "基础知识点", "PyTorch", "大模型微调", "Transformers", "PEFT", "LoRA"],
+    question: "用 PyTorch 的什么框架微调大模型？",
+    answer: [
+      "实际项目里通常不是只用裸 PyTorch 从零写训练循环，而是以 PyTorch 为底层，配合 Hugging Face Transformers、Datasets、Accelerate，再结合 PEFT 做参数高效微调。",
+      "`Transformers` 负责加载预训练大模型、tokenizer 和常见模型结构；`Datasets` 负责数据集读取和预处理；`Accelerate` 负责单机多卡、混合精度和分布式训练的封装；`PEFT` = Parameter-Efficient Fine-Tuning，参数高效微调，常用来接 LoRA、Prefix Tuning 等方法。",
+      "如果是指令微调，常见组合是 PyTorch + Transformers Trainer 或 TRL 的 SFTTrainer；如果要做 LoRA，则一般使用 PEFT，把 LoRA adapter 挂到 attention 或 MLP 的线性层上，只训练少量新增参数。",
+      "更大规模训练时还会用 DeepSpeed、FSDP 或 Megatron-LM 这类框架解决显存和并行问题。面试中可以回答：小到中等规模微调用 Transformers + PEFT + Accelerate，工程化大规模训练再引入 DeepSpeed/FSDP。"
+    ]
+  },
+  {
+    id: "Q291",
+    updatedAt: "2026-05-13",
+    company: "字节跳动",
+    topicGroup: "基础知识点",
+    category: "大模型微调",
+    tags: ["字节跳动", "基础知识点", "LoRA", "低秩分解", "参数高效微调", "大模型微调"],
+    question: "LoRA 的原理是什么？为什么 ΔW 是低秩的？具体如何降低计算量？",
+    answer: [
+      "`LoRA` = Low-Rank Adaptation，低秩适配。它的核心思想是冻结大模型原始权重 W，不直接更新完整的 ΔW，而是把权重增量写成两个小矩阵的乘积：ΔW = B A，其中 A 的形状是 r × d，B 的形状是 k × r，r 远小于 d 和 k。",
+      "为什么认为 ΔW 可以是低秩的？经验上，大模型已经在预训练阶段学到了通用能力，下游任务微调需要改变的方向通常只占参数空间里的很小一部分。也就是说，任务适配的有效变化往往落在低维子空间里，所以可以用低秩矩阵近似完整更新。",
+      "具体计算时，原始线性层是 y = Wx。LoRA 后变成 y = Wx + BAx。训练时 W 冻结，只训练 A 和 B。这样需要反向传播和优化器维护的参数量从 k × d 变成 r × d + k × r，参数量大幅下降。",
+      "它降低的主要是训练显存和可训练参数的优化开销，比如梯度、Adam 的一阶二阶动量状态都会少很多。推理时还可以把 BA 合并回 W，变成 W' = W + BA，这样几乎不增加额外推理开销。",
+      "面试里可以用一句话总结：LoRA 不改大模型主体，只学习一个低秩增量，用很少的可训练参数完成任务适配，因此显存更省、训练更快、部署也更方便。"
+    ]
+  },
+  {
     id: "Q266",
     updatedAt: "2026-04-22",
     company: "华为",
@@ -3945,6 +4008,7 @@
     ]
   }
 ];
+
 
 
 
